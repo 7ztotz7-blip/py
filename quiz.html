@@ -156,6 +156,7 @@
 </main>
 
 <script src="pystart-data.js"></script>
+<script src="assets/js/unit-quiz-bank.js"></script>
 <script>
   const DEFAULT_QUESTIONS=[
     {q:'โค้ดนี้จะพิมพ์อะไรออกมา?',code:true,diff:'ระดับง่าย',
@@ -179,6 +180,7 @@
   const qparams=new URLSearchParams(location.search);
   const unitId=parseInt(qparams.get('unit'),10);
   const testType=qparams.get('type');
+  const nextParam=qparams.get('next');
   const isUnitTest = typeof unitTests!=='undefined' && unitTests[unitId] && (testType==='pre'||testType==='post') && unitTests[unitId][testType];
   const unit = isUnitTest ? courseUnits.find(u=>u.id===unitId) : null;
 
@@ -256,19 +258,26 @@
     }
 
     const rctaMain=document.getElementById('rctaMain');
+    rctaMain.style.display='';
     let pass=true;
     if(isUnitTest && testType==='pre'){
       // diagnostic — no pass/fail framing, just report the baseline
       document.getElementById('rtitle').textContent='ทราบพื้นฐานของคุณแล้ว!';
       document.getElementById('rsub').textContent='ใช้คะแนนนี้เป็นจุดเริ่มต้น แล้วไปดูว่าเรียนหน่วยนี้จบแล้วเก่งขึ้นแค่ไหน';
       rctaMain.textContent='เริ่มเรียนหน่วยนี้ →';
-      rctaMain.href='lesson.html?lesson='+unit.lessons[0];
+      rctaMain.href=nextParam||('lesson.html?lesson='+unit.lessons[0]);
     } else if(isUnitTest && testType==='post'){
       pass=pct>=70;
-      document.getElementById('rtitle').textContent=pass?'เยี่ยมมาก! ผ่านแล้ว 🎉':'เกือบแล้ว! ลองอีกครั้งนะ';
-      document.getElementById('rsub').textContent=pass?'คุณเข้าใจเนื้อหาหน่วยนี้ได้ดี — ไปดูความก้าวหน้าที่แดชบอร์ดได้เลย':'ทบทวนเนื้อหาอีกนิดแล้วกลับมาทำใหม่ได้เลย';
-      rctaMain.textContent='ดูแดชบอร์ด →';
-      rctaMain.href='dashboard.html';
+      document.getElementById('rtitle').textContent=pass?'เยี่ยมมาก! ผ่านแล้ว 🎉':'ยังไม่ผ่าน ลองอีกครั้งนะ';
+      document.getElementById('rsub').textContent=pass
+        ?'คุณเข้าใจเนื้อหาหน่วยนี้ได้ดี — ไปต่อกันเลย'
+        :'ต้องได้ 70% ขึ้นไปถึงจะไปหน่วยถัดไปได้ ทบทวนเนื้อหาอีกนิดแล้วกลับมาทำใหม่';
+      if(pass){
+        rctaMain.textContent='ไปต่อ →';
+        rctaMain.href=nextParam||'dashboard.html';
+      } else {
+        rctaMain.style.display='none'; // must pass to move on — only "ทำใหม่อีกครั้ง" is available
+      }
     } else {
       pass=pct>=70;
       document.getElementById('rtitle').textContent=pass?'เยี่ยมมาก! ผ่านแล้ว 🎉':'เกือบแล้ว! ลองอีกครั้งนะ';

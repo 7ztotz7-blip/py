@@ -1490,80 +1490,48 @@ const courseUnits = [
     { id: 5, title: "เขียนโปรแกรมเชิงวัตถุ (OOP)", desc: "Class, Object, การสืบทอด และ Encapsulation", lessons: [21, 22, 23, 24] }
 ];
 
-/* Per-unit diagnostic (pre) and review (post) tests. Pre-tests probe baseline
-   recognition of the unit's topics before the lessons are read; post-tests
-   check applied understanding after finishing all lessons in the unit.
-   Scored and stored client-side (see quiz.html / Dashboard.html)
-   under localStorage key "pystart_unit_scores". */
-const unitTests = {
-    1: {
-        pre: [
-            { q: "Python เป็นภาษาประเภทใด?", options: ["ภาษาระดับสูง (High-Level)", "ภาษาเครื่อง (Machine Language)", "ภาษา Assembly", "ไม่ใช่ภาษาโปรแกรม"], ans: 0 },
-            { q: "เครื่องหมายใดใช้กำหนดค่าให้ตัวแปรใน Python?", options: ["==", "=", ":=", "->"], ans: 1 },
-            { q: "ข้อใดคือชนิดข้อมูลที่เก็บข้อความ?", options: ["int", "float", "str", "bool"], ans: 2 },
-            { q: "ฟังก์ชันใดใช้แสดงผลออกทางหน้าจอ?", options: ["input()", "print()", "show()", "display()"], ans: 1 }
-        ],
-        post: [
-            { q: "type(3.14) ให้ผลลัพธ์เป็นชนิดข้อมูลใด?", options: ["int", "str", "float", "bool"], ans: 2 },
-            { q: "input() คืนค่าเป็นชนิดข้อมูลใดเสมอ ไม่ว่าจะพิมพ์อะไรเข้าไป?", options: ["int", "float", "str", "bool"], ans: 2 },
-            { q: "17 % 5 มีค่าเท่ากับเท่าไหร่?", options: ["3", "2", "3.4", "1"], ans: 1 },
-            { q: "ผลลัพธ์ของ True and False คืออะไร?", options: ["True", "False", "None", "Error"], ans: 1 }
-        ]
-    },
-    2: {
-        pre: [
-            { q: "คำสั่งใดใช้ตรวจสอบเงื่อนไขในภาษาโปรแกรมทั่วไป?", options: ["if", "sum", "print", "class"], ans: 0 },
-            { q: "ลูป (loop) ใช้ทำสิ่งใด?", options: ["เก็บข้อมูลหลายค่า", "ทำงานซ้ำตามเงื่อนไขหรือจำนวนรอบ", "สร้างฟังก์ชันใหม่", "แปลงชนิดข้อมูล"], ans: 1 },
-            { q: "range(5) ในภาษา Python เริ่มนับจากเลขใด?", options: ["1", "0", "5", "-1"], ans: 1 },
-            { q: "คำสั่งใดใช้ออกจากลูปทันทีก่อนครบรอบ?", options: ["continue", "pass", "break", "return"], ans: 2 }
-        ],
-        post: [
-            { q: "หาก score = 65 โค้ด if score>=80: A elif score>=70: B elif score>=60: C else: F จะได้ผลอะไร?", options: ["A", "B", "C", "F"], ans: 2 },
-            { q: "range(2, 10, 3) ให้ตัวเลขชุดใด?", options: ["2, 5, 8", "2, 3, 4, 5, 6, 7, 8, 9", "3, 6, 9", "2, 4, 6, 8"], ans: 0 },
-            { q: "while loop หยุดทำงานเมื่อใด?", options: ["เมื่อครบจำนวนรอบ", "เมื่อเงื่อนไขเป็น False", "เมื่อเงื่อนไขเป็น True", "หลังจากรัน 100 ครั้ง"], ans: 1 },
-            { q: "ถ้า outer loop วน 3 รอบ inner loop วน 5 รอบ inner loop ทำงานรวมกี่ครั้ง?", options: ["8 ครั้ง", "5 ครั้ง", "15 ครั้ง", "3 ครั้ง"], ans: 2 }
-        ]
-    },
-    3: {
-        pre: [
-            { q: "ข้อใดคือโครงสร้างข้อมูลที่เก็บค่าหลายค่าไว้ในตัวแปรเดียว?", options: ["int", "List", "bool", "print"], ans: 1 },
-            { q: "List ใน Python สร้างด้วยเครื่องหมายใด?", options: ["{}", "()", "[]", "<>"], ans: 2 },
-            { q: "ข้อมูลชนิดใดที่แก้ไขค่าหลังสร้างไม่ได้ (immutable)?", options: ["List", "Dictionary", "Tuple", "Set"], ans: 2 },
-            { q: "Dictionary เก็บข้อมูลในรูปแบบใด?", options: ["ลำดับตัวเลข", "คู่ key:value", "ตัวอักษรเรียงกัน", "ไม่ซ้ำกันเท่านั้น"], ans: 1 }
-        ],
-        post: [
-            { q: "list[-1] หมายถึงสมาชิกตัวใด?", options: ["ตัวแรก", "ตัวสุดท้าย", "ความยาวของ list", "Error"], ans: 1 },
-            { q: "อะไรคือความแตกต่างหลักระหว่าง List และ Tuple?", options: ["List เร็วกว่า Tuple", "Tuple แก้ไขไม่ได้หลังสร้าง", "List ไม่มีลำดับ", "ไม่มีความต่าง"], ans: 1 },
-            { q: "dict.get('key') ต่างจาก dict['key'] อย่างไรเมื่อไม่เจอ key?", options: ["ไม่ต่างกัน", "get() คืน None แทน Error", "get() ช้ากว่า", "get() ไม่มีใน Python"], ans: 1 },
-            { q: "'hello world'.title() คืนค่าอะไร?", options: ["HELLO WORLD", "hello world", "Hello World", "Hello world"], ans: 2 }
-        ]
-    },
-    4: {
-        pre: [
-            { q: "คำสั่งใดใช้สร้างฟังก์ชันใน Python?", options: ["func", "function", "def", "lambda"], ans: 2 },
-            { q: "ค่าที่ส่งเข้าไปในฟังก์ชันตอนเรียกใช้เรียกว่าอะไร?", options: ["Parameter", "Argument", "Return", "Scope"], ans: 1 },
-            { q: "คำสั่งใดใช้ส่งค่ากลับออกจากฟังก์ชัน?", options: ["print", "return", "break", "yield only"], ans: 1 },
-            { q: "โครงสร้างใดใช้ดักจับข้อผิดพลาดขณะโปรแกรมทำงาน?", options: ["if/else", "for/while", "try/except", "def/return"], ans: 2 }
-        ],
-        post: [
-            { q: "ถ้าฟังก์ชันไม่มีคำสั่ง return จะคืนค่าอะไร?", options: ["0", "False", "None", "Error"], ans: 2 },
-            { q: "*args ใน Python รวบรวม arguments เป็นชนิดข้อมูลใด?", options: ["List", "Tuple", "Dictionary", "Set"], ans: 1 },
-            { q: "LEGB Rule ย่อมาจากอะไร?", options: ["Loop, Else, Global, Built-in", "Local, Enclosing, Global, Built-in", "List, Enum, Generator, Boolean", "Lambda, Expression, Group, Block"], ans: 1 },
-            { q: "finally block ทำงานเมื่อใด?", options: ["เมื่อเกิด Exception เท่านั้น", "เมื่อไม่เกิด Exception เท่านั้น", "ทำงานเสมอไม่ว่าจะเกิด Exception หรือไม่", "ไม่ทำงาน"], ans: 2 }
-        ]
-    },
-    5: {
-        pre: [
-            { q: "OOP ย่อมาจากอะไร?", options: ["Object-Oriented Programming", "Open Operation Protocol", "Ordered Output Process", "Object Output Program"], ans: 0 },
-            { q: "Class เปรียบได้กับอะไร?", options: ["วัตถุจริง", "พิมพ์เขียว/แบบแปลน", "ตัวแปร", "ฟังก์ชัน"], ans: 1 },
-            { q: "คำสั่งใดใช้สร้าง Object จาก Class?", options: ["new Class()", "Class()", "create Class", "Class.new()"], ans: 1 },
-            { q: "การซ่อนข้อมูลภายใน Object ไม่ให้เข้าถึงจากภายนอกโดยตรง เรียกว่าอะไร?", options: ["Inheritance", "Polymorphism", "Encapsulation", "Abstraction"], ans: 2 }
-        ],
-        post: [
-            { q: "__init__ ถูกเรียกอัตโนมัติเมื่อใด?", options: ["เมื่อเรียก method ใดก็ตาม", "เมื่อสร้าง Object ใหม่", "เมื่อลบ Object", "เมื่อ import class"], ans: 1 },
-            { q: "super().__init__() ใน Child class ทำหน้าที่อะไร?", options: ["สร้าง Child class ใหม่", "เรียก __init__ ของ Parent class", "ลบ Parent class", "Copy attribute จาก Child ไป Parent"], ans: 1 },
-            { q: "__name (double underscore) ใน Python Class หมายถึงอะไร?", options: ["Public attribute ทุกคนเข้าถึงได้", "Protected attribute", "Private attribute ป้องกันการเข้าถึงตรงๆ", "Class attribute ไม่ใช่ instance attribute"], ans: 2 },
-            { q: "self ใน method ของ class หมายถึงอะไร?", options: ["ชื่อ class เสมอ", "ตัว Object เองที่กำลังถูกเรียกใช้", "ค่าคงที่", "Parent class"], ans: 1 }
-        ]
+/* Pre/post test question banks now live in assets/js/unit-quiz-bank.js
+   (loaded alongside this file wherever quiz.html's tests are needed) —
+   kept separate so that file can grow to 30 questions per test without
+   crowding the lesson content here. */
+
+/* ---------- shared progress/gating helpers ----------
+   Single source of truth for "what's unlocked", used by courses.html,
+   lesson.html and quiz.html. A unit's lessons only start counting once
+   its pre-test has been taken, and the *next* unit only opens once the
+   current unit's lessons are all done AND its post-test is passed
+   (>=70%). Reads localStorage directly so every page stays in sync
+   without a shared in-memory store. */
+function pyGetCompleted(){
+    try{ return JSON.parse(localStorage.getItem('pystart_completed')||'[]'); }catch(e){ return []; }
+}
+function pyGetUnitScores(){
+    try{ return JSON.parse(localStorage.getItem('pystart_unit_scores')||'{}'); }catch(e){ return {}; }
+}
+function pyUnitForLesson(lessonId){
+    return courseUnits.find(function(u){ return u.lessons.indexOf(lessonId) > -1; });
+}
+function pyIsUnitPreDone(unitId){
+    var s = pyGetUnitScores();
+    return !!(s[unitId] && s[unitId].pre);
+}
+function pyIsUnitPostPassed(unitId){
+    var s = pyGetUnitScores();
+    return !!(s[unitId] && s[unitId].post && s[unitId].post.pct >= 70);
+}
+// Highest lesson id currently reachable: walks units in order, stopping
+// at the first not-yet-completed lesson, or — if a unit's lessons are
+// all done but its post-test isn't passed yet — capping at that unit's
+// last lesson so the next unit's lessons don't unlock early.
+function pyComputeUnlockedLessonId(){
+    var completed = pyGetCompleted();
+    for(var i = 0; i < courseUnits.length; i++){
+        var unit = courseUnits[i];
+        for(var j = 0; j < unit.lessons.length; j++){
+            if(completed.indexOf(unit.lessons[j]) === -1) return unit.lessons[j];
+        }
+        if(!pyIsUnitPostPassed(unit.id)) return unit.lessons[unit.lessons.length - 1];
     }
-};
+    var last = courseUnits[courseUnits.length - 1];
+    return last.lessons[last.lessons.length - 1];
+}

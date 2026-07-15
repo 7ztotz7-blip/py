@@ -211,7 +211,7 @@
   @media (prefers-reduced-motion:reduce){.panel.on{animation:none;}}
 </style>
 </head>
-<body data-fx=".topbar, .hero, .tabs, #panel-learn .panel-intro, #panel-learn .mod" data-fx-count=".hero-meta .meta b" data-fx-ring=".ring">
+<body data-fx=".topbar, .hero, #panel-learn .panel-intro, #panel-learn .mod" data-fx-count=".hero-meta .meta b" data-fx-ring=".ring">
 <script>
 (function(){var b=document.body,s=b.getAttribute('data-fx');if(!s)return;document.documentElement.classList.add('js-fx');if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var st=document.createElement('style');st.textContent='.js-fx :is('+s+'){transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}.js-fx :is('+s+'):not(.fx-shown){opacity:0;transform:translateY(22px)}';document.head.appendChild(st);})();
 </script>
@@ -247,83 +247,20 @@
     <div class="hero-prog">
       <div class="ring" id="progRing" style="--p:0"><i id="progPct">0%</i></div>
       <div class="pt"><b id="progText">ยังไม่เริ่มเรียน</b><span id="progSub"></span></div>
-      <a href="lesson.html" id="continueBtn" class="btn btn-primary">เรียนต่อ
+      <a href="lesson.html" id="continueBtn" class="btn btn-primary"><span id="continueBtnText">เรียนต่อ</span>
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
       </a>
     </div>
   </section>
 
-  <!-- TABS -->
-  <div class="tabs">
-    <button class="tab on" data-tab="learn"><span class="ti">📖</span>เนื้อหาบทเรียน <span class="cnt" id="learnTabCnt">24 บท</span></button>
-    <button class="tab" data-tab="test"><span class="ti">📝</span>แบบทดสอบ <span class="cnt">ก่อน + หลังเรียน</span></button>
-  </div>
-
-  <!-- ============ TAB: LEARN ============ -->
+  <!-- ============ LESSON CONTENT ============ -->
   <div class="panel on" id="panel-learn">
     <div class="panel-intro">
       <span class="pi">💡</span>
-      <div>เรียน<b>ตามลำดับจากบนลงล่าง</b> แต่ละบทต่อยอดจากบทก่อนหน้า — เรียนจบบทจะปลดล็อกบทถัดไปให้อัตโนมัติ ส่วน<b>แบบทดสอบอยู่แท็บแยกต่างหาก</b> ทำหลังเรียนเข้าใจแล้วได้เลย</div>
+      <div>เรียน<b>ตามลำดับจากบนลงล่าง</b> แต่ละบทต่อยอดจากบทก่อนหน้า — เรียนจบบทจะปลดล็อกบทถัดไปให้อัตโนมัติ</div>
     </div>
 
     <div id="modulesContainer"></div>
-  </div>
-
-  <!-- ============ TAB: TEST ============ -->
-  <div class="panel" id="panel-test">
-    <div class="panel-intro">
-      <span class="pi">📝</span>
-      <div>ส่วนนี้<b>แยกจากบทเรียน</b> — ไม่ต้องทำระหว่างเรียนก็ได้ <b>แบบทดสอบก่อนเรียน</b> ไว้วัดว่าพื้นฐานคุณอยู่ตรงไหน ส่วน<b>แบบทดสอบหลังเรียน</b> ทำเมื่อเรียนเนื้อหาครบแล้ว เพื่อวัดผลและรับใบประกาศ</div>
-    </div>
-
-    <div class="tests">
-      <!-- PRE -->
-      <div class="tcard pre">
-        <div class="tnum">🧭</div>
-        <div class="tbody">
-          <span class="tbadge">ก่อนเรียน · ไม่นับคะแนน</span>
-          <h3>แบบทดสอบก่อนเรียน</h3>
-          <p class="tdesc">วัดพื้นฐานที่คุณมีอยู่ก่อนเริ่มเรียน เพื่อแนะนำว่าควรเริ่มตรงไหน — ตอบผิดได้ ไม่มีผลต่อคะแนน</p>
-          <div class="tstats">
-            <span class="tstat">❓ <b>15</b> ข้อ</span>
-            <span class="tstat">⏱️ ~<b>10</b> นาที</span>
-            <span class="tstat">🔓 ทำได้เลย</span>
-          </div>
-        </div>
-        <div class="taction">
-          <a href="quiz.html" class="btn btn-warm">เริ่มทำแบบทดสอบ →</a>
-          <span class="tlocknote">ทำครั้งเดียวก็พอ</span>
-        </div>
-      </div>
-
-      <!-- POST -->
-      <div class="tcard post locked">
-        <div class="tnum">🏆</div>
-        <div class="tbody">
-          <span class="tbadge">หลังเรียน · มีใบประกาศ</span>
-          <h3>แบบทดสอบหลังเรียน</h3>
-          <p class="tdesc">ข้อสอบรวบยอดครอบคลุมทั้ง <b id="postUnitCount">5</b> ส่วน ทำเมื่อเรียนเนื้อหาครบแล้ว ทำผ่าน 70% ขึ้นไปจะได้รับใบประกาศนียบัตร</p>
-          <div class="tstats">
-            <span class="tstat">❓ <b>30</b> ข้อ</span>
-            <span class="tstat">⏱️ ~<b>40</b> นาที</span>
-            <span class="tstat">🎯 ผ่านที่ <b>70%</b></span>
-            <span class="tstat">🎓 รับใบประกาศ</span>
-          </div>
-          <div class="post-prog">
-            <div class="bar"><i id="postProgBar" style="width:0%"></i></div>
-            <div class="lab"><span>ปลดล็อกเมื่อเรียนครบ 100%</span><span id="postProgLabel">ตอนนี้ 0%</span></div>
-          </div>
-        </div>
-        <div class="taction">
-          <button class="btn btn-lock">🔒 ยังล็อกอยู่</button>
-          <span class="tlocknote" id="postRemainingNote"></span>
-        </div>
-      </div>
-    </div>
-
-    <!-- per-section quizzes (optional, supporting) -->
-    <div class="seclabel"><span class="t">แบบทดสอบท้ายแต่ละส่วน (ไม่บังคับ)</span><span class="ln"></span></div>
-    <div id="secQuizList"></div>
   </div>
 
 </div>
@@ -331,33 +268,43 @@
 <script src="pystart-data.js"></script>
 <script>
   const TOTAL_LESSONS = courseData.lessons.length;
-  let completed = [];
-  try{ completed = JSON.parse(localStorage.getItem('pystart_completed')||'[]'); }catch(e){ completed = []; }
-  function unlockedId(){ return Math.min(TOTAL_LESSONS,(completed.length?Math.max.apply(null,completed):0)+1); }
-  const unlocked = unlockedId();
+  const completed = pyGetCompleted();
+  const unlocked = pyComputeUnlockedLessonId();
   const pct = Math.round((completed.length/TOTAL_LESSONS)*100);
   const nextLessonId = completed.length>=TOTAL_LESSONS ? TOTAL_LESSONS : unlocked;
   const nextLesson = courseData.lessons.find(l=>l.id===nextLessonId);
+
+  // find the current frontier unit: either mid-lessons, waiting on its
+  // post-test, or (if every unit is cleared) the whole course is done
+  let frontier = {state:'complete', unit:null};
+  for(const u of courseUnits){
+    const doneInUnit = u.lessons.filter(id=>completed.indexOf(id)>-1).length;
+    if(doneInUnit<u.lessons.length){ frontier={state:'lesson',unit:u}; break; }
+    if(!pyIsUnitPostPassed(u.id)){ frontier={state:'need-post',unit:u}; break; }
+  }
 
   // hero stats + progress ring
   document.getElementById('metaUnits').textContent = courseUnits.length;
   document.getElementById('metaLessons').textContent = TOTAL_LESSONS;
   document.getElementById('metaHours').textContent = '~'+Math.max(1,Math.round(TOTAL_LESSONS*8/60));
-  document.getElementById('learnTabCnt').textContent = TOTAL_LESSONS+' บท';
   document.getElementById('progRing').style.setProperty('--p',pct);
   document.getElementById('progPct').textContent = pct+'%';
   document.getElementById('progText').textContent = completed.length===0
     ? 'ยังไม่เริ่มเรียน' : ('เรียนไปแล้ว '+completed.length+' จาก '+TOTAL_LESSONS+' บท');
-  document.getElementById('progSub').textContent = completed.length>=TOTAL_LESSONS
-    ? 'เรียนจบหลักสูตรแล้ว 🎉' : ('กำลังเรียน: บทที่ '+nextLessonId+' · '+nextLesson.title);
-  document.getElementById('continueBtn').href = 'lesson.html?lesson='+nextLessonId;
-
-  // post-test progress
-  document.getElementById('postUnitCount').textContent = courseUnits.length;
-  document.getElementById('postProgBar').style.width = pct+'%';
-  document.getElementById('postProgLabel').textContent = 'ตอนนี้ '+pct+'%';
-  document.getElementById('postRemainingNote').textContent = completed.length>=TOTAL_LESSONS
-    ? 'พร้อมทำแล้ว' : ('เหลืออีก '+(TOTAL_LESSONS-completed.length)+' บท');
+  const continueBtn=document.getElementById('continueBtn'), continueBtnText=document.getElementById('continueBtnText');
+  if(frontier.state==='lesson'){
+    document.getElementById('progSub').textContent = 'กำลังเรียน: บทที่ '+nextLessonId+' · '+nextLesson.title;
+    continueBtnText.textContent = completed.length===0?'เริ่มเรียนเลย':'เรียนต่อ';
+    continueBtn.href = 'lesson.html?lesson='+nextLessonId;
+  } else if(frontier.state==='need-post'){
+    document.getElementById('progSub').textContent = 'ทำแบบทดสอบหลังเรียนของส่วนที่ '+frontier.unit.id+' ให้ผ่านเพื่อไปต่อ';
+    continueBtnText.textContent = 'ทำแบบทดสอบหลังเรียน';
+    continueBtn.href = 'quiz.html?unit='+frontier.unit.id+'&type=post&next='+encodeURIComponent('courses.html');
+  } else {
+    document.getElementById('progSub').textContent = 'เรียนจบหลักสูตรแล้ว 🎉';
+    continueBtnText.textContent = 'ทบทวนบทเรียน';
+    continueBtn.href = 'lesson.html?lesson=1';
+  }
 
   // module + chapter list
   const CHEVRON='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
@@ -367,12 +314,15 @@
   let modulesHtml='';
   courseUnits.forEach(unit=>{
     const doneCount=unit.lessons.filter(id=>completed.indexOf(id)>-1).length;
-    const isDone=doneCount===unit.lessons.length;
+    const lessonsDone=doneCount===unit.lessons.length;
+    const isDone=lessonsDone&&pyIsUnitPostPassed(unit.id);
+    const needsPost=lessonsDone&&!isDone;
     const isOpen=unit.lessons.indexOf(nextLessonId)>-1;
     const isLocked=unit.lessons[0]>unlocked;
     const pctUnit=Math.round((doneCount/unit.lessons.length)*100);
     let statusHtml;
     if(isDone) statusHtml='<span class="mod-status s-done">เรียนจบแล้ว</span>';
+    else if(needsPost) statusHtml='<a class="mod-status s-cur" href="quiz.html?unit='+unit.id+'&type=post&next='+encodeURIComponent('courses.html')+'">📝 ทำแบบทดสอบหลังเรียน →</a>';
     else if(isLocked) statusHtml='<span class="mod-status s-lock">🔒 ล็อกอยู่</span>';
     else statusHtml='<span class="mod-status s-cur">'+doneCount+' / '+unit.lessons.length+' บท</span>';
     const badge=isDone?CHECK:(isLocked?String(unit.id):String(unit.id));
@@ -401,40 +351,6 @@
   });
   modulesEl.innerHTML=modulesHtml;
 
-  // per-section pre/post tests
-  let unitScores={};
-  try{ unitScores=JSON.parse(localStorage.getItem('pystart_unit_scores')||'{}'); }catch(e){ unitScores={}; }
-  const secListEl=document.getElementById('secQuizList');
-  let secHtml='';
-  courseUnits.forEach(unit=>{
-    const doneCount=unit.lessons.filter(id=>completed.indexOf(id)>-1).length;
-    const isDone=doneCount===unit.lessons.length;
-    const isLocked=unit.lessons[0]>unlocked;
-    const us=unitScores[unit.id]||{};
-    const preBtn = isLocked
-      ? '<span class="sq-btn locked">🔒 ก่อนเรียน</span>'
-      : '<a class="sq-btn'+(us.pre?' taken':'')+'" href="quiz.html?unit='+unit.id+'&type=pre">'+(us.pre?'ก่อนเรียน '+us.pre.pct+'%':'ทำก่อนเรียน')+'</a>';
-    const postBtn = !isDone
-      ? '<span class="sq-btn locked">🔒 หลังเรียน</span>'
-      : '<a class="sq-btn'+(us.post?' taken':'')+'" href="quiz.html?unit='+unit.id+'&type=post">'+(us.post?'หลังเรียน '+us.post.pct+'%':'ทำหลังเรียน')+'</a>';
-    secHtml+='<div class="sq'+(isDone?' done':'')+(isLocked?' is-lock':'')+'">'+
-      '<span class="sqi">'+(isDone?CHECK:(isLocked?'🔒':'📝'))+'</span>'+
-      '<div class="sq-body"><span class="sqn">ส่วนที่ '+unit.id+' · '+unit.title+'</span>'+
-      '<span class="sqm">'+unit.lessons.length+' บท'+(isLocked?' · เรียนส่วนนี้ให้จบก่อน':(isDone?' · เรียนจบแล้ว':' · '+doneCount+'/'+unit.lessons.length+' บท'))+'</span></div>'+
-      '<div class="sq-actions">'+preBtn+postBtn+'</div>'+
-    '</div>';
-  });
-  secListEl.innerHTML=secHtml;
-
-  // tabs
-  const tabs=[...document.querySelectorAll('.tab')];
-  const panels={learn:document.getElementById('panel-learn'),test:document.getElementById('panel-test')};
-  tabs.forEach(t=>t.addEventListener('click',()=>{
-    tabs.forEach(x=>x.classList.toggle('on',x===t));
-    const k=t.dataset.tab;
-    Object.entries(panels).forEach(([key,el])=>el.classList.toggle('on',key===k));
-    window.scrollTo({top:0,behavior:'smooth'});
-  }));
   // accordion (event delegation since modules are rendered dynamically)
   modulesEl.addEventListener('click',e=>{
     const head=e.target.closest('.mod-head');

@@ -279,18 +279,23 @@ function renderCodeBlock(code){
 /* ---------- resolve current lesson ---------- */
 const TOTAL = courseData.lessons.length;
 const params = new URLSearchParams(location.search);
-let completed = [];
-try{ completed = JSON.parse(localStorage.getItem('pystart_completed')||'[]'); }catch(e){ completed = []; }
-function unlockedId(){ return Math.min(TOTAL, (completed.length?Math.max.apply(null,completed):0)+1); }
-function firstIncomplete(){
-  for(let i=1;i<=TOTAL;i++) if(completed.indexOf(i)===-1) return i;
-  return TOTAL;
-}
+let completed = pyGetCompleted();
+const unlocked = pyComputeUnlockedLessonId();
+
 let lessonId=parseInt(params.get('lesson'),10);
-if(!lessonId || !courseData.lessons.some(l=>l.id===lessonId)) lessonId=firstIncomplete();
+if(!lessonId || !courseData.lessons.some(l=>l.id===lessonId)) lessonId=unlocked;
+if(lessonId>unlocked) lessonId=unlocked; // can't skip ahead of what's actually unlocked
+
+const unit=pyUnitForLesson(lessonId);
+
+// a unit's lessons are gated behind its pre-test — bounce there first,
+// remembering to come straight back to the lesson that was requested
+if(!pyIsUnitPreDone(unit.id)){
+  location.href='quiz.html?unit='+unit.id+'&type=pre&next='+encodeURIComponent('lesson.html?lesson='+lessonId);
+  throw new Error('redirecting to pre-test'); // stop the rest of this script from running
+}
+
 const lesson=courseData.lessons.find(l=>l.id===lessonId);
-const unit=courseUnits.find(u=>u.lessons.indexOf(lessonId)>-1);
-const unlocked=unlockedId();
 
 /* ---------- render header / breadcrumb / progress ---------- */
 function renderHeader(){
@@ -371,7 +376,8 @@ function drawQuiz(){
         passed=true;
         document.getElementById('lnSub').textContent=lessonId<TOTAL?'+15 XP · ปลดล็อกบทที่ '+(lessonId+1)+' แล้ว':'+15 XP · เรียนจบหลักสูตรแล้ว! 🎓';
         document.getElementById('lessonNav').style.display='flex';
-        celebrate(lessonId<TOTAL?'+15 XP · ปลดล็อกบทที่ '+(lessonId+1)+' แล้ว':'+15 XP · เรียนจบหลักสูตรแล้ว!');
+        const isLastOfUnit=unit.lessons[unit.lessons.length-1]===lessonId;
+        celebrate(isLastOfUnit?'+15 XP · ทำแบบทดสอบหลังเรียนเพื่อไปต่อ':(lessonId<TOTAL?'+15 XP · ปลดล็อกบทที่ '+(lessonId+1)+' แล้ว':'+15 XP · เรียนจบหลักสูตรแล้ว!'));
       } else {
         document.getElementById('quizRetry').style.display='flex';
       }
@@ -387,8 +393,15 @@ function completeLesson(){
     completed.push(lessonId);
     localStorage.setItem('pystart_completed',JSON.stringify(completed));
   }
+  const isLastOfUnit=unit.lessons[unit.lessons.length-1]===lessonId;
+  if(isLastOfUnit){
+    const nextUnit=courseUnits.find(u=>u.id===unit.id+1);
+    const dest=nextUnit?('lesson.html?lesson='+nextUnit.lessons[0]):'courses.html';
+    location.href='quiz.html?unit='+unit.id+'&type=post&next='+encodeURIComponent(dest);
+    return;
+  }
   const next=lessonId+1;
-  location.href = next<=TOTAL ? ('lesson.html?lesson='+next) : 'courses.html';
+  location.href = 'lesson.html?lesson='+next;
 }
 document.getElementById('nextLessonBtn').addEventListener('click',completeLesson);
 

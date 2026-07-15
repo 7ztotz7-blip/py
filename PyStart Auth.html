@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PyStart — สมัคร / เข้าสู่ระบบ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="pystart.css" rel="stylesheet" />
+<style>
+  body{height:100vh;overflow:hidden;}
+  .auth{display:grid;grid-template-columns:1.05fr 1fr;height:100vh;}
+
+  /* ===== left brand panel ===== */
+  .brand{position:relative;overflow:hidden;color:#fff;padding:54px 56px;display:flex;flex-direction:column;
+    background:
+      radial-gradient(700px 420px at 78% 8%,oklch(0.62 0.16 280/.55),transparent 62%),
+      radial-gradient(620px 460px at 8% 92%,oklch(0.58 0.15 200/.5),transparent 60%),
+      linear-gradient(155deg,oklch(0.4 0.13 290),oklch(0.3 0.1 294));}
+  .brand::after{content:"";position:absolute;inset:0;opacity:.5;pointer-events:none;
+    background-image:radial-gradient(circle at 1px 1px,oklch(1 0 0/.10) 1px,transparent 0);background-size:26px 26px;}
+  .b-logo{display:flex;align-items:center;gap:11px;font-weight:600;font-size:20px;position:relative;z-index:2;text-decoration:none;color:#fff;}
+  .b-mk{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:15px;
+    background:oklch(1 0 0/.16);border:1px solid oklch(1 0 0/.25);backdrop-filter:blur(6px);}
+  .b-mid{position:relative;z-index:2;margin-top:auto;margin-bottom:auto;}
+  .b-tag{display:inline-flex;align-items:center;gap:9px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:500;
+    letter-spacing:.05em;color:oklch(0.92 0.04 250);background:oklch(1 0 0/.1);border:1px solid oklch(1 0 0/.18);
+    padding:7px 14px;border-radius:100px;margin-bottom:24px;}
+  .b-tag .d{width:7px;height:7px;border-radius:50%;background:oklch(0.85 0.13 145);box-shadow:0 0 10px oklch(0.85 0.13 145);}
+  .brand h1{font-size:clamp(32px,3.5vw,46px);font-weight:600;letter-spacing:-.025em;line-height:1.12;text-wrap:balance;}
+  .brand p.lead{font-size:17.5px;line-height:1.6;color:oklch(0.9 0.03 250);margin-top:18px;max-width:420px;text-wrap:pretty;}
+  .b-feats{display:flex;flex-direction:column;gap:15px;margin-top:34px;}
+  .b-feat{display:flex;align-items:center;gap:14px;font-size:15.5px;color:oklch(0.94 0.02 250);}
+  .b-feat .fi{width:38px;height:38px;border-radius:11px;flex-shrink:0;display:grid;place-items:center;
+    background:oklch(1 0 0/.13);border:1px solid oklch(1 0 0/.2);}
+  /* floating code card */
+  .b-code{position:relative;z-index:2;margin-top:40px;border-radius:16px;overflow:hidden;max-width:380px;
+    background:oklch(0.17 0.02 260/.85);border:1px solid oklch(1 0 0/.14);backdrop-filter:blur(10px);
+    box-shadow:0 30px 60px -28px oklch(0 0 0/.6);transform:rotate(-1.2deg);}
+  .b-code .bar{display:flex;align-items:center;gap:7px;padding:11px 14px;background:oklch(1 0 0/.05);border-bottom:1px solid oklch(1 0 0/.1);}
+  .b-code .bar i{width:10px;height:10px;border-radius:50%;}
+  .b-code .bar .nm{margin-left:8px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:oklch(0.75 0.02 260);}
+  .b-code pre{margin:0;padding:16px 18px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;line-height:1.8;color:oklch(0.9 0.01 260);}
+  .b-code .k{color:oklch(0.78 0.13 320);} .b-code .f{color:oklch(0.8 0.12 215);} .b-code .s{color:oklch(0.82 0.13 140);} .b-code .c{color:oklch(0.6 0.03 260);}
+  .b-foot{position:relative;z-index:2;margin-top:auto;font-size:13.5px;color:oklch(0.82 0.03 250);}
+
+  /* ===== right form panel ===== */
+  .formside{display:flex;align-items:center;justify-content:center;padding:40px;overflow-y:auto;}
+  .formcard{width:100%;max-width:404px;}
+  .fc-top{text-align:center;margin-bottom:26px;}
+  .fc-top h2{font-size:27px;font-weight:600;letter-spacing:-.02em;}
+  .fc-top p{color:var(--muted);font-size:15px;margin-top:7px;}
+  .seg{display:flex;gap:5px;background:var(--soft);border:1px solid var(--line);border-radius:13px;padding:5px;margin-bottom:24px;}
+  .seg button{flex:1;height:42px;border-radius:9px;font-size:15px;font-weight:600;color:var(--muted);transition:.18s;}
+  .seg button.on{color:var(--accent-deep);background:var(--card);box-shadow:var(--shadow-sm);}
+  .field{margin-bottom:15px;}
+  .field label{display:block;font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:7px;}
+  .field .inp{position:relative;}
+  .field .inp .ic{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--faint);pointer-events:none;}
+  .field input{width:100%;height:50px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);
+    padding:0 16px 0 44px;font-size:15px;color:var(--ink);transition:.18s;}
+  .field input::placeholder{color:var(--faint);}
+  .field input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);}
+  .field .eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);color:var(--faint);width:32px;height:32px;
+    border-radius:8px;display:grid;place-items:center;}
+  .field .eye:hover{background:var(--soft);color:var(--muted);}
+  .meter{display:flex;gap:5px;margin-top:9px;}
+  .meter i{flex:1;height:5px;border-radius:100px;background:var(--line);transition:.25s;}
+  .meter i.on{background:linear-gradient(90deg,var(--ok),var(--ok-deep));}
+  .meter-l{font-size:12px;color:var(--faint);margin-top:6px;}
+  .frow{display:flex;align-items:center;justify-content:space-between;margin:4px 0 20px;font-size:13.5px;}
+  .frow label{display:flex;align-items:center;gap:8px;color:var(--muted);cursor:pointer;user-select:none;}
+  .frow .cbx{width:19px;height:19px;border:1.5px solid var(--line);border-radius:6px;display:grid;place-items:center;color:#fff;transition:.15s;}
+  .frow input{display:none;}
+  .frow input:checked + .cbx{background:var(--accent);border-color:var(--accent);}
+  .frow input:checked + .cbx svg{opacity:1;}
+  .frow .cbx svg{opacity:0;transition:.15s;}
+  .frow .link{color:var(--accent-deep);font-weight:600;text-decoration:none;}
+  .submit{width:100%;}
+  .divider{display:flex;align-items:center;gap:14px;margin:22px 0;color:var(--faint);font-size:13px;}
+  .divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line);}
+  .oauth{display:flex;gap:11px;}
+  .oauth button{flex:1;height:48px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);
+    display:flex;align-items:center;justify-content:center;gap:9px;font-size:14.5px;font-weight:600;color:var(--ink);transition:.15s;}
+  .oauth button:hover{border-color:var(--accent-line);background:var(--soft);}
+  .switch{text-align:center;margin-top:24px;font-size:14.5px;color:var(--muted);}
+  .switch a{color:var(--accent-deep);font-weight:600;text-decoration:none;cursor:pointer;}
+  .signup-only{display:none;}
+  body[data-mode="signup"] .signup-only{display:block;}
+  body[data-mode="signup"] .login-only{display:none;}
+
+  @media (max-width:880px){
+    body{overflow:auto;height:auto;}
+    .auth{grid-template-columns:1fr;height:auto;}
+    .brand{display:none;}
+    .formside{min-height:100vh;}
+  }
+</style>
+</head>
+<body data-mode="signup" data-fx=".brand .b-logo, .b-mid > *, .b-foot, .formcard > *">
+<script>
+(function(){var b=document.body,s=b.getAttribute('data-fx');if(!s)return;document.documentElement.classList.add('js-fx');if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var st=document.createElement('style');st.textContent='.js-fx :is('+s+'){transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}.js-fx :is('+s+'):not(.fx-shown){opacity:0;transform:translateY(22px)}';document.head.appendChild(st);})();
+</script>
+<div class="auth">
+
+  <!-- LEFT -->
+  <aside class="brand">
+    <a class="b-logo" href="PyStart Landing.html"><span class="b-mk">Py</span>PyStart</a>
+    <div class="b-mid">
+      <span class="b-tag"><span class="d"></span>เรียนเขียนโค้ดฟรี · ไม่ต้องลงโปรแกรม</span>
+      <h1>เริ่มเขียน Python<br/>ได้ภายใน 5 นาที</h1>
+      <p class="lead">สร้างบัญชีเพื่อบันทึกความคืบหน้า สะสมสตรีค และเรียนต่อจากเครื่องไหนก็ได้</p>
+      <div class="b-code">
+        <div class="bar"><i style="background:oklch(0.72 0.16 25)"></i><i style="background:oklch(0.84 0.13 90)"></i><i style="background:oklch(0.76 0.14 150)"></i><span class="nm">welcome.py</span></div>
+<pre><span class="c"># ยินดีต้อนรับสู่ PyStart</span>
+<span class="k">for</span> day <span class="k">in</span> <span class="f">range</span>(<span class="s"></span>1, 8):
+    <span class="f">print</span>(<span class="s">"เก่งขึ้นทุกวัน 🔥"</span>)</pre>
+      </div>
+    </div>
+    <div class="b-foot">© 2026 PyStart · โครงงานเรียนรู้การเขียนโปรแกรม</div>
+  </aside>
+
+  <!-- RIGHT -->
+  <main class="formside">
+    <div class="formcard">
+      <div class="fc-top">
+        <h2 class="t-title">สร้างบัญชีใหม่</h2>
+        <p class="t-sub">เริ่มต้นเส้นทางนักเขียนโค้ดของคุณ</p>
+      </div>
+
+      <div class="seg">
+        <button class="" data-set="login">เข้าสู่ระบบ</button>
+        <button class="on" data-set="signup">สมัครสมาชิก</button>
+      </div>
+
+      <form onsubmit="return false">
+        <div class="field signup-only">
+          <label>ชื่อที่ใช้แสดง</label>
+          <div class="inp">
+            <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span>
+            <input type="text" placeholder="เช่น ใจดี โค้ดเก่ง" />
+          </div>
+        </div>
+        <div class="field">
+          <label>อีเมล</label>
+          <div class="inp">
+            <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-10 5L2 7"></path></svg></span>
+            <input type="email" placeholder="you@example.com" />
+          </div>
+        </div>
+        <div class="field">
+          <label>รหัสผ่าน</label>
+          <div class="inp">
+            <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>
+            <input type="password" id="pw" placeholder="อย่างน้อย 8 ตัวอักษร" />
+            <button type="button" class="eye" id="eyeBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
+          </div>
+          <div class="signup-only">
+            <div class="meter" id="meter"><i></i><i></i><i></i><i></i></div>
+            <div class="meter-l" id="meterL">ความปลอดภัยของรหัสผ่าน</div>
+          </div>
+        </div>
+
+        <div class="frow">
+          <label><input type="checkbox" id="rem" checked /><span class="cbx"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></span><span class="signup-only">ยอมรับเงื่อนไขการใช้งาน</span><span class="login-only">จดจำฉันไว้</span></label>
+          <a class="link login-only" href="#">ลืมรหัสผ่าน?</a>
+        </div>
+
+        <a href="PyStart Dashboard.html" class="btn btn-primary lg submit"><span class="t-cta">สร้างบัญชี</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </form>
+
+      <div class="divider">หรือ</div>
+      <div class="oauth">
+        <button><svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.5 12.2c0-.7-.1-1.4-.2-2H12v3.8h5.9a5 5 0 0 1-2.2 3.3v2.7h3.6c2.1-2 3.2-4.8 3.2-7.8Z"/><path fill="#34A853" d="M12 23c2.9 0 5.4-1 7.2-2.6l-3.6-2.7c-1 .7-2.3 1-3.6 1-2.8 0-5.1-1.9-6-4.4H2.3v2.8A11 11 0 0 0 12 23Z"/><path fill="#FBBC05" d="M6 14.3a6.6 6.6 0 0 1 0-4.2V7.3H2.3a11 11 0 0 0 0 9.8L6 14.3Z"/><path fill="#EA4335" d="M12 5.4c1.6 0 3 .5 4.1 1.6l3.1-3.1A11 11 0 0 0 2.3 7.3L6 10.1c.9-2.6 3.2-4.7 6-4.7Z"/></svg>Google</button>
+        <button><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.6 2 12.3c0 4.5 2.9 8.3 6.8 9.7.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.4-3.4-1.4-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.6 2.4 1.1 3 .9.1-.7.4-1.1.6-1.4-2.2-.3-4.5-1.2-4.5-5.1 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9 9 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.3 4.8-4.5 5.1.4.3.7.9.7 1.9v2.8c0 .3.2.6.7.5A10.3 10.3 0 0 0 22 12.3C22 6.6 17.5 2 12 2Z"/></svg>GitHub</button>
+      </div>
+
+      <p class="switch"><span class="t-switch-q">มีบัญชีอยู่แล้ว?</span> <a id="switchLink"><span class="t-switch-a">เข้าสู่ระบบ</span></a></p>
+    </div>
+  </main>
+</div>
+
+<script>
+  const body=document.body;
+  const segBtns=[...document.querySelectorAll('.seg button')];
+  const T={
+    signup:{title:'สร้างบัญชีใหม่',sub:'เริ่มต้นเส้นทางนักเขียนโค้ดของคุณ',cta:'สร้างบัญชี',q:'มีบัญชีอยู่แล้ว?',a:'เข้าสู่ระบบ'},
+    login:{title:'ยินดีต้อนรับกลับมา',sub:'เข้าสู่ระบบเพื่อเรียนต่อ',cta:'เข้าสู่ระบบ',q:'ยังไม่มีบัญชี?',a:'สมัครสมาชิก'}
+  };
+  function setMode(m){
+    body.dataset.mode=m;
+    segBtns.forEach(b=>b.classList.toggle('on',b.dataset.set===m));
+    const t=T[m];
+    document.querySelector('.t-title').textContent=t.title;
+    document.querySelector('.t-sub').textContent=t.sub;
+    document.querySelector('.t-cta').textContent=t.cta;
+    document.querySelector('.t-switch-q').textContent=t.q;
+    document.querySelector('.t-switch-a').textContent=t.a;
+  }
+  segBtns.forEach(b=>b.addEventListener('click',()=>setMode(b.dataset.set)));
+  document.getElementById('switchLink').addEventListener('click',()=>setMode(body.dataset.mode==='signup'?'login':'signup'));
+
+  // password show/hide
+  const pw=document.getElementById('pw'),eyeBtn=document.getElementById('eyeBtn');
+  eyeBtn.addEventListener('click',()=>{pw.type=pw.type==='password'?'text':'password';});
+
+  // strength meter
+  const meter=document.getElementById('meter'),meterL=document.getElementById('meterL');
+  const labels=['อ่อนมาก','พอใช้','ดี','แข็งแรง'];
+  pw.addEventListener('input',()=>{
+    const v=pw.value;let s=0;
+    if(v.length>=8)s++; if(/[A-Z]/.test(v)||/[ก-๙]/.test(v))s++; if(/[0-9]/.test(v))s++; if(/[^A-Za-z0-9]/.test(v))s++;
+    [...meter.children].forEach((i,idx)=>i.classList.toggle('on',idx<s));
+    meterL.textContent=v?('ความปลอดภัย: '+(labels[Math.max(0,s-1)]||labels[0])):'ความปลอดภัยของรหัสผ่าน';
+  });
+</script>
+<script src="pystart-fx.js"></script>
+</body>
+</html>

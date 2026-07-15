@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PyStart — หลักสูตร Python</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:oklch(0.21 0.02 255); --muted:oklch(0.52 0.018 255); --faint:oklch(0.62 0.015 255);
+    --line:oklch(0.92 0.008 255); --line-soft:oklch(0.95 0.006 255);
+    --bg:oklch(0.985 0.005 250); --soft:oklch(0.975 0.008 250); --card:#ffffff;
+    --accent:oklch(0.56 0.16 255); --accent-deep:oklch(0.44 0.17 258); --accent-2:oklch(0.68 0.14 232);
+    --accent-soft:oklch(0.955 0.03 250); --accent-line:oklch(0.87 0.05 250);
+    --ok:oklch(0.6 0.14 155); --ok-deep:oklch(0.45 0.12 158); --ok-soft:oklch(0.95 0.05 155); --ok-line:oklch(0.85 0.07 155);
+    --warm:oklch(0.72 0.13 65); --warm-deep:oklch(0.52 0.12 60); --warm-soft:oklch(0.96 0.04 75); --warm-line:oklch(0.88 0.07 70);
+    --lock:oklch(0.7 0.012 255);
+    --shadow-sm:0 1px 2px oklch(0.4 0.06 287/.05),0 4px 12px -6px oklch(0.42 0.08 288/.14);
+    --shadow-md:0 10px 30px -14px oklch(0.4 0.08 287/.24);
+    --shadow-lg:0 30px 60px -30px oklch(0.42 0.1 288/.34);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{font-family:'IBM Plex Sans Thai','IBM Plex Sans',sans-serif;color:var(--ink);background:var(--bg);
+    -webkit-font-smoothing:antialiased;line-height:1.5;padding-bottom:80px;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+  button{font:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+  code{font-family:'IBM Plex Mono',monospace;}
+  ::selection{background:var(--accent-soft);}
+
+  /* top bar */
+  .topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:22px;height:62px;padding:0 26px;
+    background:color-mix(in oklch,var(--bg) 82%,transparent);backdrop-filter:blur(16px) saturate(1.4);border-bottom:1px solid var(--line);}
+  .tb-logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:18px;}
+  .tb-mk{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:#fff;font-family:'IBM Plex Mono',monospace;
+    font-weight:600;font-size:13px;background:linear-gradient(140deg,var(--accent-2),var(--accent-deep));}
+  .tb-nav{display:flex;gap:4px;margin-left:14px;}
+  .tb-nav a{font-size:14.5px;color:var(--muted);padding:8px 14px;border-radius:9px;text-decoration:none;font-weight:500;transition:.15s;}
+  .tb-nav a:hover{background:var(--soft);color:var(--ink);}
+  .tb-nav a.cur{color:var(--accent-deep);background:var(--accent-soft);font-weight:600;}
+  .tb-right{display:flex;align-items:center;gap:10px;margin-left:auto;}
+  .chiplet{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 13px;border-radius:10px;border:1px solid var(--line);
+    background:var(--card);font-size:13.5px;font-weight:600;}
+  .tb-av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:600;font-size:14px;
+    background:linear-gradient(140deg,oklch(0.7 0.12 30),oklch(0.58 0.14 12));}
+
+  .wrap{max-width:1000px;margin:0 auto;padding:0 26px;}
+
+  /* hero */
+  .hero{position:relative;margin-top:34px;background:
+      radial-gradient(620px 240px at 88% -20%,oklch(0.93 0.05 250/.8),transparent 70%),
+      linear-gradient(180deg,#ffffff,oklch(0.985 0.006 250));
+    border:1px solid var(--line);border-radius:24px;padding:38px 40px;overflow:hidden;
+    box-shadow:0 1px 0 #fff inset,var(--shadow-md);}
+  .hero::before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:linear-gradient(180deg,var(--accent),var(--accent-2));}
+  .hero-kick{display:inline-flex;align-items:center;gap:9px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;
+    letter-spacing:.06em;text-transform:uppercase;color:var(--accent-deep);background:var(--accent-soft);
+    border:1px solid var(--accent-line);padding:7px 13px;border-radius:100px;margin-bottom:18px;}
+  .hero h1{font-size:clamp(28px,3.6vw,40px);font-weight:600;letter-spacing:-.025em;line-height:1.12;text-wrap:balance;}
+  .hero p.lead{color:var(--muted);font-size:17px;line-height:1.6;margin-top:13px;max-width:560px;text-wrap:pretty;}
+  .hero-meta{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;}
+  .meta{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);
+    padding:9px 14px;border-radius:11px;font-size:14px;font-weight:500;box-shadow:var(--shadow-sm);}
+  .meta b{font-weight:600;}
+  .hero-prog{display:flex;align-items:center;gap:18px;margin-top:26px;padding-top:24px;border-top:1px solid var(--line);}
+  .ring{--p:24;width:74px;height:74px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;
+    background:conic-gradient(var(--accent) calc(var(--p)*1%),var(--accent-soft) 0);}
+  .ring i{width:58px;height:58px;border-radius:50%;background:var(--card);display:grid;place-items:center;
+    font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:17px;color:var(--accent-deep);}
+  .hero-prog .pt{flex:1;}
+  .hero-prog .pt b{font-size:16px;font-weight:600;display:block;}
+  .hero-prog .pt span{font-size:14px;color:var(--muted);}
+  .btn{display:inline-flex;align-items:center;gap:9px;height:48px;padding:0 24px;border-radius:13px;font-size:15.5px;font-weight:600;
+    white-space:nowrap;transition:transform .15s,box-shadow .15s;text-decoration:none;}
+  .btn-primary{color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent-deep));box-shadow:0 12px 24px -8px oklch(0.4 0.13 288/.55);}
+  .btn-primary:hover{transform:translateY(-2px);}
+  .btn-ghost{color:var(--ink);border:1px solid var(--line);background:var(--card);}
+  .btn-ghost:hover{border-color:var(--accent-line);background:var(--soft);}
+
+  /* tabs */
+  .tabs{display:flex;gap:7px;margin:30px auto 0;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:6px;
+    box-shadow:var(--shadow-sm);position:sticky;top:78px;z-index:40;}
+  .tab{flex:1;display:flex;align-items:center;justify-content:center;gap:10px;height:50px;border-radius:11px;font-size:15.5px;font-weight:600;
+    color:var(--muted);transition:.18s;position:relative;}
+  .tab .ti{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;background:var(--soft);color:var(--faint);transition:.18s;}
+  .tab:hover{color:var(--ink);}
+  .tab.on{color:var(--accent-deep);background:var(--accent-soft);}
+  .tab.on .ti{background:linear-gradient(140deg,var(--accent-2),var(--accent-deep));color:#fff;}
+  .tab .cnt{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:500;color:var(--faint);}
+
+  .panel{margin-top:26px;display:none;}
+  .panel.on{display:block;animation:fade .4s ease;}
+  @keyframes fade{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+
+  .panel-intro{display:flex;gap:13px;align-items:flex-start;background:var(--soft);border:1px solid var(--line);
+    border-radius:14px;padding:16px 18px;margin-bottom:22px;font-size:14.5px;color:var(--muted);line-height:1.6;}
+  .panel-intro .pi{width:34px;height:34px;border-radius:10px;flex-shrink:0;display:grid;place-items:center;
+    background:var(--accent-soft);color:var(--accent-deep);}
+  .panel-intro b{color:var(--ink);font-weight:600;}
+
+  /* module */
+  .mod{background:var(--card);border:1px solid var(--line);border-radius:18px;margin-bottom:16px;overflow:hidden;
+    box-shadow:var(--shadow-sm);transition:box-shadow .25s,border-color .25s;}
+  .mod.open{box-shadow:var(--shadow-md);}
+  .mod.locked{background:var(--soft);}
+  .mod-head{display:flex;align-items:center;gap:16px;padding:20px 22px;cursor:pointer;user-select:none;}
+  .mod-badge{width:46px;height:46px;border-radius:13px;flex-shrink:0;display:grid;place-items:center;font-family:'IBM Plex Mono',monospace;
+    font-weight:600;font-size:18px;color:#fff;background:linear-gradient(140deg,var(--accent-2),var(--accent-deep));
+    box-shadow:0 1px 0 oklch(1 0 0/.4) inset,0 8px 16px -6px oklch(0.45 0.13 288/.5);position:relative;}
+  .mod.done .mod-badge{background:linear-gradient(140deg,var(--ok),var(--ok-deep));box-shadow:0 1px 0 oklch(1 0 0/.4) inset,0 8px 16px -6px oklch(0.45 0.12 158/.5);}
+  .mod.locked .mod-badge{background:linear-gradient(140deg,oklch(0.82 0.01 255),oklch(0.72 0.012 255));box-shadow:var(--shadow-sm);color:#fff;}
+  .mod-info{flex:1;min-width:0;}
+  .mod-eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:3px;}
+  .mod-title{font-size:18.5px;font-weight:600;letter-spacing:-.01em;}
+  .mod-desc{font-size:14px;color:var(--muted);margin-top:3px;}
+  .mod-side{display:flex;align-items:center;gap:18px;flex-shrink:0;}
+  .mod-pct{text-align:right;}
+  .mod-pct b{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;}
+  .mod-pct span{font-size:12px;color:var(--faint);display:block;}
+  .mod-mini{width:88px;height:7px;border-radius:100px;background:var(--soft);border:1px solid var(--line);overflow:hidden;margin-top:5px;}
+  .mod-mini i{display:block;height:100%;border-radius:100px;background:linear-gradient(90deg,var(--accent),var(--accent-2));}
+  .mod.done .mod-mini i{background:linear-gradient(90deg,var(--ok),var(--ok-deep));}
+  .mod-status{font-size:13px;font-weight:600;display:inline-flex;align-items:center;gap:6px;}
+  .mod-status.s-done{color:var(--ok-deep);} .mod-status.s-cur{color:var(--accent-deep);} .mod-status.s-lock{color:var(--lock);}
+  .mod-caret{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:var(--faint);background:var(--soft);transition:transform .28s,background .15s;}
+  .mod.open .mod-caret{transform:rotate(180deg);background:var(--accent-soft);color:var(--accent-deep);}
+
+  .mod-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .32s cubic-bezier(.3,.7,.3,1);}
+  .mod.open .mod-body{grid-template-rows:1fr;}
+  .mod-body-inner{overflow:hidden;}
+  .chapters{border-top:1px solid var(--line);padding:8px 22px 16px;}
+  .ch{display:flex;align-items:center;gap:14px;padding:12px 8px;border-radius:11px;transition:background .15s;}
+  .ch:hover{background:var(--soft);}
+  .ch + .ch{border-top:1px solid var(--line-soft);}
+  .ch-ic{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;font-size:13px;}
+  .ch-ic.done{background:var(--ok-soft);color:var(--ok-deep);border:1.5px solid var(--ok-line);}
+  .ch-ic.cur{background:linear-gradient(140deg,var(--accent),var(--accent-deep));color:#fff;box-shadow:0 0 0 4px var(--accent-soft);}
+  .ch-ic.lock{background:var(--soft);color:var(--lock);border:1.5px solid var(--line);}
+  .ch-num{font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--faint);width:24px;flex-shrink:0;}
+  .ch-name{flex:1;font-size:15px;font-weight:500;}
+  .ch.is-lock .ch-name{color:var(--faint);}
+  .ch-meta{font-size:12.5px;color:var(--faint);display:flex;align-items:center;gap:12px;flex-shrink:0;}
+  .ch-go{font-size:13px;font-weight:600;color:var(--accent-deep);display:inline-flex;align-items:center;gap:5px;opacity:0;transition:.15s;text-decoration:none;}
+  .ch:hover .ch-go{opacity:1;}
+  .ch.is-cur{background:var(--accent-soft);}
+  .ch.is-cur .ch-name{color:var(--accent-deep);font-weight:600;}
+  .ch.is-cur .ch-go{opacity:1;}
+
+  /* test cards */
+  .tests{display:flex;flex-direction:column;gap:18px;}
+  .tcard{position:relative;border-radius:20px;padding:28px 30px;overflow:hidden;display:flex;gap:24px;align-items:center;
+    border:1px solid var(--line);background:linear-gradient(180deg,#fff,oklch(0.985 0.006 250));box-shadow:var(--shadow-md);}
+  .tcard.pre{border-color:var(--warm-line);background:
+      radial-gradient(500px 200px at 90% -30%,var(--warm-soft),transparent 70%),linear-gradient(180deg,#fff,oklch(0.99 0.01 75));}
+  .tcard.post{border-color:var(--ok-line);background:
+      radial-gradient(500px 200px at 90% -30%,var(--ok-soft),transparent 70%),linear-gradient(180deg,#fff,oklch(0.99 0.01 155));}
+  .tcard .tnum{width:78px;height:78px;border-radius:20px;flex-shrink:0;display:grid;place-items:center;color:#fff;
+    font-size:34px;box-shadow:0 1px 0 oklch(1 0 0/.4) inset,var(--shadow-md);}
+  .tcard.pre .tnum{background:linear-gradient(140deg,var(--warm),var(--warm-deep));}
+  .tcard.post .tnum{background:linear-gradient(140deg,var(--ok),var(--ok-deep));}
+  .tcard.locked .tnum{background:linear-gradient(140deg,oklch(0.82 0.01 255),oklch(0.72 0.012 255));}
+  .tcard .tbody{flex:1;min-width:0;}
+  .tbadge{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;font-family:'IBM Plex Mono',monospace;
+    letter-spacing:.05em;text-transform:uppercase;padding:5px 11px;border-radius:100px;margin-bottom:10px;}
+  .tcard.pre .tbadge{background:var(--warm-soft);color:var(--warm-deep);border:1px solid var(--warm-line);}
+  .tcard.post .tbadge{background:var(--ok-soft);color:var(--ok-deep);border:1px solid var(--ok-line);}
+  .tcard h3{font-size:21px;font-weight:600;letter-spacing:-.015em;}
+  .tcard .tdesc{font-size:15px;color:var(--muted);margin-top:7px;line-height:1.6;max-width:480px;text-wrap:pretty;}
+  .tstats{display:flex;gap:9px;margin-top:16px;flex-wrap:wrap;}
+  .tstat{display:inline-flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--line);
+    padding:7px 13px;border-radius:10px;font-size:13.5px;font-weight:500;}
+  .tstat b{font-weight:600;}
+  .tcard .taction{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:10px;}
+  .btn-warm{color:#fff;background:linear-gradient(135deg,var(--warm),var(--warm-deep));box-shadow:0 12px 24px -8px oklch(0.5 0.12 60/.5);}
+  .btn-warm:hover{transform:translateY(-2px);}
+  .btn-ok{color:#fff;background:linear-gradient(135deg,var(--ok),var(--ok-deep));box-shadow:0 12px 24px -8px oklch(0.45 0.12 158/.5);}
+  .btn-lock{color:var(--faint);background:var(--soft);border:1px solid var(--line);cursor:not-allowed;}
+  .tlocknote{font-size:12.5px;color:var(--faint);display:flex;align-items:center;gap:6px;}
+  .post-prog{width:100%;margin-top:4px;}
+  .post-prog .bar{height:8px;border-radius:100px;background:var(--soft);border:1px solid var(--line);overflow:hidden;}
+  .post-prog .bar i{display:block;height:100%;width:24%;border-radius:100px;background:linear-gradient(90deg,var(--ok),var(--ok-deep));}
+  .post-prog .lab{display:flex;justify-content:space-between;font-size:12.5px;color:var(--faint);margin-top:6px;}
+
+  .seclabel{display:flex;align-items:center;gap:13px;margin:30px 4px 16px;}
+  .seclabel .t{font-size:14px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--faint);font-family:'IBM Plex Mono',monospace;}
+  .seclabel .ln{flex:1;height:1px;background:var(--line);}
+
+  .sq{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:13px;padding:14px 18px;margin-bottom:10px;}
+  .sq .sqi{width:34px;height:34px;border-radius:10px;flex-shrink:0;display:grid;place-items:center;background:var(--soft);color:var(--faint);font-size:14px;}
+  .sq.done .sqi{background:var(--ok-soft);color:var(--ok-deep);}
+  .sq-body{flex:1;min-width:180px;}
+  .sq .sqn{display:block;font-size:15px;font-weight:500;}
+  .sq.is-lock .sqn{color:var(--faint);}
+  .sq .sqm{display:block;font-size:13px;color:var(--faint);margin-top:2px;}
+  .sq-actions{display:flex;gap:8px;flex-shrink:0;}
+  .sq-btn{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 13px;border-radius:9px;font-size:12.5px;font-weight:600;
+    border:1px solid var(--line);background:var(--soft);color:var(--muted);text-decoration:none;transition:.15s;white-space:nowrap;}
+  .sq-btn:hover{border-color:var(--accent-line);color:var(--accent-deep);background:var(--accent-soft);}
+  .sq-btn.taken{border-color:var(--ok-line);background:var(--ok-soft);color:var(--ok-deep);}
+  .sq-btn.locked{opacity:.55;cursor:not-allowed;}
+
+  @media (max-width:720px){
+    .tb-nav{display:none;}
+    .hero{padding:28px 24px;}
+    .tcard{flex-direction:column;align-items:flex-start;gap:18px;}
+    .tcard .taction{align-items:flex-start;width:100%;}
+    .mod-side .mod-pct{display:none;}
+  }
+  @media (prefers-reduced-motion:reduce){.panel.on{animation:none;}}
+</style>
+</head>
+<body data-fx=".topbar, .hero, .tabs, #panel-learn .panel-intro, #panel-learn .mod" data-fx-count=".hero-meta .meta b" data-fx-ring=".ring">
+<script>
+(function(){var b=document.body,s=b.getAttribute('data-fx');if(!s)return;document.documentElement.classList.add('js-fx');if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var st=document.createElement('style');st.textContent='.js-fx :is('+s+'){transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}.js-fx :is('+s+'):not(.fx-shown){opacity:0;transform:translateY(22px)}';document.head.appendChild(st);})();
+</script>
+
+<header class="topbar">
+  <a class="tb-logo" href="PyStart Landing.html" style="text-decoration:none;color:inherit"><span class="tb-mk">Py</span>PyStart</a>
+  <nav class="tb-nav">
+    <a href="PyStart Landing.html">หน้าแรก</a>
+    <a href="PyStart Curriculum.html" class="cur">หลักสูตร</a>
+    <a href="PyStart Dashboard.html">แดชบอร์ด</a>
+    <a href="PyStart Profile.html">โปรไฟล์</a>
+  </nav>
+  <div class="tb-right">
+    <span class="chiplet" style="color:oklch(0.5 0.13 50)">🔥 7</span>
+    <span class="chiplet" style="color:var(--accent-deep)">⭐ 1,240 XP</span>
+    <div class="tb-av">ใ</div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <span class="hero-kick">หลักสูตรเดียว · ครบทุกเรื่อง</span>
+    <h1>Python ตั้งแต่ศูนย์<br/>จนเขียนใช้งานได้จริง</h1>
+    <p class="lead">เส้นทางเรียนแบบเป็นขั้นเป็นตอนสำหรับคนไม่เคยเขียนโค้ด — เริ่มจากบรรทัดแรก ไปจนถึงสร้างโปรเจกต์ของตัวเองได้</p>
+    <div class="hero-meta" id="heroMeta">
+      <span class="meta">📦 <b id="metaUnits">5</b> ส่วน</span>
+      <span class="meta">📖 <b id="metaLessons">24</b> บทเรียน</span>
+      <span class="meta">⏱️ <b id="metaHours">~4</b> ชั่วโมง</span>
+      <span class="meta">🎓 มีใบประกาศเมื่อเรียนจบ</span>
+    </div>
+    <div class="hero-prog">
+      <div class="ring" id="progRing" style="--p:0"><i id="progPct">0%</i></div>
+      <div class="pt"><b id="progText">ยังไม่เริ่มเรียน</b><span id="progSub"></span></div>
+      <a href="PyStart Lesson v2.html" id="continueBtn" class="btn btn-primary">เรียนต่อ
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab on" data-tab="learn"><span class="ti">📖</span>เนื้อหาบทเรียน <span class="cnt" id="learnTabCnt">24 บท</span></button>
+    <button class="tab" data-tab="test"><span class="ti">📝</span>แบบทดสอบ <span class="cnt">ก่อน + หลังเรียน</span></button>
+  </div>
+
+  <!-- ============ TAB: LEARN ============ -->
+  <div class="panel on" id="panel-learn">
+    <div class="panel-intro">
+      <span class="pi">💡</span>
+      <div>เรียน<b>ตามลำดับจากบนลงล่าง</b> แต่ละบทต่อยอดจากบทก่อนหน้า — เรียนจบบทจะปลดล็อกบทถัดไปให้อัตโนมัติ ส่วน<b>แบบทดสอบอยู่แท็บแยกต่างหาก</b> ทำหลังเรียนเข้าใจแล้วได้เลย</div>
+    </div>
+
+    <div id="modulesContainer"></div>
+  </div>
+
+  <!-- ============ TAB: TEST ============ -->
+  <div class="panel" id="panel-test">
+    <div class="panel-intro">
+      <span class="pi">📝</span>
+      <div>ส่วนนี้<b>แยกจากบทเรียน</b> — ไม่ต้องทำระหว่างเรียนก็ได้ <b>แบบทดสอบก่อนเรียน</b> ไว้วัดว่าพื้นฐานคุณอยู่ตรงไหน ส่วน<b>แบบทดสอบหลังเรียน</b> ทำเมื่อเรียนเนื้อหาครบแล้ว เพื่อวัดผลและรับใบประกาศ</div>
+    </div>
+
+    <div class="tests">
+      <!-- PRE -->
+      <div class="tcard pre">
+        <div class="tnum">🧭</div>
+        <div class="tbody">
+          <span class="tbadge">ก่อนเรียน · ไม่นับคะแนน</span>
+          <h3>แบบทดสอบก่อนเรียน</h3>
+          <p class="tdesc">วัดพื้นฐานที่คุณมีอยู่ก่อนเริ่มเรียน เพื่อแนะนำว่าควรเริ่มตรงไหน — ตอบผิดได้ ไม่มีผลต่อคะแนน</p>
+          <div class="tstats">
+            <span class="tstat">❓ <b>15</b> ข้อ</span>
+            <span class="tstat">⏱️ ~<b>10</b> นาที</span>
+            <span class="tstat">🔓 ทำได้เลย</span>
+          </div>
+        </div>
+        <div class="taction">
+          <a href="PyStart Quiz.html" class="btn btn-warm">เริ่มทำแบบทดสอบ →</a>
+          <span class="tlocknote">ทำครั้งเดียวก็พอ</span>
+        </div>
+      </div>
+
+      <!-- POST -->
+      <div class="tcard post locked">
+        <div class="tnum">🏆</div>
+        <div class="tbody">
+          <span class="tbadge">หลังเรียน · มีใบประกาศ</span>
+          <h3>แบบทดสอบหลังเรียน</h3>
+          <p class="tdesc">ข้อสอบรวบยอดครอบคลุมทั้ง <b id="postUnitCount">5</b> ส่วน ทำเมื่อเรียนเนื้อหาครบแล้ว ทำผ่าน 70% ขึ้นไปจะได้รับใบประกาศนียบัตร</p>
+          <div class="tstats">
+            <span class="tstat">❓ <b>30</b> ข้อ</span>
+            <span class="tstat">⏱️ ~<b>40</b> นาที</span>
+            <span class="tstat">🎯 ผ่านที่ <b>70%</b></span>
+            <span class="tstat">🎓 รับใบประกาศ</span>
+          </div>
+          <div class="post-prog">
+            <div class="bar"><i id="postProgBar" style="width:0%"></i></div>
+            <div class="lab"><span>ปลดล็อกเมื่อเรียนครบ 100%</span><span id="postProgLabel">ตอนนี้ 0%</span></div>
+          </div>
+        </div>
+        <div class="taction">
+          <button class="btn btn-lock">🔒 ยังล็อกอยู่</button>
+          <span class="tlocknote" id="postRemainingNote"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- per-section quizzes (optional, supporting) -->
+    <div class="seclabel"><span class="t">แบบทดสอบท้ายแต่ละส่วน (ไม่บังคับ)</span><span class="ln"></span></div>
+    <div id="secQuizList"></div>
+  </div>
+
+</div>
+
+<script src="pystart-data.js"></script>
+<script>
+  const TOTAL_LESSONS = courseData.lessons.length;
+  let completed = [];
+  try{ completed = JSON.parse(localStorage.getItem('pystart_completed')||'[]'); }catch(e){ completed = []; }
+  function unlockedId(){ return Math.min(TOTAL_LESSONS,(completed.length?Math.max.apply(null,completed):0)+1); }
+  const unlocked = unlockedId();
+  const pct = Math.round((completed.length/TOTAL_LESSONS)*100);
+  const nextLessonId = completed.length>=TOTAL_LESSONS ? TOTAL_LESSONS : unlocked;
+  const nextLesson = courseData.lessons.find(l=>l.id===nextLessonId);
+
+  // hero stats + progress ring
+  document.getElementById('metaUnits').textContent = courseUnits.length;
+  document.getElementById('metaLessons').textContent = TOTAL_LESSONS;
+  document.getElementById('metaHours').textContent = '~'+Math.max(1,Math.round(TOTAL_LESSONS*8/60));
+  document.getElementById('learnTabCnt').textContent = TOTAL_LESSONS+' บท';
+  document.getElementById('progRing').style.setProperty('--p',pct);
+  document.getElementById('progPct').textContent = pct+'%';
+  document.getElementById('progText').textContent = completed.length===0
+    ? 'ยังไม่เริ่มเรียน' : ('เรียนไปแล้ว '+completed.length+' จาก '+TOTAL_LESSONS+' บท');
+  document.getElementById('progSub').textContent = completed.length>=TOTAL_LESSONS
+    ? 'เรียนจบหลักสูตรแล้ว 🎉' : ('กำลังเรียน: บทที่ '+nextLessonId+' · '+nextLesson.title);
+  document.getElementById('continueBtn').href = 'PyStart Lesson v2.html?lesson='+nextLessonId;
+
+  // post-test progress
+  document.getElementById('postUnitCount').textContent = courseUnits.length;
+  document.getElementById('postProgBar').style.width = pct+'%';
+  document.getElementById('postProgLabel').textContent = 'ตอนนี้ '+pct+'%';
+  document.getElementById('postRemainingNote').textContent = completed.length>=TOTAL_LESSONS
+    ? 'พร้อมทำแล้ว' : ('เหลืออีก '+(TOTAL_LESSONS-completed.length)+' บท');
+
+  // module + chapter list
+  const CHEVRON='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+  const CHECK='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+  const PLAY='<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
+  const modulesEl=document.getElementById('modulesContainer');
+  let modulesHtml='';
+  courseUnits.forEach(unit=>{
+    const doneCount=unit.lessons.filter(id=>completed.indexOf(id)>-1).length;
+    const isDone=doneCount===unit.lessons.length;
+    const isOpen=unit.lessons.indexOf(nextLessonId)>-1;
+    const isLocked=unit.lessons[0]>unlocked;
+    const pctUnit=Math.round((doneCount/unit.lessons.length)*100);
+    let statusHtml;
+    if(isDone) statusHtml='<span class="mod-status s-done">เรียนจบแล้ว</span>';
+    else if(isLocked) statusHtml='<span class="mod-status s-lock">🔒 ล็อกอยู่</span>';
+    else statusHtml='<span class="mod-status s-cur">'+doneCount+' / '+unit.lessons.length+' บท</span>';
+    const badge=isDone?CHECK:(isLocked?String(unit.id):String(unit.id));
+    let chaptersHtml='';
+    unit.lessons.forEach(id=>{
+      const l=courseData.lessons.find(x=>x.id===id);
+      const isChDone=completed.indexOf(id)>-1;
+      const isChCur=id===nextLessonId && !isChDone;
+      const isChLocked=id>unlocked;
+      let icHtml,rowCls='ch',goHtml='';
+      if(isChDone){icHtml='<span class="ch-ic done">'+CHECK+'</span>';goHtml='<a href="PyStart Lesson v2.html?lesson='+id+'" class="ch-go">ทบทวน →</a>';}
+      else if(isChCur){icHtml='<span class="ch-ic cur">'+PLAY+'</span>';rowCls+=' is-cur';goHtml='<a href="PyStart Lesson v2.html?lesson='+id+'" class="ch-go">เรียนต่อ →</a>';}
+      else if(isChLocked){icHtml='<span class="ch-ic lock">🔒</span>';rowCls+=' is-lock';}
+      else {icHtml='<span class="ch-ic lock">🔒</span>';rowCls+=' is-lock';}
+      chaptersHtml+='<div class="'+rowCls+'">'+icHtml+'<span class="ch-num">'+String(id).padStart(2,'0')+'</span><span class="ch-name">'+l.title+'</span>'+goHtml+'</div>';
+    });
+    modulesHtml+=
+      '<div class="mod'+(isDone?' done':'')+(isOpen?' open':'')+(isLocked?' locked':'')+'">'+
+        '<div class="mod-head">'+
+          '<div class="mod-badge">'+badge+'</div>'+
+          '<div class="mod-info"><div class="mod-eyebrow">ส่วนที่ '+unit.id+(isOpen&&!isDone?' · กำลังเรียน':'')+'</div><div class="mod-title">'+unit.title+'</div><div class="mod-desc">'+unit.desc+'</div></div>'+
+          '<div class="mod-side"><div class="mod-pct">'+statusHtml+'<div class="mod-mini"><i style="width:'+pctUnit+'%"></i></div></div><div class="mod-caret">'+CHEVRON+'</div></div>'+
+        '</div>'+
+        '<div class="mod-body"><div class="mod-body-inner"><div class="chapters">'+chaptersHtml+'</div></div></div>'+
+      '</div>';
+  });
+  modulesEl.innerHTML=modulesHtml;
+
+  // per-section pre/post tests
+  let unitScores={};
+  try{ unitScores=JSON.parse(localStorage.getItem('pystart_unit_scores')||'{}'); }catch(e){ unitScores={}; }
+  const secListEl=document.getElementById('secQuizList');
+  let secHtml='';
+  courseUnits.forEach(unit=>{
+    const doneCount=unit.lessons.filter(id=>completed.indexOf(id)>-1).length;
+    const isDone=doneCount===unit.lessons.length;
+    const isLocked=unit.lessons[0]>unlocked;
+    const us=unitScores[unit.id]||{};
+    const preBtn = isLocked
+      ? '<span class="sq-btn locked">🔒 ก่อนเรียน</span>'
+      : '<a class="sq-btn'+(us.pre?' taken':'')+'" href="PyStart Quiz.html?unit='+unit.id+'&type=pre">'+(us.pre?'ก่อนเรียน '+us.pre.pct+'%':'ทำก่อนเรียน')+'</a>';
+    const postBtn = !isDone
+      ? '<span class="sq-btn locked">🔒 หลังเรียน</span>'
+      : '<a class="sq-btn'+(us.post?' taken':'')+'" href="PyStart Quiz.html?unit='+unit.id+'&type=post">'+(us.post?'หลังเรียน '+us.post.pct+'%':'ทำหลังเรียน')+'</a>';
+    secHtml+='<div class="sq'+(isDone?' done':'')+(isLocked?' is-lock':'')+'">'+
+      '<span class="sqi">'+(isDone?CHECK:(isLocked?'🔒':'📝'))+'</span>'+
+      '<div class="sq-body"><span class="sqn">ส่วนที่ '+unit.id+' · '+unit.title+'</span>'+
+      '<span class="sqm">'+unit.lessons.length+' บท'+(isLocked?' · เรียนส่วนนี้ให้จบก่อน':(isDone?' · เรียนจบแล้ว':' · '+doneCount+'/'+unit.lessons.length+' บท'))+'</span></div>'+
+      '<div class="sq-actions">'+preBtn+postBtn+'</div>'+
+    '</div>';
+  });
+  secListEl.innerHTML=secHtml;
+
+  // tabs
+  const tabs=[...document.querySelectorAll('.tab')];
+  const panels={learn:document.getElementById('panel-learn'),test:document.getElementById('panel-test')};
+  tabs.forEach(t=>t.addEventListener('click',()=>{
+    tabs.forEach(x=>x.classList.toggle('on',x===t));
+    const k=t.dataset.tab;
+    Object.entries(panels).forEach(([key,el])=>el.classList.toggle('on',key===k));
+    window.scrollTo({top:0,behavior:'smooth'});
+  }));
+  // accordion (event delegation since modules are rendered dynamically)
+  modulesEl.addEventListener('click',e=>{
+    const head=e.target.closest('.mod-head');
+    if(head) head.closest('.mod').classList.toggle('open');
+  });
+</script>
+<script src="pystart-fx.js"></script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+/* ===== PyStart shared design system ===== */
+:root{
+  --ink:oklch(0.21 0.02 255); --muted:oklch(0.52 0.018 255); --faint:oklch(0.62 0.015 255);
+  --line:oklch(0.92 0.008 255); --line-soft:oklch(0.95 0.006 255);
+  --bg:oklch(0.985 0.005 250); --soft:oklch(0.975 0.008 250); --card:#ffffff;
+  --accent:oklch(0.56 0.16 255); --accent-deep:oklch(0.44 0.17 258); --accent-2:oklch(0.68 0.14 232);
+  --accent-soft:oklch(0.955 0.03 250); --accent-line:oklch(0.87 0.05 250);
+  --ok:oklch(0.6 0.14 155); --ok-deep:oklch(0.45 0.12 158); --ok-soft:oklch(0.95 0.05 155); --ok-line:oklch(0.85 0.07 155);
+  --warm:oklch(0.72 0.13 65); --warm-deep:oklch(0.52 0.12 60); --warm-soft:oklch(0.96 0.04 75); --warm-line:oklch(0.88 0.07 70);
+  --gold:oklch(0.78 0.13 85); --gold-deep:oklch(0.6 0.12 75);
+  --lock:oklch(0.7 0.012 255);
+  --shadow-sm:0 1px 2px oklch(0.4 0.06 287/.05),0 4px 12px -6px oklch(0.42 0.08 288/.14);
+  --shadow-md:0 10px 30px -14px oklch(0.4 0.08 287/.24);
+  --shadow-lg:0 30px 60px -30px oklch(0.42 0.1 288/.34);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'IBM Plex Sans Thai','IBM Plex Sans',sans-serif;color:var(--ink);background:var(--bg);
+  -webkit-font-smoothing:antialiased;line-height:1.5;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+a{color:inherit;}
+code{font-family:'IBM Plex Mono',monospace;}
+::selection{background:var(--accent-soft);}
+
+/* top bar */
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;gap:22px;height:62px;padding:0 26px;
+  background:color-mix(in oklch,var(--bg) 82%,transparent);backdrop-filter:blur(16px) saturate(1.4);border-bottom:1px solid var(--line);}
+.tb-logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:18px;text-decoration:none;color:var(--ink);}
+.tb-mk{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:#fff;font-family:'IBM Plex Mono',monospace;
+  font-weight:600;font-size:13px;background:linear-gradient(140deg,var(--accent-2),var(--accent-deep));}
+.tb-nav{display:flex;gap:4px;margin-left:14px;}
+.tb-nav a{font-size:14.5px;color:var(--muted);padding:8px 14px;border-radius:9px;text-decoration:none;font-weight:500;transition:.15s;}
+.tb-nav a:hover{background:var(--soft);color:var(--ink);}
+.tb-nav a.cur{color:var(--accent-deep);background:var(--accent-soft);font-weight:600;}
+.tb-right{display:flex;align-items:center;gap:10px;margin-left:auto;}
+.chiplet{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 13px;border-radius:10px;border:1px solid var(--line);
+  background:var(--card);font-size:13.5px;font-weight:600;}
+.tb-av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:600;font-size:14px;text-decoration:none;
+  background:linear-gradient(140deg,oklch(0.7 0.12 30),oklch(0.58 0.14 12));}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;height:48px;padding:0 24px;border-radius:13px;font-size:15.5px;
+  font-weight:600;white-space:nowrap;transition:transform .15s,box-shadow .15s,background .15s,border-color .15s;text-decoration:none;}
+.btn.sm{height:40px;padding:0 18px;font-size:14.5px;border-radius:11px;}
+.btn.lg{height:54px;padding:0 30px;font-size:16.5px;}
+.btn-primary{color:#fff;background:linear-gradient(135deg,var(--accent),var(--accent-deep));box-shadow:0 12px 24px -8px oklch(0.4 0.13 288/.55);}
+.btn-primary:hover{transform:translateY(-2px);}
+.btn-ghost{color:var(--ink);border:1px solid var(--line);background:var(--card);}
+.btn-ghost:hover{border-color:var(--accent-line);background:var(--soft);}
+.btn-ok{color:#fff;background:linear-gradient(135deg,var(--ok),var(--ok-deep));box-shadow:0 12px 24px -8px oklch(0.45 0.12 158/.5);}
+.btn-ok:hover{transform:translateY(-2px);}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none;}
+
+/* generic chips */
+.chip{display:inline-flex;align-items:center;gap:7px;background:var(--card);border:1px solid var(--line);
+  padding:8px 14px;border-radius:100px;font-size:13.5px;font-weight:500;}
+.chip.a{background:var(--accent-soft);border-color:var(--accent-line);color:var(--accent-deep);}
+
+.wrap{max-width:1080px;margin:0 auto;padding:0 26px;}
+@media (max-width:720px){.tb-nav{display:none;}}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;}}

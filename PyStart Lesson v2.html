@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PyStart — บทเรียน</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --ink:oklch(0.19 0.02 255); --muted:oklch(0.50 0.018 255); --faint:oklch(0.62 0.015 255);
+  --line:oklch(0.91 0.008 255); --line2:oklch(0.94 0.006 255); --bg:oklch(0.982 0.005 250); --card:#fff;
+  --accent:oklch(0.56 0.16 255); --accent-d:oklch(0.44 0.17 258); --accent-2:oklch(0.68 0.14 232);
+  --accent-s:oklch(0.955 0.03 250); --accent-l:oklch(0.87 0.05 250);
+  --ok:oklch(0.58 0.14 155); --ok-d:oklch(0.44 0.12 158); --ok-s:oklch(0.95 0.05 155); --ok-l:oklch(0.84 0.07 155);
+  --warm:oklch(0.68 0.13 62); --warm-s:oklch(0.96 0.04 72); --warm-l:oklch(0.87 0.08 68);
+  --ed:oklch(0.152 0.018 260); --ed2:oklch(0.128 0.015 262); --edl:oklch(0.235 0.018 260);
+  --edtx:oklch(0.91 0.01 260); --eddim:oklch(0.46 0.025 264);
+  --kw:oklch(0.75 0.13 318); --fn:oklch(0.78 0.12 216); --str:oklch(0.80 0.13 142); --num:oklch(0.80 0.12 56); --cmt:oklch(0.51 0.03 262);
+  --shadow-sm:0 2px 8px -2px oklch(0.4 0.06 287/.1);
+  --shadow-md:0 8px 28px -8px oklch(0.4 0.08 287/.18);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{height:100%;}
+body{font-family:'IBM Plex Sans Thai','IBM Plex Sans',sans-serif;color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;}
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+a{color:inherit;text-decoration:none;}
+code{font-family:'IBM Plex Mono',monospace;}
+::selection{background:var(--accent-s);}
+
+/* ── TOPBAR ── */
+.topbar{position:sticky;top:0;z-index:50;height:50px;display:flex;align-items:center;background:var(--card);border-bottom:1px solid var(--line);}
+.tb-back{display:flex;align-items:center;gap:8px;padding:0 16px;height:100%;border-right:1px solid var(--line);font-size:13px;color:var(--muted);font-weight:500;transition:color .15s,background .15s;white-space:nowrap;}
+.tb-back:hover{color:var(--accent-d);background:var(--accent-s);}
+.tb-logo{display:flex;align-items:center;gap:8px;padding:0 14px;height:100%;font-weight:600;font-size:15px;border-right:1px solid var(--line);}
+.tb-mk{width:24px;height:24px;border-radius:6px;display:grid;place-items:center;color:#fff;font-family:'IBM Plex Mono',monospace;font-weight:700;font-size:11px;background:linear-gradient(140deg,var(--accent-2),var(--accent-d));}
+.tb-crumb{padding:0 16px;display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);}
+.tb-crumb .sep{opacity:.4;}
+.tb-crumb .cur{color:var(--ink);font-weight:600;}
+.tb-right{margin-left:auto;display:flex;align-items:center;gap:8px;padding-right:14px;}
+.chiplet{display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 10px;border-radius:7px;border:1px solid var(--line);background:var(--card);font-size:12px;font-weight:600;}
+.tb-av{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:11px;background:linear-gradient(140deg,oklch(0.7 0.12 30),oklch(0.58 0.14 12));}
+
+/* progress strip */
+.prog-strip{position:sticky;top:50px;z-index:49;height:2px;background:var(--line2);}
+.prog-strip .pf{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:0%;transition:width .3s ease;}
+
+/* ── SIDEBAR ── */
+.page-wrap{display:flex;min-height:calc(100vh - 52px);}
+.sidebar{
+  width:260px;flex-shrink:0;
+  background:var(--sb, oklch(0.128 0.015 262));
+  border-right:1px solid oklch(0.21 0.015 262);
+  display:flex;flex-direction:column;
+  position:sticky;top:52px;height:calc(100vh - 52px);
+  overflow:hidden;
+  transition:width .25s cubic-bezier(.4,0,.2,1);
+  z-index:40;
+}
+.sidebar.closed{width:0;border-right:none;}
+.sb-head{padding:18px 16px 14px;border-bottom:1px solid oklch(0.21 0.015 262);flex-shrink:0;}
+.sb-title{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:oklch(0.48 0.02 264);margin-bottom:4px;font-family:'IBM Plex Mono',monospace;}
+.sb-course{font-size:13.5px;font-weight:600;color:oklch(0.88 0.01 260);line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sb-body{flex:1;overflow-y:auto;padding:8px 0;}
+.sb-body::-webkit-scrollbar{width:0;}
+.sb-section{font-family:'IBM Plex Mono',monospace;font-size:9.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:oklch(0.48 0.02 264);padding:12px 16px 4px;display:block;white-space:nowrap;}
+.sb-item{display:flex;align-items:center;gap:10px;padding:8px 16px;cursor:pointer;transition:background .15s;position:relative;min-width:0;white-space:nowrap;}
+.sb-item:hover{background:oklch(0.158 0.016 262);}
+.sb-item.active{background:oklch(0.56 0.165 284 / .15);}
+.sb-item.active::before{content:'';position:absolute;left:0;top:5px;bottom:5px;width:3px;border-radius:0 2px 2px 0;background:var(--accent);}
+.sb-item.locked{opacity:.45;cursor:not-allowed;pointer-events:none;}
+.sb-ic{width:22px;height:22px;border-radius:6px;flex-shrink:0;display:grid;place-items:center;font-size:10px;font-family:'IBM Plex Mono',monospace;font-weight:700;border:1.5px solid;}
+.sb-ic.done{background:var(--ok-s);border-color:var(--ok-l);color:var(--ok-d);}
+.sb-ic.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.sb-ic.lock{background:oklch(0.19 0.015 262);border-color:oklch(0.21 0.015 262);color:oklch(0.48 0.02 264);}
+.sb-tx{flex:1;min-width:0;}
+.sb-num{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:oklch(0.48 0.02 264);margin-bottom:1px;}
+.sb-name{font-size:12.5px;color:oklch(0.88 0.01 260);font-weight:500;overflow:hidden;text-overflow:ellipsis;}
+.sb-item.active .sb-name{color:#fff;font-weight:600;}
+.sb-foot{border-top:1px solid oklch(0.21 0.015 262);padding:13px 16px;flex-shrink:0;}
+.xp-label{display:flex;justify-content:space-between;font-size:11.5px;color:oklch(0.48 0.02 264);margin-bottom:6px;}
+.xp-label strong{color:oklch(0.88 0.01 260);}
+.xp-track{height:4px;border-radius:100px;background:oklch(0.19 0.015 262);overflow:hidden;}
+.xp-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,var(--accent),var(--accent-2));width:0%;transition:width .3s ease;}
+.sb-toggle{
+  position:fixed;top:62px;left:12px;z-index:45;
+  width:32px;height:32px;border-radius:8px;
+  background:var(--card);border:1px solid var(--line);
+  display:grid;place-items:center;
+  cursor:pointer;transition:background .15s,border-color .15s,left .25s;
+  box-shadow:var(--shadow-sm);
+}
+.sb-toggle:hover{background:var(--accent-s);border-color:var(--accent-l);color:var(--accent-d);}
+.sidebar.closed~.content-wrap .sb-toggle{left:12px;}
+/* content wrap */
+.content-wrap{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden;}
+/* ── CONTENT ── */
+.content{max-width:860px;margin:0 auto;padding:52px 56px 80px;position:relative;}
+
+/* step pill */
+.step-pill{display:inline-flex;align-items:center;gap:8px;padding:4px 12px;border-radius:100px;background:var(--accent-s);border:1px solid var(--accent-l);font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--accent-d);margin-bottom:16px;}
+.step-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);}
+
+/* title */
+.l-title{font-size:30px;font-weight:700;letter-spacing:-.024em;line-height:1.18;margin-bottom:22px;}
+.l-title code{font-size:28px;background:var(--accent-s);color:var(--accent-d);padding:2px 10px;border-radius:8px;font-weight:700;}
+
+/* divider */
+.sdiv{border:none;height:1px;background:var(--line2);margin:36px 0;}
+
+/* eyebrow */
+.ey{display:flex;align-items:center;gap:9px;margin-bottom:12px;}
+.sn{width:24px;height:24px;border-radius:6px;display:grid;place-items:center;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;background:linear-gradient(140deg,var(--accent-2),var(--accent-d));flex-shrink:0;}
+.st{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);}
+.sec-h{font-size:22px;font-weight:700;letter-spacing:-.018em;line-height:1.28;margin-bottom:16px;}
+
+/* body text */
+.bt{font-size:16px;line-height:1.92;color:oklch(0.34 0.016 258);text-wrap:pretty;white-space:pre-line;}
+.bt+.bt{margin-top:14px;}
+.bt code{font-size:13.5px;background:var(--accent-s);color:var(--accent-d);padding:1px 6px;border-radius:5px;}
+.bt strong{font-weight:600;color:var(--ink);}
+
+/* ── INLINE CODE BLOCKS ── */
+.inline-code{margin:18px 0 24px;border-radius:11px;overflow:hidden;border:1px solid var(--edl);box-shadow:var(--shadow-md);}
+.ic-bar{display:flex;align-items:center;gap:6px;padding:9px 14px;background:var(--ed2);border-bottom:1px solid var(--edl);}
+.ic-dot{width:9px;height:9px;border-radius:50%;}
+.ic-fname{margin-left:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--eddim);}
+.ic-copy{margin-left:auto;display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 10px;border-radius:6px;font-size:11px;font-weight:500;color:var(--eddim);border:1px solid var(--edl);transition:.15s;}
+.ic-copy:hover{color:var(--edtx);background:oklch(0.22 0.018 260);}
+.ic-body{padding:14px 18px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;line-height:1.82;white-space:pre;color:var(--edtx);background:var(--ed);overflow-x:auto;}
+.ic-body .k{color:var(--kw);}.ic-body .f,.ic-body .b{color:var(--fn);}.ic-body .s{color:var(--str);}.ic-body .n{color:var(--num);}.ic-body .c{color:var(--cmt);}
+
+/* ── QUIZ ── */
+.q-card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:20px 22px;}
+.q-card.answered{border-color:var(--line2);}
+.q-num{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--warm);margin-bottom:8px;}
+.q-text{font-size:16px;font-weight:600;color:var(--ink);line-height:1.45;margin-bottom:14px;}
+.q-opts{display:flex;flex-direction:column;gap:8px;}
+.q-opt{display:flex;align-items:center;gap:11px;padding:11px 14px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);cursor:pointer;font-size:14.5px;color:var(--ink);transition:border-color .15s,background .15s;text-align:left;}
+.q-opt:hover:not(:disabled){border-color:var(--accent-l);background:var(--accent-s);}
+.q-opt .q-ic{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line);flex-shrink:0;display:grid;place-items:center;font-size:10px;transition:.15s;}
+.q-opt.correct{border-color:var(--ok-l);background:var(--ok-s);color:var(--ok-d);cursor:default;}
+.q-opt.correct .q-ic{background:var(--ok);border-color:var(--ok);color:#fff;}
+.q-opt.wrong{border-color:oklch(0.86 0.08 20);background:oklch(0.97 0.02 20);color:oklch(0.45 0.12 22);cursor:default;}
+.q-opt.wrong .q-ic{background:oklch(0.7 0.15 22);border-color:oklch(0.7 0.15 22);color:#fff;}
+.q-opt.missed{border-color:var(--ok-l);background:oklch(0.97 0.015 155);cursor:default;}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(28px);z-index:60;display:flex;align-items:center;gap:11px;padding:11px 18px 11px 12px;border-radius:13px;background:var(--card);border:1px solid var(--ok-l);opacity:0;pointer-events:none;box-shadow:var(--shadow-md);transition:transform .38s cubic-bezier(.2,.7,.2,1),opacity .28s;}
+.toast.show{transform:translateX(-50%);opacity:1;}
+.toast .t-ic{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;color:#fff;font-size:16px;background:linear-gradient(140deg,var(--ok),var(--ok-d));flex-shrink:0;}
+.toast b{font-size:13px;display:block;line-height:1.3;}
+.toast span{font-size:12px;color:var(--muted);}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:55;overflow:hidden;}
+.confetti i{position:absolute;top:-12px;width:8px;height:13px;border-radius:2px;animation:fall linear forwards;}
+@keyframes fall{to{transform:translateY(105vh) rotate(600deg);}}
+
+/* lesson-end nav */
+.lesson-nav{margin-top:24px;padding:18px 20px;border-radius:13px;border:1px solid var(--ok-l);background:var(--ok-s);display:flex;align-items:center;gap:14px;}
+.lesson-nav .ln-ic{width:38px;height:38px;border-radius:10px;background:var(--ok);color:#fff;display:grid;place-items:center;font-size:17px;flex-shrink:0;}
+.lesson-nav .ln-tx b{display:block;font-size:14.5px;font-weight:700;color:var(--ok-d);}
+.lesson-nav .ln-tx span{font-size:12.5px;color:var(--ok-d);opacity:.8;}
+.btn{display:inline-flex;align-items:center;gap:7px;height:36px;padding:0 16px;border-radius:8px;font-size:13.5px;font-weight:600;white-space:nowrap;transition:.15s;}
+.btn-primary{color:#fff;background:linear-gradient(135deg,var(--ok),var(--ok-d));margin-left:auto;}
+.btn-primary:hover{transform:translateY(-1px);}
+.btn-ghost{color:var(--warm);border:1px solid var(--warm-l);background:var(--card);}
+.btn-ghost:hover{background:oklch(0.99 0.01 70);}
+.retry-box{margin-top:24px;padding:16px 20px;border-radius:13px;border:1px solid var(--warm-l);background:var(--warm-s);display:flex;align-items:center;gap:12px;}
+.retry-box .rb-ic{width:34px;height:34px;border-radius:9px;background:var(--warm);color:#fff;display:grid;place-items:center;font-size:15px;flex-shrink:0;}
+.retry-box b{font-size:14px;font-weight:700;color:var(--warm);display:block;}
+.retry-box span{font-size:12px;color:var(--warm);opacity:.8;}
+
+@media(max-width:680px){.content{padding:36px 22px 60px;}.tb-crumb{display:none;}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="tb-back" href="PyStart Curriculum.html">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+    หลักสูตร
+  </a>
+  <a class="tb-logo" href="PyStart Dashboard.html"><span class="tb-mk">Py</span>PyStart</a>
+  <div class="tb-crumb" id="tbCrumb"></div>
+  <div class="tb-right">
+    <span class="chiplet" style="color:oklch(0.5 0.13 50);">🔥 7</span>
+    <span class="chiplet" style="color:var(--accent-d)" id="xpChip">⭐ 0</span>
+    <a class="tb-av" href="PyStart Profile.html">ใ</a>
+  </div>
+</header>
+<div class="prog-strip"><div class="pf" id="progFill"></div></div>
+
+<div class="page-wrap">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-head" id="sbHead"></div>
+    <div class="sb-body" id="sbBody"></div>
+    <div class="sb-foot">
+      <div class="xp-label"><span>XP รวม</span><strong id="xpTotal">0 XP</strong></div>
+      <div class="xp-track"><div class="xp-fill" id="xpFill"></div></div>
+    </div>
+  </aside>
+
+  <div class="content-wrap">
+<div class="content">
+
+  <div class="step-pill" id="stepPill"></div>
+  <h1 class="l-title" id="lTitle"></h1>
+
+  <div id="sectionsContainer"></div>
+
+  <hr class="sdiv" />
+
+  <!-- MINI QUIZ -->
+  <div class="ey"><span class="sn" style="background:linear-gradient(140deg,oklch(0.72 0.13 62),oklch(0.56 0.14 48));">Q</span><span class="st" style="color:var(--warm);">แบบทดสอบท้ายบท</span></div>
+  <h2 class="sec-h">ทบทวนความเข้าใจ</h2>
+  <p class="bt" style="margin-bottom:22px;">ตอบให้ถูกต้องเพื่อปลดล็อกบทถัดไป</p>
+  <div id="quiz" style="display:flex;flex-direction:column;gap:20px;"></div>
+
+  <div class="retry-box" id="quizRetry" style="display:none;">
+    <div class="rb-ic">↩</div>
+    <div><b id="retryTxt">ยังไม่ถูก ลองอีกครั้ง</b><span>เลือกคำตอบใหม่ได้เลย</span></div>
+  </div>
+
+  <div class="lesson-nav" id="lessonNav" style="display:none;">
+    <div class="ln-ic">✓</div>
+    <div class="ln-tx"><b id="lnTitle">ผ่านแล้ว!</b><span id="lnSub"></span></div>
+    <button class="btn btn-primary" id="nextLessonBtn">บทถัดไป
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+  </div>
+
+</div><!-- /content -->
+  </div><!-- /content-wrap -->
+</div><!-- /page-wrap -->
+
+<!-- SIDEBAR TOGGLE BUTTON -->
+<button class="sb-toggle" id="sbToggle" title="เปิด/ปิดเมนู">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+
+<div class="toast" id="toast">
+  <div class="t-ic">🎉</div>
+  <div><b>ผ่านแล้ว! เก่งมาก</b><span id="toastSub"></span></div>
+</div>
+
+<script src="pystart-data.js"></script>
+<script>
+/* ---------- syntax highlight (reused for read-only code blocks) ---------- */
+const KW=new Set(['for','in','while','if','elif','else','def','return','import','from','as','and','or','not','True','False','None','break','continue','pass','class','with','try','except','finally','lambda','global','raise','is','yield','del']);
+const BI=new Set(['print','input','range','int','str','float','len','list','dict','set','tuple','sum','min','max','abs','round','type','sorted','enumerate','isinstance','super','zip','open']);
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function highlight(code){
+  return code.split('\n').map(line=>{
+    let out='',i=0;
+    while(i<line.length){
+      const r=line.slice(i);
+      if(r[0]==='#'){out+='<span class="c">'+esc(r)+'</span>';break;}
+      const sm=r.match(/^(['"])(?:\\.|(?!\1).)*\1?/);
+      if(sm){out+='<span class="s">'+esc(sm[0])+'</span>';i+=sm[0].length;continue;}
+      const nm=r.match(/^\d+\.?\d*/);
+      if(nm){out+='<span class="n">'+esc(nm[0])+'</span>';i+=nm[0].length;continue;}
+      const wm=r.match(/^[A-Za-z_]\w*/);
+      if(wm){const w=wm[0];if(KW.has(w))out+='<span class="k">'+w+'</span>';else if(BI.has(w))out+='<span class="b">'+w+'</span>';else out+=esc(w);i+=w.length;continue;}
+      out+=esc(r[0]);i++;
+    }
+    return out;
+  }).join('\n');
+}
+function renderCodeBlock(code){
+  const bar='<div class="ic-bar"><span class="ic-dot" style="background:oklch(0.72 0.16 25)"></span><span class="ic-dot" style="background:oklch(0.84 0.13 90)"></span><span class="ic-dot" style="background:oklch(0.76 0.14 150)"></span>'+
+    (code.filename?'<span class="ic-fname">'+esc(code.filename)+'</span>':'')+
+    '<button class="ic-copy" data-copy>คัดลอก</button></div>';
+  const body='<div class="ic-body">'+highlight(code.source)+'</div>';
+  return '<div class="inline-code">'+bar+body+'</div>';
+}
+
+/* ---------- resolve current lesson ---------- */
+const TOTAL = courseData.lessons.length;
+const params = new URLSearchParams(location.search);
+let completed = [];
+try{ completed = JSON.parse(localStorage.getItem('pystart_completed')||'[]'); }catch(e){ completed = []; }
+function unlockedId(){ return Math.min(TOTAL, (completed.length?Math.max.apply(null,completed):0)+1); }
+function firstIncomplete(){
+  for(let i=1;i<=TOTAL;i++) if(completed.indexOf(i)===-1) return i;
+  return TOTAL;
+}
+let lessonId=parseInt(params.get('lesson'),10);
+if(!lessonId || !courseData.lessons.some(l=>l.id===lessonId)) lessonId=firstIncomplete();
+const lesson=courseData.lessons.find(l=>l.id===lessonId);
+const unit=courseUnits.find(u=>u.lessons.indexOf(lessonId)>-1);
+const unlocked=unlockedId();
+
+/* ---------- render header / breadcrumb / progress ---------- */
+function renderHeader(){
+  const desc=(lesson.content.th.desc||''), code=(lesson.content.th.code||'');
+  const mins=Math.max(4,Math.round((desc.length+code.length)/220));
+  document.title='PyStart — บทที่ '+lessonId+' · '+lesson.title;
+  document.getElementById('tbCrumb').innerHTML=
+    '<span>หน่วยที่ '+unit.id+' · '+esc(unit.title)+'</span><span class="sep">›</span><span class="cur">บทที่ '+lessonId+' · '+esc(lesson.title)+'</span>';
+  document.getElementById('stepPill').innerHTML=
+    '<span class="step-dot"></span>บทที่ '+lessonId+' จาก '+TOTAL+' &nbsp;·&nbsp; ⏱️ ~'+mins+' นาที &nbsp;·&nbsp; ⭐ +15 XP';
+  document.getElementById('lTitle').textContent=lesson.content.th.title||lesson.title;
+  document.getElementById('progFill').style.width=Math.round(((unlocked-1)/TOTAL)*100)+'%';
+  const xp=completed.length*15;
+  document.getElementById('xpChip').textContent='⭐ '+xp.toLocaleString('en-US');
+  document.getElementById('xpTotal').textContent=xp.toLocaleString('en-US')+' XP';
+  document.getElementById('xpFill').style.width=Math.round((completed.length/TOTAL)*100)+'%';
+}
+
+/* ---------- render sidebar (current unit's lessons) ---------- */
+function renderSidebar(){
+  document.getElementById('sbHead').innerHTML=
+    '<div class="sb-title">หน่วยที่ '+unit.id+' · '+unit.lessons.length+' บท</div><div class="sb-course">'+esc(unit.title)+'</div>';
+  let body='<span class="sb-section">บทเรียน</span>';
+  unit.lessons.forEach(id=>{
+    const l=courseData.lessons.find(x=>x.id===id);
+    const isActive=id===lessonId, isDone=completed.indexOf(id)>-1, isLocked=id>unlocked;
+    const cls='sb-item'+(isActive?' active':'')+(isLocked?' locked':'');
+    const ic=isActive?'<div class="sb-ic active">'+id+'</div>':(isDone?'<div class="sb-ic done">✓</div>':'<div class="sb-ic lock">🔒</div>');
+    body+='<a class="'+cls+'" href="PyStart Lesson v2.html?lesson='+id+'">'+ic+'<div class="sb-tx"><div class="sb-num">บทที่ '+id+'</div><div class="sb-name">'+esc(l.title)+'</div></div></a>';
+  });
+  document.getElementById('sbBody').innerHTML=body;
+}
+
+/* ---------- render lesson body (desc + code) ---------- */
+function renderContent(){
+  let html='';
+  (lesson.content.th.desc||'').split(/\n\n+/).map(s=>s.trim()).filter(Boolean).forEach(p=>{
+    html+='<p class="bt">'+esc(p)+'</p>';
+  });
+  if(lesson.content.th.code) html+=renderCodeBlock({source:lesson.content.th.code,filename:'example.py'});
+  document.getElementById('sectionsContainer').innerHTML=html;
+  const copyBtn=document.querySelector('[data-copy]');
+  if(copyBtn) copyBtn.addEventListener('click',()=>{
+    navigator.clipboard.writeText(lesson.content.th.code||'').then(()=>{
+      copyBtn.textContent='คัดลอกแล้ว ✓';
+      setTimeout(()=>{copyBtn.textContent='คัดลอก';},1500);
+    });
+  });
+}
+
+/* ---------- quiz (single question per lesson) ---------- */
+let passed=false;
+function drawQuiz(){
+  const q=lesson.quiz;
+  const wrap=document.getElementById('quiz');
+  document.getElementById('quizRetry').style.display='none';
+  document.getElementById('lessonNav').style.display='none';
+  wrap.innerHTML=
+    '<div class="q-card" id="qcard">'+
+      '<div class="q-num">คำถามท้ายบท</div>'+
+      '<div class="q-text">'+esc(q.q)+'</div>'+
+      '<div class="q-opts" id="qopts">'+
+        q.options.map((o,oi)=>'<button class="q-opt" data-oi="'+oi+'"><span class="q-ic">'+String.fromCharCode(65+oi)+'</span><span>'+esc(o)+'</span></button>').join('')+
+      '</div>'+
+    '</div>';
+  wrap.querySelectorAll('.q-opt').forEach(btn=>{
+    btn.addEventListener('click',function(){
+      const oi=+this.dataset.oi;
+      const opts=wrap.querySelectorAll('.q-opt');
+      opts.forEach((b,i)=>{
+        b.disabled=true;
+        if(i===q.ans) b.classList.add(oi===q.ans?'correct':'missed');
+        else if(i===oi) b.classList.add('wrong');
+        b.querySelector('.q-ic').textContent=i===q.ans?'✓':(i===oi?'✗':String.fromCharCode(65+i));
+      });
+      document.getElementById('qcard').classList.add('answered');
+      if(oi===q.ans){
+        passed=true;
+        document.getElementById('lnSub').textContent=lessonId<TOTAL?'+15 XP · ปลดล็อกบทที่ '+(lessonId+1)+' แล้ว':'+15 XP · เรียนจบหลักสูตรแล้ว! 🎓';
+        document.getElementById('lessonNav').style.display='flex';
+        celebrate(lessonId<TOTAL?'+15 XP · ปลดล็อกบทที่ '+(lessonId+1)+' แล้ว':'+15 XP · เรียนจบหลักสูตรแล้ว!');
+      } else {
+        document.getElementById('quizRetry').style.display='flex';
+      }
+    });
+  });
+}
+document.addEventListener('click',e=>{
+  if(e.target.closest('#quizRetry')) drawQuiz();
+});
+
+function completeLesson(){
+  if(completed.indexOf(lessonId)===-1){
+    completed.push(lessonId);
+    localStorage.setItem('pystart_completed',JSON.stringify(completed));
+  }
+  const next=lessonId+1;
+  location.href = next<=TOTAL ? ('PyStart Lesson v2.html?lesson='+next) : 'PyStart Curriculum.html';
+}
+document.getElementById('nextLessonBtn').addEventListener('click',completeLesson);
+
+/* ---------- toast / celebrate ---------- */
+const toast=document.getElementById('toast');
+function showToast(){toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>toast.classList.remove('show'),3800);}
+function celebrate(msg){
+  if(msg!==undefined) document.getElementById('toastSub').textContent=msg;
+  showToast();
+  const colors=['oklch(0.7 0.15 284)','oklch(0.72 0.14 200)','oklch(0.78 0.14 145)','oklch(0.8 0.14 80)','oklch(0.7 0.16 25)'];
+  const wrap=document.createElement('div');wrap.className='confetti';
+  for(let i=0;i<72;i++){const c=document.createElement('i');c.style.left=Math.random()*100+'vw';c.style.background=colors[i%colors.length];c.style.animationDuration=(2.2+Math.random()*2)+'s';c.style.animationDelay=(Math.random()*.35)+'s';c.style.transform='rotate('+(Math.random()*360)+'deg)';wrap.appendChild(c);}
+  document.body.appendChild(wrap);setTimeout(()=>wrap.remove(),4600);
+}
+
+/* ---------- sidebar toggle ---------- */
+const sidebar=document.getElementById('sidebar'),sbToggle=document.getElementById('sbToggle');
+const sbOpen=localStorage.getItem('pystart_sb')!=='closed';
+if(!sbOpen)sidebar.classList.add('closed');
+sbToggle.addEventListener('click',()=>{
+  sidebar.classList.toggle('closed');
+  localStorage.setItem('pystart_sb',sidebar.classList.contains('closed')?'closed':'open');
+  sbToggle.style.left=sidebar.classList.contains('closed')?'12px':'272px';
+});
+sbToggle.style.left=sidebar.classList.contains('closed')?'12px':'272px';
+
+/* ---------- go ---------- */
+renderHeader();
+renderSidebar();
+renderContent();
+drawQuiz();
+</script>
+</body>
+</html>

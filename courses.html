@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>PyStart — หลักสูตร Python</title>
+<title>py — หลักสูตร Python</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -217,12 +217,12 @@
 </script>
 
 <header class="topbar">
-  <a class="tb-logo" href="PyStart Landing.html" style="text-decoration:none;color:inherit"><span class="tb-mk">Py</span>PyStart</a>
+  <a class="tb-logo" href="index.html" style="text-decoration:none;color:inherit"><span class="tb-mk">py</span>py</a>
   <nav class="tb-nav">
-    <a href="PyStart Landing.html">หน้าแรก</a>
-    <a href="PyStart Curriculum.html" class="cur">หลักสูตร</a>
-    <a href="PyStart Dashboard.html">แดชบอร์ด</a>
-    <a href="PyStart Profile.html">โปรไฟล์</a>
+    <a href="index.html">หน้าแรก</a>
+    <a href="courses.html" class="cur">หลักสูตร</a>
+    <a href="dashboard.html">แดชบอร์ด</a>
+    <a href="profile.html">โปรไฟล์</a>
   </nav>
   <div class="tb-right">
     <span class="chiplet" style="color:oklch(0.5 0.13 50)">🔥 7</span>
@@ -247,7 +247,7 @@
     <div class="hero-prog">
       <div class="ring" id="progRing" style="--p:0"><i id="progPct">0%</i></div>
       <div class="pt"><b id="progText">ยังไม่เริ่มเรียน</b><span id="progSub"></span></div>
-      <a href="PyStart Lesson v2.html" id="continueBtn" class="btn btn-primary">เรียนต่อ
+      <a href="lesson.html" id="continueBtn" class="btn btn-primary">เรียนต่อ
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
       </a>
     </div>
@@ -291,7 +291,7 @@
           </div>
         </div>
         <div class="taction">
-          <a href="PyStart Quiz.html" class="btn btn-warm">เริ่มทำแบบทดสอบ →</a>
+          <a href="quiz.html" class="btn btn-warm">เริ่มทำแบบทดสอบ →</a>
           <span class="tlocknote">ทำครั้งเดียวก็พอ</span>
         </div>
       </div>
@@ -350,7 +350,7 @@
     ? 'ยังไม่เริ่มเรียน' : ('เรียนไปแล้ว '+completed.length+' จาก '+TOTAL_LESSONS+' บท');
   document.getElementById('progSub').textContent = completed.length>=TOTAL_LESSONS
     ? 'เรียนจบหลักสูตรแล้ว 🎉' : ('กำลังเรียน: บทที่ '+nextLessonId+' · '+nextLesson.title);
-  document.getElementById('continueBtn').href = 'PyStart Lesson v2.html?lesson='+nextLessonId;
+  document.getElementById('continueBtn').href = 'lesson.html?lesson='+nextLessonId;
 
   // post-test progress
   document.getElementById('postUnitCount').textContent = courseUnits.length;
@@ -383,8 +383,8 @@
       const isChCur=id===nextLessonId && !isChDone;
       const isChLocked=id>unlocked;
       let icHtml,rowCls='ch',goHtml='';
-      if(isChDone){icHtml='<span class="ch-ic done">'+CHECK+'</span>';goHtml='<a href="PyStart Lesson v2.html?lesson='+id+'" class="ch-go">ทบทวน →</a>';}
-      else if(isChCur){icHtml='<span class="ch-ic cur">'+PLAY+'</span>';rowCls+=' is-cur';goHtml='<a href="PyStart Lesson v2.html?lesson='+id+'" class="ch-go">เรียนต่อ →</a>';}
+      if(isChDone){icHtml='<span class="ch-ic done">'+CHECK+'</span>';goHtml='<a href="lesson.html?lesson='+id+'" class="ch-go">ทบทวน →</a>';}
+      else if(isChCur){icHtml='<span class="ch-ic cur">'+PLAY+'</span>';rowCls+=' is-cur';goHtml='<a href="lesson.html?lesson='+id+'" class="ch-go">เรียนต่อ →</a>';}
       else if(isChLocked){icHtml='<span class="ch-ic lock">🔒</span>';rowCls+=' is-lock';}
       else {icHtml='<span class="ch-ic lock">🔒</span>';rowCls+=' is-lock';}
       chaptersHtml+='<div class="'+rowCls+'">'+icHtml+'<span class="ch-num">'+String(id).padStart(2,'0')+'</span><span class="ch-name">'+l.title+'</span>'+goHtml+'</div>';
@@ -413,10 +413,10 @@
     const us=unitScores[unit.id]||{};
     const preBtn = isLocked
       ? '<span class="sq-btn locked">🔒 ก่อนเรียน</span>'
-      : '<a class="sq-btn'+(us.pre?' taken':'')+'" href="PyStart Quiz.html?unit='+unit.id+'&type=pre">'+(us.pre?'ก่อนเรียน '+us.pre.pct+'%':'ทำก่อนเรียน')+'</a>';
+      : '<a class="sq-btn'+(us.pre?' taken':'')+'" href="quiz.html?unit='+unit.id+'&type=pre">'+(us.pre?'ก่อนเรียน '+us.pre.pct+'%':'ทำก่อนเรียน')+'</a>';
     const postBtn = !isDone
       ? '<span class="sq-btn locked">🔒 หลังเรียน</span>'
-      : '<a class="sq-btn'+(us.post?' taken':'')+'" href="PyStart Quiz.html?unit='+unit.id+'&type=post">'+(us.post?'หลังเรียน '+us.post.pct+'%':'ทำหลังเรียน')+'</a>';
+      : '<a class="sq-btn'+(us.post?' taken':'')+'" href="quiz.html?unit='+unit.id+'&type=post">'+(us.post?'หลังเรียน '+us.post.pct+'%':'ทำหลังเรียน')+'</a>';
     secHtml+='<div class="sq'+(isDone?' done':'')+(isLocked?' is-lock':'')+'">'+
       '<span class="sqi">'+(isDone?CHECK:(isLocked?'🔒':'📝'))+'</span>'+
       '<div class="sq-body"><span class="sqn">ส่วนที่ '+unit.id+' · '+unit.title+'</span>'+

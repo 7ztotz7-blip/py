@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>PyStart — บทเรียน</title>
+<title>py — บทเรียน</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -176,16 +176,16 @@ code{font-family:'IBM Plex Mono',monospace;}
 <body>
 
 <header class="topbar">
-  <a class="tb-back" href="PyStart Curriculum.html">
+  <a class="tb-back" href="courses.html">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
     หลักสูตร
   </a>
-  <a class="tb-logo" href="PyStart Dashboard.html"><span class="tb-mk">Py</span>PyStart</a>
+  <a class="tb-logo" href="dashboard.html"><span class="tb-mk">py</span>py</a>
   <div class="tb-crumb" id="tbCrumb"></div>
   <div class="tb-right">
     <span class="chiplet" style="color:oklch(0.5 0.13 50);">🔥 7</span>
     <span class="chiplet" style="color:var(--accent-d)" id="xpChip">⭐ 0</span>
-    <a class="tb-av" href="PyStart Profile.html">ใ</a>
+    <a class="tb-av" href="profile.html">ใ</a>
   </div>
 </header>
 <div class="prog-strip"><div class="pf" id="progFill"></div></div>
@@ -296,7 +296,7 @@ const unlocked=unlockedId();
 function renderHeader(){
   const desc=(lesson.content.th.desc||''), code=(lesson.content.th.code||'');
   const mins=Math.max(4,Math.round((desc.length+code.length)/220));
-  document.title='PyStart — บทที่ '+lessonId+' · '+lesson.title;
+  document.title='py — บทที่ '+lessonId+' · '+lesson.title;
   document.getElementById('tbCrumb').innerHTML=
     '<span>หน่วยที่ '+unit.id+' · '+esc(unit.title)+'</span><span class="sep">›</span><span class="cur">บทที่ '+lessonId+' · '+esc(lesson.title)+'</span>';
   document.getElementById('stepPill').innerHTML=
@@ -319,7 +319,7 @@ function renderSidebar(){
     const isActive=id===lessonId, isDone=completed.indexOf(id)>-1, isLocked=id>unlocked;
     const cls='sb-item'+(isActive?' active':'')+(isLocked?' locked':'');
     const ic=isActive?'<div class="sb-ic active">'+id+'</div>':(isDone?'<div class="sb-ic done">✓</div>':'<div class="sb-ic lock">🔒</div>');
-    body+='<a class="'+cls+'" href="PyStart Lesson v2.html?lesson='+id+'">'+ic+'<div class="sb-tx"><div class="sb-num">บทที่ '+id+'</div><div class="sb-name">'+esc(l.title)+'</div></div></a>';
+    body+='<a class="'+cls+'" href="lesson.html?lesson='+id+'">'+ic+'<div class="sb-tx"><div class="sb-num">บทที่ '+id+'</div><div class="sb-name">'+esc(l.title)+'</div></div></a>';
   });
   document.getElementById('sbBody').innerHTML=body;
 }
@@ -388,7 +388,7 @@ function completeLesson(){
     localStorage.setItem('pystart_completed',JSON.stringify(completed));
   }
   const next=lessonId+1;
-  location.href = next<=TOTAL ? ('PyStart Lesson v2.html?lesson='+next) : 'PyStart Curriculum.html';
+  location.href = next<=TOTAL ? ('lesson.html?lesson='+next) : 'courses.html';
 }
 document.getElementById('nextLessonBtn').addEventListener('click',completeLesson);
 

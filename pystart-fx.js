@@ -1,4 +1,4 @@
-/* ===== PyStart shared motion layer =====
+/* ===== py shared motion layer =====
    Driven by body attributes:
      data-fx       : comma-separated selectors → scroll-reveal (fade + rise), staggered per parent
      data-fx-count : selectors whose numeric text counts up when scrolled into view

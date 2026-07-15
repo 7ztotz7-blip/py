@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>PyStart — แบบทดสอบ</title>
+<title>py — แบบทดสอบ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -108,7 +108,7 @@
 <body>
 
 <header class="qbar">
-  <a class="x" href="PyStart Curriculum.html" title="ออกจากแบบทดสอบ"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></a>
+  <a class="x" href="courses.html" title="ออกจากแบบทดสอบ"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></a>
   <div class="qtitle"><span id="qtitleText">แบบทดสอบท้ายส่วน · ตรรกะและลูป</span><span id="qcount">ข้อ 1/5</span></div>
   <div class="qprog"><div class="track"><i id="ptrack" style="width:20%"></i></div><span class="pc" id="ppc">20%</span></div>
   <div class="qtimer">⏱ <span id="timer">04:32</span></div>
@@ -149,9 +149,9 @@
     </div>
     <div class="rcta">
       <button class="btn btn-ghost" id="retryBtn">ทำใหม่อีกครั้ง</button>
-      <a href="PyStart Curriculum.html" class="btn btn-ok" id="rctaMain">ไปต่อ →</a>
+      <a href="courses.html" class="btn btn-ok" id="rctaMain">ไปต่อ →</a>
     </div>
-    <p style="margin-top:18px;font-size:13.5px;color:var(--faint);" id="resultsLinkRow">นี่คือแบบทดสอบท้ายส่วน · <a href="PyStart Results.html" style="color:var(--accent-deep);font-weight:600;text-decoration:none;">ดูตัวอย่างผลแบบทดสอบหลังเรียนแบบเต็ม →</a></p>
+    <p style="margin-top:18px;font-size:13.5px;color:var(--faint);" id="resultsLinkRow">นี่คือแบบทดสอบท้ายส่วน · <a href="results.html" style="color:var(--accent-deep);font-weight:600;text-decoration:none;">ดูตัวอย่างผลแบบทดสอบหลังเรียนแบบเต็ม →</a></p>
   </div>
 </main>
 
@@ -262,19 +262,19 @@
       document.getElementById('rtitle').textContent='ทราบพื้นฐานของคุณแล้ว!';
       document.getElementById('rsub').textContent='ใช้คะแนนนี้เป็นจุดเริ่มต้น แล้วไปดูว่าเรียนหน่วยนี้จบแล้วเก่งขึ้นแค่ไหน';
       rctaMain.textContent='เริ่มเรียนหน่วยนี้ →';
-      rctaMain.href='PyStart Lesson v2.html?lesson='+unit.lessons[0];
+      rctaMain.href='lesson.html?lesson='+unit.lessons[0];
     } else if(isUnitTest && testType==='post'){
       pass=pct>=70;
       document.getElementById('rtitle').textContent=pass?'เยี่ยมมาก! ผ่านแล้ว 🎉':'เกือบแล้ว! ลองอีกครั้งนะ';
       document.getElementById('rsub').textContent=pass?'คุณเข้าใจเนื้อหาหน่วยนี้ได้ดี — ไปดูความก้าวหน้าที่แดชบอร์ดได้เลย':'ทบทวนเนื้อหาอีกนิดแล้วกลับมาทำใหม่ได้เลย';
       rctaMain.textContent='ดูแดชบอร์ด →';
-      rctaMain.href='PyStart Dashboard.html';
+      rctaMain.href='dashboard.html';
     } else {
       pass=pct>=70;
       document.getElementById('rtitle').textContent=pass?'เยี่ยมมาก! ผ่านแล้ว 🎉':'เกือบแล้ว! ลองอีกครั้งนะ';
       document.getElementById('rsub').textContent=pass?'คุณเข้าใจเรื่องลูปได้ดี — พร้อมไปต่อบทถัดไปได้เลย':'ทบทวนเนื้อหาอีกนิดแล้วกลับมาทำใหม่ได้เลย';
       rctaMain.textContent='ไปต่อ →';
-      rctaMain.href='PyStart Curriculum.html';
+      rctaMain.href='courses.html';
     }
     if(!pass){rs.style.setProperty('--p',pct);rs.style.background='conic-gradient(var(--warm) calc('+pct+'*1%),var(--warm-soft) 0)';document.getElementById('rbig').style.background='linear-gradient(120deg,var(--warm),var(--warm-deep))';document.getElementById('rbig').style.webkitBackgroundClip='text';document.getElementById('rbig').style.backgroundClip='text';}
     document.body.classList.add('done');

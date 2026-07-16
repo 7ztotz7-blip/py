@@ -266,10 +266,15 @@
 </div>
 
 <script src="pystart-data.js"></script>
-<script>
+<script type="module">
+  import { requireUser, loadProgress } from './assets/js/progress-store.js';
+
+  const user = await requireUser();
+  if(!user) throw new Error('redirecting to login'); // requireUser() already navigated away
+  const { completed, unitScores } = await loadProgress(user.uid);
+
   const TOTAL_LESSONS = courseData.lessons.length;
-  const completed = pyGetCompleted();
-  const unlocked = pyComputeUnlockedLessonId();
+  const unlocked = pyComputeUnlockedLessonId(completed, unitScores);
   const pct = Math.round((completed.length/TOTAL_LESSONS)*100);
   const nextLessonId = completed.length>=TOTAL_LESSONS ? TOTAL_LESSONS : unlocked;
   const nextLesson = courseData.lessons.find(l=>l.id===nextLessonId);
@@ -280,7 +285,7 @@
   for(const u of courseUnits){
     const doneInUnit = u.lessons.filter(id=>completed.indexOf(id)>-1).length;
     if(doneInUnit<u.lessons.length){ frontier={state:'lesson',unit:u}; break; }
-    if(!pyIsUnitPostPassed(u.id)){ frontier={state:'need-post',unit:u}; break; }
+    if(!pyIsUnitPostPassed(unitScores, u.id)){ frontier={state:'need-post',unit:u}; break; }
   }
 
   // hero stats + progress ring
@@ -315,7 +320,7 @@
   courseUnits.forEach(unit=>{
     const doneCount=unit.lessons.filter(id=>completed.indexOf(id)>-1).length;
     const lessonsDone=doneCount===unit.lessons.length;
-    const isDone=lessonsDone&&pyIsUnitPostPassed(unit.id);
+    const isDone=lessonsDone&&pyIsUnitPostPassed(unitScores, unit.id);
     const needsPost=lessonsDone&&!isDone;
     const isOpen=unit.lessons.indexOf(nextLessonId)>-1;
     const isLocked=unit.lessons[0]>unlocked;

@@ -280,11 +280,14 @@
   });
 </script>
 <script src="pystart-data.js"></script>
-<script>
+<script type="module">
+  import { requireUser, loadProgress } from './assets/js/progress-store.js';
   /* ---- pre vs post score chart (per unit) ---- */
-  (function(){
+  (async function(){
+    const user = await requireUser();
+    if(!user) return; // requireUser() already navigated to login.html
     let unitScores={};
-    try{ unitScores=JSON.parse(localStorage.getItem('pystart_unit_scores')||'{}'); }catch(e){ unitScores={}; }
+    try{ unitScores=(await loadProgress(user.uid)).unitScores; }catch(e){ unitScores={}; }
 
     const wrap=document.getElementById('scoreChartWrap');
     const hasAnyScore=courseUnits.some(u=>unitScores[u.id]&&(unitScores[u.id].pre||unitScores[u.id].post));

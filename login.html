@@ -225,13 +225,16 @@
 <script type="module">
   import { auth, db } from './assets/js/firebase.js';
   import {
-    createUserWithEmailAndPassword, signInWithEmailAndPassword,
-    updateProfile, onAuthStateChanged
+    createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile
   } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
   import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+  import { getCurrentUser } from './assets/js/progress-store.js';
 
-  // already signed in? no need to sign up/in again
-  onAuthStateChanged(auth, (user) => { if (user) location.href = 'courses.html'; });
+  // already signed in from a previous visit? skip straight to the course hub.
+  // Checked once on load (not a persistent listener) so it can't fire again
+  // mid-submit and cut off the signup flow's own profile/Firestore writes.
+  const existingUser = await getCurrentUser();
+  if(existingUser) location.href='courses.html';
 
   const FIREBASE_ERRORS = {
     'auth/email-already-in-use': 'อีเมลนี้ถูกใช้สมัครไปแล้ว ลองเข้าสู่ระบบแทน',
@@ -272,7 +275,9 @@
         await setDoc(doc(db,'users',cred.user.uid),{
           name: name||'',
           email: email,
-          createdAt: serverTimestamp()
+          createdAt: serverTimestamp(),
+          completed: [],
+          unitScores: {}
         });
       } else {
         await signInWithEmailAndPassword(auth,email,password);

@@ -246,7 +246,9 @@ code{font-family:'IBM Plex Mono',monospace;}
 </div>
 
 <script src="pystart-data.js"></script>
-<script>
+<script type="module">
+import { requireUser, loadProgress, saveCompleted } from './assets/js/progress-store.js';
+
 /* ---------- syntax highlight (reused for read-only code blocks) ---------- */
 const KW=new Set(['for','in','while','if','elif','else','def','return','import','from','as','and','or','not','True','False','None','break','continue','pass','class','with','try','except','finally','lambda','global','raise','is','yield','del']);
 const BI=new Set(['print','input','range','int','str','float','len','list','dict','set','tuple','sum','min','max','abs','round','type','sorted','enumerate','isinstance','super','zip','open']);
@@ -277,10 +279,15 @@ function renderCodeBlock(code){
 }
 
 /* ---------- resolve current lesson ---------- */
+const user = await requireUser();
+if(!user) throw new Error('redirecting to login'); // requireUser() already navigated away
+const progress = await loadProgress(user.uid);
+let completed = progress.completed;
+const unitScores = progress.unitScores;
+
 const TOTAL = courseData.lessons.length;
 const params = new URLSearchParams(location.search);
-let completed = pyGetCompleted();
-const unlocked = pyComputeUnlockedLessonId();
+const unlocked = pyComputeUnlockedLessonId(completed, unitScores);
 
 let lessonId=parseInt(params.get('lesson'),10);
 if(!lessonId || !courseData.lessons.some(l=>l.id===lessonId)) lessonId=unlocked;
@@ -290,7 +297,7 @@ const unit=pyUnitForLesson(lessonId);
 
 // a unit's lessons are gated behind its pre-test — bounce there first,
 // remembering to come straight back to the lesson that was requested
-if(!pyIsUnitPreDone(unit.id)){
+if(!pyIsUnitPreDone(unitScores, unit.id)){
   location.href='quiz.html?unit='+unit.id+'&type=pre&next='+encodeURIComponent('lesson.html?lesson='+lessonId);
   throw new Error('redirecting to pre-test'); // stop the rest of this script from running
 }
@@ -388,10 +395,10 @@ document.addEventListener('click',e=>{
   if(e.target.closest('#quizRetry')) drawQuiz();
 });
 
-function completeLesson(){
+async function completeLesson(){
   if(completed.indexOf(lessonId)===-1){
     completed.push(lessonId);
-    localStorage.setItem('pystart_completed',JSON.stringify(completed));
+    await saveCompleted(user.uid,completed);
   }
   const isLastOfUnit=unit.lessons[unit.lessons.length-1]===lessonId;
   if(isLastOfUnit){

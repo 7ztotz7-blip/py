@@ -112,9 +112,9 @@
   </nav>
   <div class="tb-right">
     <span class="chiplet" style="color:oklch(0.5 0.13 50)">🔥 7</span>
-    <span class="chiplet" style="color:var(--accent-deep)">⭐ 1,240 XP</span>
+    <span class="chiplet" style="color:var(--accent-deep)" id="xpChiplet">⭐ 0 XP</span>
     <button class="btn btn-ghost sm" id="signOutBtn" type="button">ออกจากระบบ</button>
-    <a class="tb-av" href="profile.html">ใ</a>
+    <a class="tb-av" href="profile.html" id="tbAvatar">?</a>
   </div>
 </header>
 
@@ -122,26 +122,26 @@
   <!-- HEADER -->
   <section class="phead">
     <div class="ph-row">
-      <div class="ph-av">ใ</div>
+      <div class="ph-av" id="profAvatar">?</div>
       <div class="ph-id">
-        <h1>ใจดี โค้ดเก่ง</h1>
-        <div class="handle">@jaidee · ผู้เรียนมือใหม่</div>
-        <div class="joined"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>เข้าร่วมเมื่อ มิถุนายน 2026</div>
+        <h1 id="profName">กำลังโหลด...</h1>
+        <div class="handle" id="profHandle"></div>
+        <div class="joined"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg><span id="profJoined">—</span></div>
       </div>
       <div class="ph-level">
-        <div class="lv">Lv.3</div>
+        <div class="lv" id="profLevel">Lv.1</div>
         <div class="ll">นักเรียนขยัน</div>
-        <div class="lbar"><i></i></div>
-        <div class="lx">1,240 / 2,000 XP</div>
+        <div class="lbar"><i id="profLevelBar"></i></div>
+        <div class="lx" id="profXpLabel">0 / 2,000 XP</div>
       </div>
     </div>
   </section>
 
   <!-- STAT STRIP -->
   <div class="strip">
-    <div class="sc"><div class="ic" style="background:var(--accent-soft);color:var(--accent-deep)">📖</div><div class="n">7</div><div class="l">บทที่เรียนจบ</div></div>
+    <div class="sc"><div class="ic" style="background:var(--accent-soft);color:var(--accent-deep)">📖</div><div class="n" id="statLessons">0</div><div class="l">บทที่เรียนจบ</div></div>
     <div class="sc"><div class="ic" style="background:var(--warm-soft);color:var(--warm-deep)">🔥</div><div class="n">7</div><div class="l">สตรีคสูงสุด (วัน)</div></div>
-    <div class="sc"><div class="ic" style="background:var(--ok-soft);color:var(--ok-deep)">✅</div><div class="n">12</div><div class="l">แบบฝึกหัดที่ทำผ่าน</div></div>
+    <div class="sc"><div class="ic" style="background:var(--ok-soft);color:var(--ok-deep)">✅</div><div class="n" id="statTests">0</div><div class="l">แบบฝึกหัดที่ทำผ่าน</div></div>
     <div class="sc"><div class="ic" style="background:oklch(0.95 0.05 85);color:var(--gold-deep)">🏅</div><div class="n">3</div><div class="l">เหรียญตราที่ได้รับ</div></div>
   </div>
 
@@ -197,19 +197,50 @@
   const heat=document.getElementById('heat');
   const pattern=[0,1,2,1,3,2,4,3,2,4,3,1,2,4, 1,0,2,3,1,2,3,4,2,1,3,2,4,3, 0,1,1,2,3,4,2,3,1,2,4,3,2,1, 2,3,1,0,2,1,3,4,2,3,1,2,3,4, 1,2,3,4,2,1,0,2,3,4,1,2,3,2];
   pattern.forEach(v=>{const i=document.createElement('i');if(v>0)i.className='l'+v;heat.appendChild(i);});
-  // level bar animate
-  window.addEventListener('load',()=>{
-    const b=document.querySelector('.ph-level .lbar i');if(b){b.style.width='0';requestAnimationFrame(()=>{b.style.transition='width 1s cubic-bezier(.2,.7,.2,1)';b.style.width='62%';});}
-  });
 </script>
 
 <script type="module">
   import { auth } from './assets/js/firebase.js';
   import { signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { requireUser, loadProgress, loadProfile } from './assets/js/progress-store.js';
+
   document.getElementById('signOutBtn').addEventListener('click', async ()=>{
     await signOut(auth);
     location.href='index.html';
   });
+
+  const user = await requireUser();
+  if(!user) throw new Error('redirecting to login'); // requireUser() already navigated away
+
+  // the signup form saves the chosen name to Firestore directly — read it
+  // from there rather than the Auth profile field, which can lag behind
+  // right after signup.
+  const profileDoc = await loadProfile(user.uid);
+  const displayName = profileDoc.name || user.displayName || user.email.split('@')[0];
+  const initial = displayName.trim().charAt(0).toUpperCase() || '?';
+  document.getElementById('profAvatar').textContent = initial;
+  document.getElementById('tbAvatar').textContent = initial;
+  document.getElementById('profName').textContent = displayName;
+  document.getElementById('profHandle').textContent = '@'+user.email.split('@')[0]+' · ผู้เรียนมือใหม่';
+  const joined = user.metadata && user.metadata.creationTime ? new Date(user.metadata.creationTime) : null;
+  document.getElementById('profJoined').textContent = joined
+    ? ('เข้าร่วมเมื่อ '+joined.toLocaleDateString('th-TH',{year:'numeric',month:'long'}))
+    : 'เข้าร่วมแล้ว';
+
+  const { completed, unitScores } = await loadProgress(user.uid);
+  const xp = completed.length*15;
+  const testsPassed = Object.values(unitScores).reduce((n,u)=>n+(u.pre?1:0)+(u.post?1:0),0);
+  document.getElementById('statLessons').textContent = completed.length;
+  document.getElementById('statTests').textContent = testsPassed;
+  document.getElementById('xpChiplet').textContent = '⭐ '+xp.toLocaleString('en-US')+' XP';
+  const level = Math.max(1, Math.floor(xp/400)+1);
+  const xpIntoLevel = xp % 400, levelTarget = 400;
+  document.getElementById('profLevel').textContent = 'Lv.'+level;
+  document.getElementById('profXpLabel').textContent = xp.toLocaleString('en-US')+' / '+((level)*400).toLocaleString('en-US')+' XP';
+  const levelBar=document.getElementById('profLevelBar');
+  const levelPct=Math.round((xpIntoLevel/levelTarget)*100);
+  levelBar.style.width='0';
+  requestAnimationFrame(()=>{levelBar.style.transition='width 1s cubic-bezier(.2,.7,.2,1)';levelBar.style.width=levelPct+'%';});
 </script>
 <script src="pystart-fx.js"></script>
 </body>

@@ -1497,40 +1497,36 @@ const courseUnits = [
 
 /* ---------- shared progress/gating helpers ----------
    Single source of truth for "what's unlocked", used by courses.html,
-   lesson.html and quiz.html. A unit's lessons only start counting once
-   its pre-test has been taken, and the *next* unit only opens once the
-   current unit's lessons are all done AND its post-test is passed
-   (>=70%). Reads localStorage directly so every page stays in sync
-   without a shared in-memory store. */
-function pyGetCompleted(){
-    try{ return JSON.parse(localStorage.getItem('pystart_completed')||'[]'); }catch(e){ return []; }
-}
-function pyGetUnitScores(){
-    try{ return JSON.parse(localStorage.getItem('pystart_unit_scores')||'{}'); }catch(e){ return {}; }
-}
+   lesson.html, quiz.html and dashboard.html. A unit's lessons only start
+   counting once its pre-test has been taken, and the *next* unit only
+   opens once the current unit's lessons are all done AND its post-test
+   is passed (>=70%).
+
+   Pure functions — they take `completed` (array of lesson ids) and
+   `unitScores` (per-unit {pre,post} map) as arguments instead of reading
+   storage themselves, because progress now lives in Firestore per
+   account (see assets/js/progress-store.js) and has to be fetched async
+   before any of this can run. */
 function pyUnitForLesson(lessonId){
     return courseUnits.find(function(u){ return u.lessons.indexOf(lessonId) > -1; });
 }
-function pyIsUnitPreDone(unitId){
-    var s = pyGetUnitScores();
-    return !!(s[unitId] && s[unitId].pre);
+function pyIsUnitPreDone(unitScores, unitId){
+    return !!(unitScores[unitId] && unitScores[unitId].pre);
 }
-function pyIsUnitPostPassed(unitId){
-    var s = pyGetUnitScores();
-    return !!(s[unitId] && s[unitId].post && s[unitId].post.pct >= 70);
+function pyIsUnitPostPassed(unitScores, unitId){
+    return !!(unitScores[unitId] && unitScores[unitId].post && unitScores[unitId].post.pct >= 70);
 }
 // Highest lesson id currently reachable: walks units in order, stopping
 // at the first not-yet-completed lesson, or — if a unit's lessons are
 // all done but its post-test isn't passed yet — capping at that unit's
 // last lesson so the next unit's lessons don't unlock early.
-function pyComputeUnlockedLessonId(){
-    var completed = pyGetCompleted();
+function pyComputeUnlockedLessonId(completed, unitScores){
     for(var i = 0; i < courseUnits.length; i++){
         var unit = courseUnits[i];
         for(var j = 0; j < unit.lessons.length; j++){
             if(completed.indexOf(unit.lessons[j]) === -1) return unit.lessons[j];
         }
-        if(!pyIsUnitPostPassed(unit.id)) return unit.lessons[unit.lessons.length - 1];
+        if(!pyIsUnitPostPassed(unitScores, unit.id)) return unit.lessons[unit.lessons.length - 1];
     }
     var last = courseUnits[courseUnits.length - 1];
     return last.lessons[last.lessons.length - 1];

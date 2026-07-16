@@ -157,7 +157,14 @@
 
 <script src="pystart-data.js"></script>
 <script src="assets/js/unit-quiz-bank.js"></script>
-<script>
+<script type="module">
+  import { requireUser, loadProgress, saveUnitScores } from './assets/js/progress-store.js';
+
+  const user = await requireUser();
+  if(!user) throw new Error('redirecting to login'); // requireUser() already navigated away
+  let unitScores = {};
+  try{ unitScores = (await loadProgress(user.uid)).unitScores; }catch(e){ unitScores = {}; }
+
   const DEFAULT_QUESTIONS=[
     {q:'โค้ดนี้จะพิมพ์อะไรออกมา?',code:true,diff:'ระดับง่าย',
      opts:['<code>1 2 3</code> (บรรทัดเดียว)','<code>1</code><br><code>2</code><br><code>3</code> (คนละบรรทัด)','<code>1 2 3 4</code>','<code>0 1 2 3</code>'],
@@ -250,11 +257,9 @@
     document.getElementById('rwrong').textContent=QUESTIONS.length-correctCount;
 
     if(isUnitTest){
-      let scores={};
-      try{ scores=JSON.parse(localStorage.getItem('pystart_unit_scores')||'{}'); }catch(e){ scores={}; }
-      if(!scores[unitId]) scores[unitId]={};
-      scores[unitId][testType]={score:correctCount,total:QUESTIONS.length,pct:pct};
-      localStorage.setItem('pystart_unit_scores',JSON.stringify(scores));
+      if(!unitScores[unitId]) unitScores[unitId]={};
+      unitScores[unitId][testType]={score:correctCount,total:QUESTIONS.length,pct:pct};
+      saveUnitScores(user.uid,unitScores); // best-effort, doesn't block the result screen
     }
 
     const rctaMain=document.getElementById('rctaMain');

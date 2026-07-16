@@ -113,6 +113,7 @@
   <div class="tb-right">
     <span class="chiplet" style="color:oklch(0.5 0.13 50)">🔥 7</span>
     <span class="chiplet" style="color:var(--accent-deep)">⭐ 1,240 XP</span>
+    <button class="btn btn-ghost sm" id="signOutBtn" type="button">ออกจากระบบ</button>
     <a class="tb-av" href="profile.html">ใ</a>
   </div>
 </header>
@@ -199,6 +200,15 @@
   // level bar animate
   window.addEventListener('load',()=>{
     const b=document.querySelector('.ph-level .lbar i');if(b){b.style.width='0';requestAnimationFrame(()=>{b.style.transition='width 1s cubic-bezier(.2,.7,.2,1)';b.style.width='62%';});}
+  });
+</script>
+
+<script type="module">
+  import { auth } from './assets/js/firebase.js';
+  import { signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  document.getElementById('signOutBtn').addEventListener('click', async ()=>{
+    await signOut(auth);
+    location.href='index.html';
   });
 </script>
 <script src="pystart-fx.js"></script>

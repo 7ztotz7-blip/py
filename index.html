@@ -403,14 +403,21 @@
 </head>
 <body>
 
+<script type="module">
+  // already signed in? skip the landing page and go straight to the course hub
+  import { auth } from './assets/js/firebase.js';
+  import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  onAuthStateChanged(auth, (user) => {
+    if (user) location.href = 'courses.html';
+  });
+</script>
+
 <header class="nav" id="nav">
   <div class="wrap nav-inner">
     <a class="logo" href="index.html"><span class="mark">py</span>py</a>
     <nav class="nav-links">
-      <a class="lnk" href="courses.html">หลักสูตร</a>
       <a class="lnk" href="#how">วิธีเริ่ม</a>
       <a class="lnk" href="#faq">คำถามที่พบบ่อย</a>
-      <a class="lnk" href="dashboard.html">แดชบอร์ด</a>
     </nav>
     <div class="nav-actions">
       <a class="btn btn-text" href="login.html">เข้าสู่ระบบ</a>
@@ -669,9 +676,7 @@
   <div class="wrap foot-inner">
     <a class="logo" href="index.html" style="font-size:17px"><span class="mark" style="width:26px;height:26px;font-size:13px">py</span>py</a>
     <div class="foot-links">
-      <a href="courses.html">หลักสูตร</a>
       <a href="#faq">คำถามที่พบบ่อย</a>
-      <a href="dashboard.html">แดชบอร์ด</a>
       <a href="profile.html">โปรไฟล์</a>
     </div>
     <div class="copy">© 2026 py · เรียน Python สำหรับทุกคน</div>

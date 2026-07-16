@@ -89,6 +89,9 @@
   .signup-only{display:none;}
   body[data-mode="signup"] .signup-only{display:block;}
   body[data-mode="signup"] .login-only{display:none;}
+  .auth-error{display:none;margin-bottom:16px;padding:12px 15px;border-radius:10px;background:oklch(0.97 0.03 25);
+    border:1px solid oklch(0.85 0.08 25);color:oklch(0.45 0.14 25);font-size:13.5px;line-height:1.5;}
+  .submit:disabled{opacity:.6;cursor:not-allowed;}
 
   @media (max-width:880px){
     body{overflow:auto;height:auto;}
@@ -134,26 +137,27 @@
         <button class="on" data-set="signup">สมัครสมาชิก</button>
       </div>
 
-      <form onsubmit="return false">
+      <form id="authForm">
+        <div class="auth-error" id="authError"></div>
         <div class="field signup-only">
           <label>ชื่อที่ใช้แสดง</label>
           <div class="inp">
             <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span>
-            <input type="text" placeholder="เช่น ใจดี โค้ดเก่ง" />
+            <input type="text" id="nameInput" placeholder="เช่น ใจดี โค้ดเก่ง" />
           </div>
         </div>
         <div class="field">
           <label>อีเมล</label>
           <div class="inp">
             <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"></rect><path d="m22 7-10 5L2 7"></path></svg></span>
-            <input type="email" placeholder="you@example.com" />
+            <input type="email" id="emailInput" placeholder="you@example.com" required />
           </div>
         </div>
         <div class="field">
           <label>รหัสผ่าน</label>
           <div class="inp">
             <span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg></span>
-            <input type="password" id="pw" placeholder="อย่างน้อย 8 ตัวอักษร" />
+            <input type="password" id="pw" placeholder="อย่างน้อย 8 ตัวอักษร" required />
             <button type="button" class="eye" id="eyeBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"></path><circle cx="12" cy="12" r="3"></circle></svg></button>
           </div>
           <div class="signup-only">
@@ -167,9 +171,9 @@
           <a class="link login-only" href="#">ลืมรหัสผ่าน?</a>
         </div>
 
-        <a href="lesson.html" class="btn btn-primary lg submit"><span class="t-cta">สร้างบัญชี</span>
+        <button type="submit" id="submitBtn" class="btn btn-primary lg submit"><span class="t-cta">สร้างบัญชี</span>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-        </a>
+        </button>
       </form>
 
       <div class="divider">หรือ</div>
@@ -215,6 +219,70 @@
     if(v.length>=8)s++; if(/[A-Z]/.test(v)||/[ก-๙]/.test(v))s++; if(/[0-9]/.test(v))s++; if(/[^A-Za-z0-9]/.test(v))s++;
     [...meter.children].forEach((i,idx)=>i.classList.toggle('on',idx<s));
     meterL.textContent=v?('ความปลอดภัย: '+(labels[Math.max(0,s-1)]||labels[0])):'ความปลอดภัยของรหัสผ่าน';
+  });
+</script>
+
+<script type="module">
+  import { auth, db } from './assets/js/firebase.js';
+  import {
+    createUserWithEmailAndPassword, signInWithEmailAndPassword,
+    updateProfile, onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+  // already signed in? no need to sign up/in again
+  onAuthStateChanged(auth, (user) => { if (user) location.href = 'courses.html'; });
+
+  const FIREBASE_ERRORS = {
+    'auth/email-already-in-use': 'อีเมลนี้ถูกใช้สมัครไปแล้ว ลองเข้าสู่ระบบแทน',
+    'auth/invalid-email': 'รูปแบบอีเมลไม่ถูกต้อง',
+    'auth/weak-password': 'รหัสผ่านสั้นเกินไป ต้องมีอย่างน้อย 6 ตัวอักษร',
+    'auth/user-not-found': 'ไม่พบบัญชีนี้ในระบบ',
+    'auth/wrong-password': 'รหัสผ่านไม่ถูกต้อง',
+    'auth/invalid-credential': 'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
+    'auth/too-many-requests': 'ลองผิดหลายครั้งเกินไป กรุณารอสักครู่แล้วลองใหม่'
+  };
+
+  const authForm=document.getElementById('authForm');
+  const nameInput=document.getElementById('nameInput');
+  const emailInput=document.getElementById('emailInput');
+  const submitBtn=document.getElementById('submitBtn');
+  const errorBox=document.getElementById('authError');
+  const ctaLabel=submitBtn.querySelector('.t-cta');
+
+  function showError(msg){ errorBox.textContent=msg; errorBox.style.display='block'; }
+  function clearError(){ errorBox.style.display='none'; }
+
+  authForm.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    clearError();
+    const email=emailInput.value.trim();
+    const password=pw.value;
+    const mode=document.body.dataset.mode;
+    if(!email||!password){ showError('กรุณากรอกอีเมลและรหัสผ่าน'); return; }
+
+    submitBtn.disabled=true;
+    const originalLabel=ctaLabel.textContent;
+    ctaLabel.textContent='กำลังดำเนินการ...';
+    try{
+      if(mode==='signup'){
+        const name=nameInput.value.trim();
+        const cred=await createUserWithEmailAndPassword(auth,email,password);
+        if(name) await updateProfile(cred.user,{displayName:name});
+        await setDoc(doc(db,'users',cred.user.uid),{
+          name: name||'',
+          email: email,
+          createdAt: serverTimestamp()
+        });
+      } else {
+        await signInWithEmailAndPassword(auth,email,password);
+      }
+      location.href='courses.html';
+    } catch(err){
+      showError(FIREBASE_ERRORS[err.code] || ('เกิดข้อผิดพลาด: '+err.message));
+      submitBtn.disabled=false;
+      ctaLabel.textContent=originalLabel;
+    }
   });
 </script>
 <script src="pystart-fx.js"></script>

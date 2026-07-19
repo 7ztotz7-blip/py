@@ -140,6 +140,13 @@ code{font-family:'IBM Plex Mono',monospace;}
   white-space:pre-wrap;word-break:break-word;color:var(--edtx);background:oklch(0.1 0.012 260);border-radius:8px;min-height:20px;}
 .ic-out-body.err{color:oklch(0.78 0.14 30);}
 
+/* ── TIP / WARNING CALLOUTS ── */
+.tip{display:flex;gap:12px;margin:18px 0 24px;padding:14px 16px;border-radius:12px;border:1px solid;}
+.tip .tip-ic{flex-shrink:0;font-size:16px;line-height:1;}
+.tip .tip-tx{font-size:14.5px;line-height:1.7;color:inherit;}
+.tip.note{background:var(--ok-s);border-color:var(--ok-l);color:var(--ok-d);}
+.tip.warn{background:var(--warm-s);border-color:var(--warm-l);color:oklch(0.42 0.1 62);}
+
 /* ── QUIZ ── */
 .q-card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:20px 22px;}
 .q-card.answered{border-color:var(--line2);}
@@ -258,21 +265,25 @@ code{font-family:'IBM Plex Mono',monospace;}
 import { requireUser, loadProgress, saveCompleted } from './assets/js/progress-store.js';
 
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function renderCodeBlock(code){
+function renderCodeBlock(code,idx){
   const bar='<div class="ic-bar"><span class="ic-dot" style="background:oklch(0.72 0.16 25)"></span><span class="ic-dot" style="background:oklch(0.84 0.13 90)"></span><span class="ic-dot" style="background:oklch(0.76 0.14 150)"></span>'+
     (code.filename?'<span class="ic-fname">'+esc(code.filename)+'</span>':'')+
-    '<button class="ic-run" data-run>▸ รัน</button>'+
-    '<button class="ic-copy" data-copy>คัดลอก</button></div>';
-  const editor='<textarea class="ic-editor" id="codeEditor" spellcheck="false">'+esc(code.source)+'</textarea>';
-  const out='<div class="ic-out"><div class="ic-out-bar">ผลลัพธ์</div><div class="ic-out-body" id="codeOutput">กด "รัน" เพื่อรันโค้ดด้านบน</div></div>';
+    '<button class="ic-run" data-run data-idx="'+idx+'">▸ รัน</button>'+
+    '<button class="ic-copy" data-copy data-idx="'+idx+'">คัดลอก</button></div>';
+  const editor='<textarea class="ic-editor" id="codeEditor-'+idx+'" spellcheck="false">'+esc(code.source)+'</textarea>';
+  const out='<div class="ic-out"><div class="ic-out-bar">ผลลัพธ์</div><div class="ic-out-body" id="codeOutput-'+idx+'">กด "รัน" เพื่อรันโค้ดด้านบน</div></div>';
   return '<div class="inline-code">'+bar+editor+out+'</div>';
+}
+function renderTip(tip){
+  const icon=tip.kind==='warn'?'⚠️':'💡';
+  return '<div class="tip '+(tip.kind==='warn'?'warn':'note')+'"><span class="tip-ic">'+icon+'</span><span class="tip-tx">'+esc(tip.text)+'</span></div>';
 }
 
 /* ---------- run Python code with Skulpt ---------- */
-function runCode(){
-  const runBtn=document.querySelector('[data-run]');
-  const editor=document.getElementById('codeEditor');
-  const out=document.getElementById('codeOutput');
+function runCode(idx){
+  const runBtn=document.querySelector('[data-run][data-idx="'+idx+'"]');
+  const editor=document.getElementById('codeEditor-'+idx);
+  const out=document.getElementById('codeOutput-'+idx);
   out.classList.remove('err');
   out.textContent='';
   runBtn.disabled=true;
@@ -324,8 +335,11 @@ const lesson=courseData.lessons.find(l=>l.id===lessonId);
 
 /* ---------- render header / breadcrumb / progress ---------- */
 function renderHeader(){
-  const desc=(lesson.content.th.desc||''), code=(lesson.content.th.code||'');
-  const mins=Math.max(4,Math.round((desc.length+code.length)/220));
+  const c=lesson.content.th;
+  const contentLen=Array.isArray(c.blocks)
+    ? c.blocks.reduce((n,b)=>n+((b.text||b.source||'').length),0)
+    : (c.desc||'').length+(c.code||'').length;
+  const mins=Math.max(4,Math.round(contentLen/220));
   document.title='py — บทที่ '+lessonId+' · '+lesson.title;
   document.getElementById('tbCrumb').innerHTML=
     '<span>หน่วยที่ '+unit.id+' · '+esc(unit.title)+'</span><span class="sep">›</span><span class="cur">บทที่ '+lessonId+' · '+esc(lesson.title)+'</span>';
@@ -354,24 +368,45 @@ function renderSidebar(){
   document.getElementById('sbBody').innerHTML=body;
 }
 
-/* ---------- render lesson body (desc + code) ---------- */
+/* ---------- render lesson body ----------
+   New lessons use `blocks`: an ordered array of {type:'text'|'code'|'tip', ...}
+   letting a lesson interleave several code examples and callouts.
+   Older lessons still use the original single `desc`+`code` pair — both
+   are supported so content can be migrated one lesson at a time. */
 function renderContent(){
   let html='';
-  (lesson.content.th.desc||'').split(/\n\n+/).map(s=>s.trim()).filter(Boolean).forEach(p=>{
-    html+='<p class="bt">'+esc(p)+'</p>';
-  });
-  if(lesson.content.th.code) html+=renderCodeBlock({source:lesson.content.th.code,filename:'example.py'});
-  document.getElementById('sectionsContainer').innerHTML=html;
-  const copyBtn=document.querySelector('[data-copy]');
-  const editorEl=document.getElementById('codeEditor');
-  if(copyBtn) copyBtn.addEventListener('click',()=>{
-    navigator.clipboard.writeText(editorEl?editorEl.value:(lesson.content.th.code||'')).then(()=>{
-      copyBtn.textContent='คัดลอกแล้ว ✓';
-      setTimeout(()=>{copyBtn.textContent='คัดลอก';},1500);
+  let codeIdx=0;
+  const c=lesson.content.th;
+  if(Array.isArray(c.blocks)){
+    c.blocks.forEach(b=>{
+      if(b.type==='text') html+='<p class="bt">'+esc(b.text)+'</p>';
+      else if(b.type==='code'){ html+=renderCodeBlock({source:b.source,filename:b.filename||'example.py'},codeIdx); codeIdx++; }
+      else if(b.type==='tip') html+=renderTip(b);
     });
+  } else {
+    (c.desc||'').split(/\n\n+/).map(s=>s.trim()).filter(Boolean).forEach(p=>{
+      html+='<p class="bt">'+esc(p)+'</p>';
+    });
+    if(c.code){ html+=renderCodeBlock({source:c.code,filename:'example.py'},codeIdx); codeIdx++; }
+  }
+  const container=document.getElementById('sectionsContainer');
+  container.innerHTML=html;
+
+  // event delegation: any number of run/copy buttons, one per code block
+  container.addEventListener('click',e=>{
+    const copyBtn=e.target.closest('[data-copy]');
+    if(copyBtn){
+      const idx=copyBtn.dataset.idx;
+      const editorEl=document.getElementById('codeEditor-'+idx);
+      navigator.clipboard.writeText(editorEl?editorEl.value:'').then(()=>{
+        copyBtn.textContent='คัดลอกแล้ว ✓';
+        setTimeout(()=>{copyBtn.textContent='คัดลอก';},1500);
+      });
+      return;
+    }
+    const runBtn=e.target.closest('[data-run]');
+    if(runBtn) runCode(runBtn.dataset.idx);
   });
-  const runBtn=document.querySelector('[data-run]');
-  if(runBtn) runBtn.addEventListener('click',runCode);
 }
 
 /* ---------- quiz (single question per lesson) ---------- */

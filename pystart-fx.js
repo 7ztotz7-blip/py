@@ -40,16 +40,8 @@
   /* ---------- scroll reveal + stagger ---------- */
   var revSel = body.getAttribute('data-fx');
   if (revSel && !reduce) {
-    var els = [];
-    each(revSel, function (e) { if (els.indexOf(e) < 0) els.push(e); });
-
+    var revealed = new Set();
     var counters = new Map();
-    els.forEach(function (e) {
-      var p = e.parentNode;
-      var n = counters.get(p) || 0;
-      e.dataset.fxDelay = Math.min(n * 0.06, 0.42);
-      counters.set(p, n + 1);
-    });
 
     var io = new IntersectionObserver(function (ents) {
       ents.forEach(function (en) {
@@ -60,10 +52,31 @@
         io.unobserve(e);
       });
     }, { threshold: 0.1, rootMargin: '0px 0px -6% 0px' });
-    els.forEach(function (e) { io.observe(e); });
 
-    // safety: never leave anything stuck hidden
-    setTimeout(function () { els.forEach(function (e) { e.classList.add('fx-shown'); }); }, 2400);
+    function attachReveal(e) {
+      if (revealed.has(e)) return;
+      revealed.add(e);
+      var p = e.parentNode;
+      var n = counters.get(p) || 0;
+      e.dataset.fxDelay = Math.min(n * 0.06, 0.42);
+      counters.set(p, n + 1);
+      io.observe(e);
+      // safety: never leave this element stuck hidden, even if it
+      // never scrolls into view. Timed per-element (not from page
+      // load) so elements inserted late still get covered.
+      setTimeout(function () { e.classList.add('fx-shown'); }, 2400);
+    }
+
+    each(revSel, attachReveal);
+
+    // Some pages render their content asynchronously (e.g. the course
+    // module list or a dashboard's "up next" rows, built after a
+    // Firestore fetch resolves) — those elements don't exist yet at
+    // this point, so the scan above misses them and they'd otherwise
+    // sit at opacity:0 forever. Re-scan on any DOM change and attach
+    // reveal behavior to anything new that matches.
+    new MutationObserver(function () { each(revSel, attachReveal); })
+      .observe(document.body, { childList: true, subtree: true });
   } else if (revSel && reduce) {
     each(revSel, function (e) { e.classList.add('fx-shown'); });
   }

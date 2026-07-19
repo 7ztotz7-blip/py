@@ -18,7 +18,7 @@
   .greet .sub{color:var(--muted);font-size:16px;margin-top:6px;}
   .greet .date{font-size:13.5px;color:var(--faint);font-family:'IBM Plex Mono',monospace;}
 
-  .layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px;margin-top:26px;}
+  .layout{margin-top:26px;}
 
   /* continue hero card */
   .resume{position:relative;overflow:hidden;border-radius:22px;padding:32px 34px;color:#fff;
@@ -43,15 +43,13 @@
   .btn-glass:hover{background:oklch(1 0 0/.2);}
 
   /* stat row */
-  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px;}
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:22px;}
   .stat{position:relative;overflow:hidden;background:linear-gradient(180deg,#fff,var(--soft));border:1px solid var(--line);
     border-radius:17px;padding:20px;box-shadow:var(--shadow-sm);}
   .stat .si{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;margin-bottom:14px;color:#fff;
     box-shadow:0 1px 0 oklch(1 0 0/.4) inset,var(--shadow-sm);}
   .stat .sn{font-size:28px;font-weight:600;letter-spacing:-.02em;line-height:1;}
   .stat .sl{font-size:13.5px;color:var(--muted);margin-top:6px;}
-  .stat .sd{position:absolute;top:18px;right:18px;font-size:12px;font-weight:600;color:var(--ok-deep);
-    background:var(--ok-soft);padding:3px 9px;border-radius:100px;}
 
   /* section title */
   .stitle{display:flex;align-items:center;justify-content:space-between;margin:30px 0 14px;}
@@ -59,7 +57,7 @@
   .stitle a{font-size:14px;color:var(--accent-deep);font-weight:600;text-decoration:none;}
 
   /* score chart */
-  .chartcard{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 22px 18px;box-shadow:var(--shadow-sm);}
+  .chartcard{background:linear-gradient(180deg,#fff,var(--soft));border:1px solid var(--line);border-radius:18px;padding:22px 22px 18px;box-shadow:var(--shadow-sm);}
   .chartcard .chead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
   .chartcard h3{font-size:16px;font-weight:600;}
   .clegend{display:flex;gap:16px;font-size:12.5px;color:var(--muted);}
@@ -79,7 +77,7 @@
 
   /* up-next list */
   .nextlist{display:flex;flex-direction:column;gap:11px;}
-  .nx{display:flex;align-items:center;gap:15px;background:var(--card);border:1px solid var(--line);border-radius:15px;
+  .nx{display:flex;align-items:center;gap:15px;background:linear-gradient(180deg,#fff,var(--soft));border:1px solid var(--line);border-radius:15px;
     padding:15px 18px;box-shadow:var(--shadow-sm);transition:transform .18s,box-shadow .18s,border-color .18s;text-decoration:none;color:inherit;}
   .nx:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--accent-line);}
   .nx .ni{width:46px;height:46px;border-radius:13px;flex-shrink:0;display:grid;place-items:center;font-size:20px;
@@ -88,48 +86,14 @@
   .nx .nt{flex:1;min-width:0;}
   .nx .nt .e{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--faint);letter-spacing:.04em;}
   .nx .nt b{display:block;font-size:15.5px;font-weight:600;margin-top:2px;}
-  .nx .nm{font-size:13px;color:var(--faint);flex-shrink:0;}
   .nx .go{width:34px;height:34px;border-radius:10px;flex-shrink:0;display:grid;place-items:center;color:var(--accent-deep);
     background:var(--soft);transition:.15s;}
   .nx:hover .go{background:var(--accent);color:#fff;}
 
-  /* right column */
-  .side{display:flex;flex-direction:column;gap:20px;}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;box-shadow:var(--shadow-sm);}
-  .card h4{font-size:15px;font-weight:600;display:flex;align-items:center;gap:9px;margin-bottom:16px;}
-  .card h4 .hi{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;font-size:14px;}
-  /* streak */
-  .streak-top{display:flex;align-items:center;gap:13px;margin-bottom:16px;}
-  .streak-flame{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;font-size:26px;flex-shrink:0;
-    background:linear-gradient(140deg,var(--warm-soft),oklch(0.93 0.06 40));border:1px solid var(--warm-line);}
-  .streak-top .n{font-size:30px;font-weight:600;letter-spacing:-.02em;line-height:1;}
-  .streak-top .l{font-size:13px;color:var(--muted);margin-top:3px;}
-  .week{display:flex;justify-content:space-between;gap:6px;}
-  .day{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;}
-  .day .dot{width:100%;aspect-ratio:1;border-radius:10px;display:grid;place-items:center;font-size:13px;color:#fff;
-    background:var(--soft);border:1px solid var(--line);}
-  .day.done .dot{background:linear-gradient(140deg,var(--warm),var(--warm-deep));border:none;box-shadow:0 4px 10px -4px oklch(0.55 0.12 60/.6);}
-  .day.today .dot{background:linear-gradient(140deg,var(--accent),var(--accent-deep));border:none;box-shadow:0 0 0 3px var(--accent-soft);}
-  .day .dl{font-size:11px;color:var(--faint);}
-  /* goal ring */
-  .goalwrap{display:flex;align-items:center;gap:16px;}
-  .goalring{--p:60;width:72px;height:72px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;
-    background:conic-gradient(var(--ok) calc(var(--p)*1%),var(--ok-soft) 0);}
-  .goalring i{width:56px;height:56px;border-radius:50%;background:var(--card);display:grid;place-items:center;
-    font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:15px;color:var(--ok-deep);}
-  .goalwrap .gt b{font-size:15px;font-weight:600;display:block;}
-  .goalwrap .gt span{font-size:13px;color:var(--muted);}
-  /* badges mini */
-  .bgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
-  .bg{aspect-ratio:1;border-radius:13px;display:grid;place-items:center;font-size:20px;background:var(--soft);border:1px solid var(--line);}
-  .bg.earned{background:linear-gradient(140deg,var(--gold),var(--gold-deep));border:none;box-shadow:0 6px 14px -6px oklch(0.6 0.12 80/.6);}
-  .bg.lock{color:var(--lock);opacity:.6;}
-
-  @media (max-width:900px){.layout{grid-template-columns:1fr;}.stats{grid-template-columns:1fr 1fr;}}
   @media (max-width:560px){.stats{grid-template-columns:1fr;}}
 </style>
 </head>
-<body data-fx=".topbar, .greet, .resume, .stats > .stat, .stitle, .nextlist > .nx, .side > .card" data-fx-count=".stat .sn, .streak-top .n" data-fx-ring=".goalring">
+<body data-fx=".topbar, .greet, .resume, .stats > .stat, .stitle, .nextlist > .nx" data-fx-count=".stat .sn">
 <script>
 (function(){var b=document.body,s=b.getAttribute('data-fx');if(!s)return;document.documentElement.classList.add('js-fx');if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var st=document.createElement('style');st.textContent='.js-fx :is('+s+'){transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}.js-fx :is('+s+'):not(.fx-shown){opacity:0;transform:translateY(22px)}';document.head.appendChild(st);})();
 </script>
@@ -143,8 +107,7 @@
     <a href="profile.html">โปรไฟล์</a>
   </nav>
   <div class="tb-right">
-    <span class="chiplet" style="color:oklch(0.5 0.13 50)">🔥 7</span>
-    <span class="chiplet" style="color:var(--accent-deep)">⭐ 1,240 XP</span>
+    <span class="chiplet" style="color:var(--accent-deep)" id="xpChip">⭐ 0 XP</span>
     <a class="tb-av" href="profile.html">ใ</a>
   </div>
 </header>
@@ -152,23 +115,23 @@
 <div class="wrap">
   <div class="greet">
     <div>
-      <h1>สวัสดีตอนเช้า, ใจดี 👋</h1>
-      <p class="sub">วันนี้เรียนต่ออีกบทเดียวก็รักษาสตรีคไว้ได้แล้ว!</p>
+      <h1>สวัสดี, <span id="greetName">นักเรียน</span> 👋</h1>
+      <p class="sub" id="greetSub">วันนี้เรียนต่ออีกนิดก็ใกล้จบหลักสูตรแล้ว!</p>
     </div>
-    <span class="date">จันทร์ · 22 มิ.ย. 2026</span>
+    <span class="date" id="greetDate">—</span>
   </div>
 
   <div class="layout">
     <!-- MAIN -->
     <div>
       <section class="resume">
-        <span class="rk">เรียนต่อจากที่ค้างไว้</span>
-        <h2>บทที่ 8 · ลูป for และ range()</h2>
-        <p class="meta">ส่วนที่ 2 · ตรรกะและการควบคุม — เหลืออีก ~5 นาทีก็จบบท</p>
+        <span class="rk" id="resumeKicker">เรียนต่อจากที่ค้างไว้</span>
+        <h2 id="resumeTitle">กำลังโหลด...</h2>
+        <p class="meta" id="resumeMeta"></p>
         <div class="pbar"><i></i></div>
-        <p class="plab">ความคืบหน้ารวม 7/29 บท · 24%</p>
+        <p class="plab" id="resumeProgLabel">ความคืบหน้ารวม 0/24 บท · 0%</p>
         <div class="ra">
-          <a href="lesson.html" class="btn btn-white lg">▶ เรียนต่อเลย</a>
+          <a href="lesson.html" id="resumeCta" class="btn btn-white lg">▶ เรียนต่อเลย</a>
           <a href="courses.html" class="btn btn-glass lg">ดูหลักสูตรทั้งหมด</a>
         </div>
       </section>
@@ -176,18 +139,11 @@
       <div class="stats">
         <div class="stat">
           <div class="si" style="background:linear-gradient(140deg,var(--accent-2),var(--accent-deep))"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg></div>
-          <div class="sn">7</div><div class="sl">บทที่เรียนจบ</div>
-          <span class="sd">+2 สัปดาห์นี้</span>
-        </div>
-        <div class="stat">
-          <div class="si" style="background:linear-gradient(140deg,var(--warm),var(--warm-deep))">🔥</div>
-          <div class="sn">7</div><div class="sl">วันติดต่อกัน (สตรีค)</div>
-          <span class="sd">สถิติส่วนตัว!</span>
+          <div class="sn" id="statLessons">0</div><div class="sl">บทที่เรียนจบ</div>
         </div>
         <div class="stat">
           <div class="si" style="background:linear-gradient(140deg,var(--gold),var(--gold-deep))">⭐</div>
-          <div class="sn">1,240</div><div class="sl">คะแนนสะสม (XP)</div>
-          <span class="sd">+280 สัปดาห์นี้</span>
+          <div class="sn" id="statXp">0</div><div class="sl">คะแนนสะสม (XP)</div>
         </div>
       </div>
 
@@ -209,86 +165,95 @@
       </div>
 
       <div class="stitle"><h3>เรียนต่อไปนี้</h3><a href="courses.html">ดูทั้งหมด →</a></div>
-      <div class="nextlist">
-        <a href="lesson.html" class="nx cur">
-          <span class="ni"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></span>
-          <span class="nt"><span class="e">บทที่ 08 · กำลังเรียน</span><b>ลูป for และ range()</b></span>
-          <span class="nm">~5 นาที</span>
-          <span class="go"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-        </a>
-        <a href="#" class="nx">
-          <span class="ni">🔒</span>
-          <span class="nt"><span class="e">บทที่ 09</span><b>ลูป while</b></span>
-          <span class="nm">~6 นาที</span>
-          <span class="go"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-        </a>
-        <a href="#" class="nx">
-          <span class="ni">🔒</span>
-          <span class="nt"><span class="e">บทที่ 10</span><b>break, continue และลูปซ้อนลูป</b></span>
-          <span class="nm">~6 นาที</span>
-          <span class="go"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-        </a>
-      </div>
+      <div class="nextlist" id="nextlist"></div>
     </div>
-
-    <!-- SIDE -->
-    <aside class="side">
-      <div class="card">
-        <h4><span class="hi" style="background:var(--warm-soft);color:var(--warm-deep)">🔥</span>สตรีคของคุณ</h4>
-        <div class="streak-top">
-          <div class="streak-flame">🔥</div>
-          <div><div class="n">7 วัน</div><div class="l">เรียนต่อเนื่องไม่ขาด</div></div>
-        </div>
-        <div class="week">
-          <div class="day done"><div class="dot"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div><span class="dl">จ</span></div>
-          <div class="day done"><div class="dot"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div><span class="dl">อ</span></div>
-          <div class="day done"><div class="dot"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div><span class="dl">พ</span></div>
-          <div class="day done"><div class="dot"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div><span class="dl">พฤ</span></div>
-          <div class="day done"><div class="dot"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div><span class="dl">ศ</span></div>
-          <div class="day done"><div class="dot"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg></div><span class="dl">ส</span></div>
-          <div class="day today"><div class="dot">?</div><span class="dl">อา</span></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h4><span class="hi" style="background:var(--ok-soft);color:var(--ok-deep)">🎯</span>เป้าหมายวันนี้</h4>
-        <div class="goalwrap">
-          <div class="goalring" style="--p:60"><i>3/5</i></div>
-          <div class="gt"><b>เรียน 5 บท/สัปดาห์</b><span>อีก 2 บทก็ถึงเป้า ลุยต่อ!</span></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h4><span class="hi" style="background:oklch(0.95 0.05 85);color:var(--gold-deep)">🏅</span>เหรียญตราล่าสุด</h4>
-        <div class="bgrid">
-          <div class="bg earned" title="เริ่มต้น">🚀</div>
-          <div class="bg earned" title="สตรีค 7 วัน">🔥</div>
-          <div class="bg earned" title="จบส่วนแรก">🎓</div>
-          <div class="bg lock" title="ยังไม่ปลดล็อก">🔒</div>
-        </div>
-        <a href="profile.html" class="btn btn-ghost sm" style="width:100%;margin-top:16px;">ดูทั้งหมดในโปรไฟล์</a>
-      </div>
-    </aside>
   </div>
 </div>
 
-<script>
-  // animate progress + rings on load
-  window.addEventListener('load',()=>{
-    const bar=document.querySelector('.resume .pbar i');
-    if(bar){bar.style.width='0';requestAnimationFrame(()=>{bar.style.transition='width 1s cubic-bezier(.2,.7,.2,1)';bar.style.width='24%';});}
-  });
-</script>
 <script src="pystart-data.js"></script>
 <script type="module">
-  import { requireUser, loadProgress } from './assets/js/progress-store.js';
-  /* ---- pre vs post score chart (per unit) ---- */
-  (async function(){
-    const user = await requireUser();
-    if(!user) return; // requireUser() already navigated to login.html
-    let unitScores={};
-    try{ unitScores=(await loadProgress(user.uid)).unitScores; }catch(e){ unitScores={}; }
+  import { requireUser, loadProgress, loadProfile } from './assets/js/progress-store.js';
 
+  const user = await requireUser();
+  if(!user) throw new Error('redirecting to login'); // requireUser() already navigated away
+
+  const [profileDoc, progress] = await Promise.all([loadProfile(user.uid), loadProgress(user.uid)]);
+  const { completed, unitScores } = progress;
+  const displayName = profileDoc.name || user.displayName || user.email.split('@')[0];
+
+  document.getElementById('xpChip').textContent = '⭐ '+(completed.length*15).toLocaleString('en-US')+' XP';
+  document.getElementById('greetName').textContent = displayName;
+  document.getElementById('greetDate').textContent = new Date().toLocaleDateString('th-TH',{weekday:'long',day:'numeric',month:'short',year:'numeric'});
+
+  const TOTAL_LESSONS = courseData.lessons.length;
+  const unlocked = pyComputeUnlockedLessonId(completed, unitScores);
+  const pct = Math.round((completed.length/TOTAL_LESSONS)*100);
+  const nextLessonId = completed.length>=TOTAL_LESSONS ? TOTAL_LESSONS : unlocked;
+  const nextLesson = courseData.lessons.find(l=>l.id===nextLessonId);
+
+  // same frontier logic as courses.html: mid-lessons, waiting on a
+  // post-test, or (once every unit is cleared) the whole course is done
+  let frontier = {state:'complete', unit:null};
+  for(const u of courseUnits){
+    const doneInUnit = u.lessons.filter(id=>completed.indexOf(id)>-1).length;
+    if(doneInUnit<u.lessons.length){ frontier={state:'lesson',unit:u}; break; }
+    if(!pyIsUnitPostPassed(unitScores, u.id)){ frontier={state:'need-post',unit:u}; break; }
+  }
+
+  // resume hero card
+  const kickerEl=document.getElementById('resumeKicker'), titleEl=document.getElementById('resumeTitle'),
+        metaEl=document.getElementById('resumeMeta'), ctaEl=document.getElementById('resumeCta'),
+        progLabelEl=document.getElementById('resumeProgLabel'), barEl=document.querySelector('.resume .pbar i');
+  if(frontier.state==='lesson'){
+    kickerEl.textContent = completed.length===0 ? 'พร้อมเริ่มเรียนหรือยัง' : 'เรียนต่อจากที่ค้างไว้';
+    titleEl.textContent = 'บทที่ '+nextLessonId+' · '+nextLesson.title;
+    metaEl.textContent = 'ส่วนที่ '+frontier.unit.id+' · '+frontier.unit.title;
+    ctaEl.textContent = completed.length===0 ? '▶ เริ่มเรียนเลย' : '▶ เรียนต่อเลย';
+    ctaEl.href = 'lesson.html?lesson='+nextLessonId;
+  } else if(frontier.state==='need-post'){
+    kickerEl.textContent = 'ถึงเวลาทดสอบหลังเรียนแล้ว';
+    titleEl.textContent = 'แบบทดสอบหลังเรียน · หน่วยที่ '+frontier.unit.id+' '+frontier.unit.title;
+    metaEl.textContent = 'ทำแบบทดสอบหลังเรียนให้ผ่าน 70% เพื่อปลดล็อกหน่วยถัดไป';
+    ctaEl.textContent = '📝 ทำแบบทดสอบหลังเรียน';
+    ctaEl.href = 'quiz.html?unit='+frontier.unit.id+'&type=post&next='+encodeURIComponent('dashboard.html');
+  } else {
+    kickerEl.textContent = 'เรียนจบหลักสูตรแล้ว 🎉';
+    titleEl.textContent = 'ทบทวนบทเรียนที่เรียนไปแล้วได้ทุกเมื่อ';
+    metaEl.textContent = 'เก่งมาก! กลับไปทบทวนบทไหนก็ได้จากหน้าหลักสูตร';
+    ctaEl.textContent = '▶ ทบทวนบทเรียน';
+    ctaEl.href = 'lesson.html?lesson=1';
+  }
+  progLabelEl.textContent = 'ความคืบหน้ารวม '+completed.length+'/'+TOTAL_LESSONS+' บท · '+pct+'%';
+  window.addEventListener('load',()=>{
+    if(barEl){barEl.style.width='0';requestAnimationFrame(()=>{barEl.style.transition='width 1s cubic-bezier(.2,.7,.2,1)';barEl.style.width=pct+'%';});}
+  });
+
+  // stat row
+  document.getElementById('statLessons').textContent = completed.length;
+  document.getElementById('statXp').textContent = (completed.length*15).toLocaleString('en-US');
+
+  // "เรียนต่อไปนี้" — next up to 3 lessons in real course order, starting
+  // from the current unlock frontier
+  const PLAY='<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>';
+  const CHECK='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+  const ARROW='<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>';
+  const startIdx = courseData.lessons.findIndex(l=>l.id===nextLessonId);
+  const upcoming = startIdx===-1 ? [] : courseData.lessons.slice(startIdx, startIdx+3);
+  const nextlistEl = document.getElementById('nextlist');
+  if(upcoming.length===0){
+    nextlistEl.innerHTML = '<p style="color:var(--muted);font-size:14.5px;">เรียนจบหลักสูตรแล้ว ไปทบทวนบทเรียนได้ที่หน้า<a href="courses.html" style="color:var(--accent-deep);font-weight:600;">หลักสูตร</a></p>';
+  } else {
+    nextlistEl.innerHTML = upcoming.map(l=>{
+      const isDone = completed.indexOf(l.id)>-1;
+      const isCur = l.id===nextLessonId && frontier.state==='lesson';
+      if(isDone) return '<a href="lesson.html?lesson='+l.id+'" class="nx"><span class="ni">'+CHECK+'</span><span class="nt"><span class="e">บทที่ '+String(l.id).padStart(2,'0')+' · เรียนจบแล้ว</span><b>'+l.title+'</b></span><span class="go">'+ARROW+'</span></a>';
+      if(isCur) return '<a href="lesson.html?lesson='+l.id+'" class="nx cur"><span class="ni">'+PLAY+'</span><span class="nt"><span class="e">บทที่ '+String(l.id).padStart(2,'0')+' · กำลังเรียน</span><b>'+l.title+'</b></span><span class="go">'+ARROW+'</span></a>';
+      return '<a href="#" class="nx" style="pointer-events:none;opacity:.6;"><span class="ni">🔒</span><span class="nt"><span class="e">บทที่ '+String(l.id).padStart(2,'0')+'</span><b>'+l.title+'</b></span></a>';
+    }).join('');
+  }
+
+  /* ---- pre vs post score chart (per unit) — already real data ---- */
+  (function(){
     const wrap=document.getElementById('scoreChartWrap');
     const hasAnyScore=courseUnits.some(u=>unitScores[u.id]&&(unitScores[u.id].pre||unitScores[u.id].post));
 

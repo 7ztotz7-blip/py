@@ -36,68 +36,16 @@
   .ph-level .lx{font-size:11px;color:oklch(0.85 0.03 250);margin-top:7px;font-family:'IBM Plex Mono',monospace;}
 
   /* stat strip */
-  .strip{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:22px;}
+  .strip{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:22px;}
   .sc{background:linear-gradient(180deg,#fff,var(--soft));border:1px solid var(--line);border-radius:17px;padding:20px;box-shadow:var(--shadow-sm);}
   .sc .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:19px;margin-bottom:13px;}
   .sc .n{font-size:26px;font-weight:600;letter-spacing:-.02em;line-height:1;}
   .sc .l{font-size:13px;color:var(--muted);margin-top:6px;}
 
-  .grid2{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:24px;margin-top:24px;}
-  .stitle{display:flex;align-items:center;gap:11px;margin-bottom:16px;}
-  .stitle h2{font-size:19px;font-weight:600;}
-  .stitle .ct{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--faint);margin-left:auto;}
-
-  /* badges */
-  .badges{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
-  .badge{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 16px;text-align:center;
-    box-shadow:var(--shadow-sm);transition:transform .18s,box-shadow .18s;}
-  .badge.earned{cursor:default;}
-  .badge.earned:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);}
-  .badge .bi{width:56px;height:56px;border-radius:16px;margin:0 auto 12px;display:grid;place-items:center;font-size:27px;}
-  .badge.earned .bi{background:linear-gradient(140deg,var(--gold),var(--gold-deep));box-shadow:0 1px 0 oklch(1 0 0/.4) inset,0 10px 20px -8px oklch(0.6 0.12 80/.6);}
-  .badge.locked .bi{background:var(--soft);border:1px solid var(--line);filter:grayscale(1);opacity:.5;}
-  .badge .bn{font-size:14px;font-weight:600;}
-  .badge .bd{font-size:12px;color:var(--faint);margin-top:4px;line-height:1.4;}
-  .badge.earned::after{content:"✓";position:absolute;top:12px;right:12px;width:20px;height:20px;border-radius:50%;
-    background:var(--ok);color:#fff;font-size:12px;display:grid;place-items:center;}
-  .badge.locked .bn{color:var(--muted);}
-
-  /* activity heatmap */
-  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--shadow-sm);}
-  .heat{display:grid;grid-template-columns:repeat(14,1fr);gap:5px;}
-  .heat i{aspect-ratio:1;border-radius:4px;background:var(--soft);border:1px solid var(--line-soft);}
-  .heat i.l1{background:oklch(0.9 0.05 250);border-color:transparent;}
-  .heat i.l2{background:oklch(0.78 0.1 282);border-color:transparent;}
-  .heat i.l3{background:oklch(0.62 0.14 284);border-color:transparent;}
-  .heat i.l4{background:oklch(0.48 0.15 288);border-color:transparent;}
-  .heat-leg{display:flex;align-items:center;gap:7px;justify-content:flex-end;margin-top:12px;font-size:12px;color:var(--faint);}
-  .heat-leg i{width:12px;height:12px;border-radius:3px;}
-
-  /* certificate */
-  .cert{position:relative;overflow:hidden;border-radius:18px;padding:24px;border:1.5px solid var(--gold);
-    background:radial-gradient(400px 200px at 80% -30%,oklch(0.96 0.05 85),transparent 70%),linear-gradient(180deg,#fff,oklch(0.99 0.02 85));
-    box-shadow:var(--shadow-sm);}
-  .cert .ribbon{font-size:34px;}
-  .cert h3{font-size:18px;font-weight:600;margin-top:8px;}
-  .cert p{font-size:14px;color:var(--muted);margin-top:7px;line-height:1.6;}
-  .cert .cprog{height:8px;border-radius:100px;background:var(--soft);border:1px solid var(--line);overflow:hidden;margin:16px 0 8px;}
-  .cert .cprog i{display:block;height:100%;width:24%;border-radius:100px;background:linear-gradient(90deg,var(--gold),var(--gold-deep));}
-  .cert .clab{font-size:12.5px;color:var(--faint);font-family:'IBM Plex Mono',monospace;}
-
-  .timeline{display:flex;flex-direction:column;gap:2px;}
-  .tl{display:flex;gap:14px;padding:12px 0;}
-  .tl .tdot{width:36px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;}
-  .tl .tdot .d{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;font-size:14px;background:var(--accent-soft);color:var(--accent-deep);}
-  .tl .tdot .ln{flex:1;width:2px;background:var(--line);margin-top:5px;}
-  .tl:last-child .tdot .ln{display:none;}
-  .tl .tc b{font-size:14.5px;font-weight:600;}
-  .tl .tc span{display:block;font-size:13px;color:var(--muted);margin-top:2px;}
-  .tl .tc .tm{font-size:12px;color:var(--faint);font-family:'IBM Plex Mono',monospace;margin-top:4px;}
-
-  @media (max-width:900px){.grid2{grid-template-columns:1fr;}.strip{grid-template-columns:1fr 1fr;}.badges{grid-template-columns:1fr 1fr;}}
+  @media (max-width:900px){.strip{grid-template-columns:1fr 1fr;}}
 </style>
 </head>
-<body data-fx=".topbar, .phead, .strip > .sc, .stitle, .badges > .badge, .cert, .card" data-fx-count=".strip .sc .n, .ph-level .lv">
+<body data-fx=".topbar, .phead, .strip > .sc" data-fx-count=".strip .sc .n, .ph-level .lv">
 <script>
 (function(){var b=document.body,s=b.getAttribute('data-fx');if(!s)return;document.documentElement.classList.add('js-fx');if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var st=document.createElement('style');st.textContent='.js-fx :is('+s+'){transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}.js-fx :is('+s+'):not(.fx-shown){opacity:0;transform:translateY(22px)}';document.head.appendChild(st);})();
 </script>
@@ -111,7 +59,6 @@
     <a href="profile.html" class="cur">โปรไฟล์</a>
   </nav>
   <div class="tb-right">
-    <span class="chiplet" style="color:oklch(0.5 0.13 50)">🔥 7</span>
     <span class="chiplet" style="color:var(--accent-deep)" id="xpChiplet">⭐ 0 XP</span>
     <button class="btn btn-ghost sm" id="signOutBtn" type="button">ออกจากระบบ</button>
     <a class="tb-av" href="profile.html" id="tbAvatar">?</a>
@@ -140,64 +87,9 @@
   <!-- STAT STRIP -->
   <div class="strip">
     <div class="sc"><div class="ic" style="background:var(--accent-soft);color:var(--accent-deep)">📖</div><div class="n" id="statLessons">0</div><div class="l">บทที่เรียนจบ</div></div>
-    <div class="sc"><div class="ic" style="background:var(--warm-soft);color:var(--warm-deep)">🔥</div><div class="n">7</div><div class="l">สตรีคสูงสุด (วัน)</div></div>
     <div class="sc"><div class="ic" style="background:var(--ok-soft);color:var(--ok-deep)">✅</div><div class="n" id="statTests">0</div><div class="l">แบบฝึกหัดที่ทำผ่าน</div></div>
-    <div class="sc"><div class="ic" style="background:oklch(0.95 0.05 85);color:var(--gold-deep)">🏅</div><div class="n">3</div><div class="l">เหรียญตราที่ได้รับ</div></div>
-  </div>
-
-  <div class="grid2">
-    <!-- LEFT -->
-    <div>
-      <div class="stitle"><h2>เหรียญตรา & ความสำเร็จ</h2><span class="ct">3 / 9 ปลดล็อก</span></div>
-      <div class="badges">
-        <div class="badge earned"><div class="bi">🚀</div><div class="bn">ก้าวแรก</div><div class="bd">เรียนจบบทแรก</div></div>
-        <div class="badge earned"><div class="bi">🔥</div><div class="bn">ไฟแรง 7 วัน</div><div class="bd">สตรีค 7 วันติด</div></div>
-        <div class="badge earned"><div class="bi">🎓</div><div class="bn">จบส่วนแรก</div><div class="bd">เรียนครบส่วนที่ 1</div></div>
-        <div class="badge locked"><div class="bi">⚡</div><div class="bn">นักลูป</div><div class="bd">จบส่วนที่ 2</div></div>
-        <div class="badge locked"><div class="bi">📦</div><div class="bn">เจ้าแห่งข้อมูล</div><div class="bd">จบส่วนที่ 3</div></div>
-        <div class="badge locked"><div class="bi">🛠️</div><div class="bn">นักสร้างฟังก์ชัน</div><div class="bd">จบส่วนที่ 4</div></div>
-        <div class="badge locked"><div class="bi">🧱</div><div class="bn">สถาปนิก OOP</div><div class="bd">จบส่วนที่ 6</div></div>
-        <div class="badge locked"><div class="bi">🏆</div><div class="bn">จบหลักสูตร</div><div class="bd">เรียนครบ 29 บท</div></div>
-        <div class="badge locked"><div class="bi">💯</div><div class="bn">เพอร์เฟกต์</div><div class="bd">สอบหลังเรียนได้ 100%</div></div>
-      </div>
-
-      <div class="stitle" style="margin-top:30px;"><h2>กิจกรรมการเรียน</h2><span class="ct">14 วันล่าสุด</span></div>
-      <div class="card">
-        <div class="heat" id="heat"></div>
-        <div class="heat-leg">น้อย <i style="background:var(--soft);border:1px solid var(--line-soft)"></i><i class="l1"></i><i class="l2"></i><i class="l3"></i><i class="l4"></i> มาก</div>
-      </div>
-    </div>
-
-    <!-- RIGHT -->
-    <aside>
-      <div class="stitle"><h2>ใบประกาศนียบัตร</h2></div>
-      <div class="cert">
-        <div class="ribbon">🎖️</div>
-        <h3>Python พื้นฐาน — สำเร็จหลักสูตร</h3>
-        <p>เรียนครบทั้ง 29 บท และสอบหลังเรียนผ่าน 70% เพื่อรับใบประกาศที่ดาวน์โหลดได้</p>
-        <div class="cprog"><i></i></div>
-        <div class="clab">ความคืบหน้า 24% · เหลืออีก 22 บท</div>
-      </div>
-
-      <div class="stitle" style="margin-top:24px;"><h2>ความเคลื่อนไหวล่าสุด</h2></div>
-      <div class="card">
-        <div class="timeline">
-          <div class="tl"><div class="tdot"><div class="d">✓</div><div class="ln"></div></div><div class="tc"><b>เรียนจบบทที่ 7</b><span>เงื่อนไข if / elif / else</span><div class="tm">วันนี้ · 09:24</div></div></div>
-          <div class="tl"><div class="tdot"><div class="d" style="background:var(--gold);color:#fff">🏅</div><div class="ln"></div></div><div class="tc"><b>ปลดล็อกเหรียญ “ไฟแรง 7 วัน”</b><span>สตรีค 7 วันติดต่อกัน</span><div class="tm">เมื่อวาน · 20:10</div></div></div>
-          <div class="tl"><div class="tdot"><div class="d" style="background:var(--ok-soft);color:var(--ok-deep)">📝</div><div class="ln"></div></div><div class="tc"><b>ทำแบบทดสอบท้ายส่วนที่ 1</b><span>ได้คะแนน 90%</span><div class="tm">2 วันก่อน · 18:45</div></div></div>
-          <div class="tl"><div class="tdot"><div class="d">✓</div></div><div class="tc"><b>เรียนจบบทที่ 6</b><span>ตัวดำเนินการเปรียบเทียบ</span><div class="tm">2 วันก่อน · 18:02</div></div></div>
-        </div>
-      </div>
-    </aside>
   </div>
 </div>
-
-<script>
-  // build heatmap (14 cols x 5 rows of intensity)
-  const heat=document.getElementById('heat');
-  const pattern=[0,1,2,1,3,2,4,3,2,4,3,1,2,4, 1,0,2,3,1,2,3,4,2,1,3,2,4,3, 0,1,1,2,3,4,2,3,1,2,4,3,2,1, 2,3,1,0,2,1,3,4,2,3,1,2,3,4, 1,2,3,4,2,1,0,2,3,4,1,2,3,2];
-  pattern.forEach(v=>{const i=document.createElement('i');if(v>0)i.className='l'+v;heat.appendChild(i);});
-</script>
 
 <script type="module">
   import { auth } from './assets/js/firebase.js';

@@ -26,8 +26,13 @@
     color:var(--muted);background:var(--card);border:1px solid var(--line);padding:8px 13px;border-radius:10px;}
 
   .stage{flex:1;display:flex;align-items:center;justify-content:center;padding:40px 26px;}
-  .qcard{width:100%;max-width:720px;animation:pop .4s cubic-bezier(.2,.7,.2,1);}
+  .qcard{position:relative;width:100%;max-width:720px;animation:pop .4s cubic-bezier(.2,.7,.2,1);
+    background:linear-gradient(180deg,#fff,var(--soft));border:1px solid var(--line);border-radius:22px;
+    padding:34px 38px 30px;box-shadow:var(--shadow-lg);overflow:hidden;}
+  .qcard::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;
+    background:linear-gradient(90deg,var(--accent-2),var(--accent-deep));}
   @keyframes pop{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+  @media (max-width:600px){.qcard{padding:26px 22px 22px;}}
 
   /* option entrance stagger (replays on each question) */
   body:not(.answered) .opt{animation:optIn .45s cubic-bezier(.2,.7,.2,1) both;}

@@ -101,11 +101,12 @@
   .panel-intro b{color:var(--ink);font-weight:600;}
 
   /* module */
-  .mod{background:var(--card);border:1px solid var(--line);border-radius:18px;margin-bottom:16px;overflow:hidden;
+  .mod{background:linear-gradient(180deg,#fff,var(--soft));border:1px solid var(--line);border-radius:18px;margin-bottom:16px;overflow:hidden;
     box-shadow:var(--shadow-sm);transition:box-shadow .25s,border-color .25s;}
-  .mod.open{box-shadow:var(--shadow-md);}
+  .mod.open,.mod:hover{box-shadow:var(--shadow-md);border-color:var(--accent-line);}
   .mod.locked{background:var(--soft);}
-  .mod-head{display:flex;align-items:center;gap:16px;padding:20px 22px;cursor:pointer;user-select:none;}
+  .mod-head{display:flex;align-items:center;gap:16px;padding:20px 22px;cursor:pointer;user-select:none;transition:background .15s;}
+  .mod-head:hover{background:oklch(1 0 0/.5);}
   .mod-badge{width:46px;height:46px;border-radius:13px;flex-shrink:0;display:grid;place-items:center;font-family:'IBM Plex Mono',monospace;
     font-weight:600;font-size:18px;color:#fff;background:linear-gradient(140deg,var(--accent-2),var(--accent-deep));
     box-shadow:0 1px 0 oklch(1 0 0/.4) inset,0 8px 16px -6px oklch(0.45 0.13 288/.5);position:relative;}
@@ -225,8 +226,7 @@
     <a href="profile.html">โปรไฟล์</a>
   </nav>
   <div class="tb-right">
-    <span class="chiplet" style="color:oklch(0.5 0.13 50)">🔥 7</span>
-    <span class="chiplet" style="color:var(--accent-deep)">⭐ 1,240 XP</span>
+    <span class="chiplet" style="color:var(--accent-deep)" id="xpChip">⭐ 0 XP</span>
     <div class="tb-av">ใ</div>
   </div>
 </header>
@@ -272,6 +272,7 @@
   const user = await requireUser();
   if(!user) throw new Error('redirecting to login'); // requireUser() already navigated away
   const { completed, unitScores } = await loadProgress(user.uid);
+  document.getElementById('xpChip').textContent = '⭐ '+(completed.length*15).toLocaleString('en-US')+' XP';
 
   const TOTAL_LESSONS = courseData.lessons.length;
   const unlocked = pyComputeUnlockedLessonId(completed, unitScores);

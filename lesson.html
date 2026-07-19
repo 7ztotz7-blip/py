@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<script src="https://skulpt.org/js/skulpt.min.js"></script>
+<script src="https://skulpt.org/js/skulpt-stdlib.js"></script>
 <style>
 :root {
   --ink:oklch(0.19 0.02 255); --muted:oklch(0.50 0.018 255); --faint:oklch(0.62 0.015 255);
@@ -17,7 +19,6 @@
   --warm:oklch(0.68 0.13 62); --warm-s:oklch(0.96 0.04 72); --warm-l:oklch(0.87 0.08 68);
   --ed:oklch(0.152 0.018 260); --ed2:oklch(0.128 0.015 262); --edl:oklch(0.235 0.018 260);
   --edtx:oklch(0.91 0.01 260); --eddim:oklch(0.46 0.025 264);
-  --kw:oklch(0.75 0.13 318); --fn:oklch(0.78 0.12 216); --str:oklch(0.80 0.13 142); --num:oklch(0.80 0.12 56); --cmt:oklch(0.51 0.03 262);
   --shadow-sm:0 2px 8px -2px oklch(0.4 0.06 287/.1);
   --shadow-md:0 8px 28px -8px oklch(0.4 0.08 287/.18);
 }
@@ -128,8 +129,16 @@ code{font-family:'IBM Plex Mono',monospace;}
 .ic-fname{margin-left:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--eddim);}
 .ic-copy{margin-left:auto;display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 10px;border-radius:6px;font-size:11px;font-weight:500;color:var(--eddim);border:1px solid var(--edl);transition:.15s;}
 .ic-copy:hover{color:var(--edtx);background:oklch(0.22 0.018 260);}
-.ic-body{padding:14px 18px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;line-height:1.82;white-space:pre;color:var(--edtx);background:var(--ed);overflow-x:auto;}
-.ic-body .k{color:var(--kw);}.ic-body .f,.ic-body .b{color:var(--fn);}.ic-body .s{color:var(--str);}.ic-body .n{color:var(--num);}.ic-body .c{color:var(--cmt);}
+.ic-run{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 10px;border-radius:6px;font-size:11px;font-weight:600;color:var(--ok-d);background:var(--ok-s);border:1px solid var(--ok-l);transition:.15s;}
+.ic-run:hover:not(:disabled){background:var(--ok);color:#fff;border-color:var(--ok);}
+.ic-run:disabled{opacity:.6;cursor:wait;}
+.ic-editor{display:block;width:100%;padding:14px 18px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;line-height:1.82;
+  color:var(--edtx);background:var(--ed);border:none;outline:none;resize:vertical;min-height:80px;}
+.ic-out{border-top:1px solid var(--edl);background:var(--ed2);}
+.ic-out-bar{padding:8px 18px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--eddim);}
+.ic-out-body{margin:0 18px 14px;padding:10px 14px;font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.7;
+  white-space:pre-wrap;word-break:break-word;color:var(--edtx);background:oklch(0.1 0.012 260);border-radius:8px;min-height:20px;}
+.ic-out-body.err{color:oklch(0.78 0.14 30);}
 
 /* ── QUIZ ── */
 .q-card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:20px 22px;}
@@ -248,33 +257,43 @@ code{font-family:'IBM Plex Mono',monospace;}
 <script type="module">
 import { requireUser, loadProgress, saveCompleted } from './assets/js/progress-store.js';
 
-/* ---------- syntax highlight (reused for read-only code blocks) ---------- */
-const KW=new Set(['for','in','while','if','elif','else','def','return','import','from','as','and','or','not','True','False','None','break','continue','pass','class','with','try','except','finally','lambda','global','raise','is','yield','del']);
-const BI=new Set(['print','input','range','int','str','float','len','list','dict','set','tuple','sum','min','max','abs','round','type','sorted','enumerate','isinstance','super','zip','open']);
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function highlight(code){
-  return code.split('\n').map(line=>{
-    let out='',i=0;
-    while(i<line.length){
-      const r=line.slice(i);
-      if(r[0]==='#'){out+='<span class="c">'+esc(r)+'</span>';break;}
-      const sm=r.match(/^(['"])(?:\\.|(?!\1).)*\1?/);
-      if(sm){out+='<span class="s">'+esc(sm[0])+'</span>';i+=sm[0].length;continue;}
-      const nm=r.match(/^\d+\.?\d*/);
-      if(nm){out+='<span class="n">'+esc(nm[0])+'</span>';i+=nm[0].length;continue;}
-      const wm=r.match(/^[A-Za-z_]\w*/);
-      if(wm){const w=wm[0];if(KW.has(w))out+='<span class="k">'+w+'</span>';else if(BI.has(w))out+='<span class="b">'+w+'</span>';else out+=esc(w);i+=w.length;continue;}
-      out+=esc(r[0]);i++;
-    }
-    return out;
-  }).join('\n');
-}
 function renderCodeBlock(code){
   const bar='<div class="ic-bar"><span class="ic-dot" style="background:oklch(0.72 0.16 25)"></span><span class="ic-dot" style="background:oklch(0.84 0.13 90)"></span><span class="ic-dot" style="background:oklch(0.76 0.14 150)"></span>'+
     (code.filename?'<span class="ic-fname">'+esc(code.filename)+'</span>':'')+
+    '<button class="ic-run" data-run>▸ รัน</button>'+
     '<button class="ic-copy" data-copy>คัดลอก</button></div>';
-  const body='<div class="ic-body">'+highlight(code.source)+'</div>';
-  return '<div class="inline-code">'+bar+body+'</div>';
+  const editor='<textarea class="ic-editor" id="codeEditor" spellcheck="false">'+esc(code.source)+'</textarea>';
+  const out='<div class="ic-out"><div class="ic-out-bar">ผลลัพธ์</div><div class="ic-out-body" id="codeOutput">กด "รัน" เพื่อรันโค้ดด้านบน</div></div>';
+  return '<div class="inline-code">'+bar+editor+out+'</div>';
+}
+
+/* ---------- run Python code with Skulpt ---------- */
+function runCode(){
+  const runBtn=document.querySelector('[data-run]');
+  const editor=document.getElementById('codeEditor');
+  const out=document.getElementById('codeOutput');
+  out.classList.remove('err');
+  out.textContent='';
+  runBtn.disabled=true;
+  Sk.configure({
+    output:(text)=>{ out.textContent+=text; },
+    read:(file)=>{
+      if(!Sk.builtinFiles || !Sk.builtinFiles.files[file]) throw 'File not found: '+file;
+      return Sk.builtinFiles.files[file];
+    },
+    inputfun:(promptText)=>window.prompt(promptText||''),
+    inputfunTakesPrompt:true
+  });
+  Sk.misceval.asyncToPromise(()=>Sk.importMainWithBody('<stdin>',false,editor.value,true))
+    .then(()=>{
+      if(!out.textContent) out.textContent='(ไม่มี output)';
+    })
+    .catch((e)=>{
+      out.classList.add('err');
+      out.textContent='❌ '+e.toString();
+    })
+    .finally(()=>{ runBtn.disabled=false; });
 }
 
 /* ---------- resolve current lesson ---------- */
@@ -344,12 +363,15 @@ function renderContent(){
   if(lesson.content.th.code) html+=renderCodeBlock({source:lesson.content.th.code,filename:'example.py'});
   document.getElementById('sectionsContainer').innerHTML=html;
   const copyBtn=document.querySelector('[data-copy]');
+  const editorEl=document.getElementById('codeEditor');
   if(copyBtn) copyBtn.addEventListener('click',()=>{
-    navigator.clipboard.writeText(lesson.content.th.code||'').then(()=>{
+    navigator.clipboard.writeText(editorEl?editorEl.value:(lesson.content.th.code||'')).then(()=>{
       copyBtn.textContent='คัดลอกแล้ว ✓';
       setTimeout(()=>{copyBtn.textContent='คัดลอก';},1500);
     });
   });
+  const runBtn=document.querySelector('[data-run]');
+  if(runBtn) runBtn.addEventListener('click',runCode);
 }
 
 /* ---------- quiz (single question per lesson) ---------- */

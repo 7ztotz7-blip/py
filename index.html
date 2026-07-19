@@ -204,21 +204,13 @@
     background-clip:text;-webkit-text-fill-color:transparent;}
   .stat .l{color:var(--muted);font-size:15px;margin-top:6px;}
 
-  /* quote */
-  .quote{position:relative;max-width:820px;margin:0 auto;text-align:center;
-    background:linear-gradient(180deg,#ffffff,oklch(0.985 0.006 250));
-    border:1px solid var(--line);border-radius:26px;padding:56px 56px 48px;
-    box-shadow:0 1px 0 oklch(1 0 0/.9) inset,0 24px 50px -28px oklch(0.42 0.09 288/.32);}
-  .quote .mark{font-family:Georgia,serif;font-size:80px;line-height:.5;
-    background:linear-gradient(120deg,var(--accent),var(--accent-2));-webkit-background-clip:text;
-    background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:14px;display:block;}
-  .quote p{font-size:clamp(22px,3vw,29px);line-height:1.5;letter-spacing:-.015em;font-weight:500;text-wrap:balance;}
-  .quote .by{display:flex;align-items:center;justify-content:center;gap:13px;margin-top:32px;}
-  .quote .av{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;color:#fff;
-    font-weight:600;font-size:17px;background:linear-gradient(140deg,var(--accent),var(--accent-deep));}
-  .quote .who{text-align:left;}
-  .quote .who b{display:block;font-size:15.5px;font-weight:600;}
-  .quote .who span{font-size:14px;color:var(--muted);}
+  /* about */
+  .about-card{max-width:620px;margin:0 auto;background:linear-gradient(180deg,#fff,var(--soft));
+    border:1px solid var(--line);border-radius:20px;padding:8px 28px;box-shadow:var(--shadow-sm);}
+  .about-row{display:flex;align-items:baseline;gap:18px;padding:14px 0;font-size:14.5px;}
+  .about-row + .about-row{border-top:1px solid var(--line-soft);}
+  .about-row span{flex:0 0 110px;color:var(--faint);}
+  .about-row b{font-weight:600;color:var(--ink);}
 
   /* FAQ */
   .faq{max-width:760px;margin:54px auto 0;display:flex;flex-direction:column;gap:14px;}
@@ -416,6 +408,7 @@
   <div class="wrap nav-inner">
     <a class="logo" href="index.html"><span class="mark">py</span>py</a>
     <nav class="nav-links">
+      <a class="lnk" href="courses.html">หลักสูตร</a>
       <a class="lnk" href="#how">วิธีเริ่ม</a>
       <a class="lnk" href="#faq">คำถามที่พบบ่อย</a>
     </nav>
@@ -455,7 +448,7 @@
           <span class="face" style="background:linear-gradient(140deg,oklch(0.7 0.12 287),oklch(0.6 0.13 282))">พ</span>
           <span class="face" style="background:linear-gradient(140deg,oklch(0.72 0.12 90),oklch(0.62 0.13 80))">อ</span>
         </div>
-        <span>เข้าร่วมกับผู้เรียนกว่า <b style="color:var(--ink)">50,000 คน</b> · ไม่ต้องใช้บัตรเครดิต</span>
+        <span>เรียนฟรี <b style="color:var(--ink)">100%</b> ทุกบทเรียน · ไม่ต้องใช้บัตรเครดิต</span>
       </div>
 
       <!-- code window -->
@@ -601,21 +594,9 @@
         </div>
       </div>
       <div class="stats reveal">
-        <div class="stat"><div class="n" data-count="50000" data-comma data-suffix="+">50,000+</div><div class="l">ผู้เรียนทั่วประเทศ</div></div>
-        <div class="stat"><div class="n" data-count="120">120</div><div class="l">บทเรียนและแบบฝึกหัด</div></div>
-        <div class="stat"><div class="n" data-count="4.9" data-dec="1" data-suffix=" / 5">4.9 / 5</div><div class="l">คะแนนรีวิวเฉลี่ย</div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- QUOTE -->
-  <section class="block">
-    <div class="wrap quote reveal">
-      <div class="mark">"</div>
-      <p>ไม่เคยคิดว่าตัวเองจะเขียนโค้ดได้ แต่ py ทำให้ทุกอย่างเข้าใจง่ายมาก ตอนนี้เขียนโปรแกรมเล็ก ๆ ใช้เองได้แล้ว</p>
-      <div class="by">
-        <div class="av">ณ</div>
-        <div class="who"><b>ณิชา พงษ์ไพบูลย์</b><span>นักการตลาด · เรียนจบคอร์สพื้นฐาน</span></div>
+        <div class="stat"><div class="n" data-count="24">24</div><div class="l">บทเรียน</div></div>
+        <div class="stat"><div class="n" data-count="5">5</div><div class="l">หน่วยการเรียนรู้</div></div>
+        <div class="stat"><div class="n" data-count="100" data-suffix="%">100%</div><div class="l">เรียนฟรีทุกบท</div></div>
       </div>
     </div>
   </section>
@@ -648,8 +629,24 @@
           <summary>เรียนฟรีจริงไหม?
             <span class="ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg></span>
           </summary>
-          <div class="ans">บทเรียนพื้นฐานเปิดให้เรียนฟรี ไม่ต้องใช้บัตรเครดิต หากต้องการปลดล็อกหลักสูตรขั้นสูงและใบรับรอง ค่อยอัปเกรดทีหลังได้</div>
+          <div class="ans">เรียนฟรีทั้งหลักสูตร ครบทั้ง 24 บท ไม่มีค่าใช้จ่ายส่วนไหนเลย และมีใบประกาศให้เมื่อเรียนจบ</div>
         </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="block" id="about">
+    <div class="wrap">
+      <div class="eyebrow reveal">เกี่ยวกับโครงงาน</div>
+      <h2 class="h2 reveal">ทีมผู้จัดทำ</h2>
+      <div class="about-card reveal">
+        <div class="about-row"><span>ชื่อโครงงาน</span><b>ระบบสื่อการเรียนรู้ py</b></div>
+        <div class="about-row"><span>ผู้จัดทำ</span><b>นายชาญวิทย์ เทพาชมภู · 68319100017</b></div>
+        <div class="about-row"><span></span><b>นายวงเดือน ลุงซอ · 68319100019</b></div>
+        <div class="about-row"><span></span><b>นายศรัณย์ โชติกันตะ · 68319100020</b></div>
+        <div class="about-row"><span>ระดับชั้น</span><b>ปวส.2/2 วิทยาลัยเทคนิคลำพูน</b></div>
+        <div class="about-row"><span>ปีการศึกษา</span><b>2569</b></div>
       </div>
     </div>
   </section>

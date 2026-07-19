@@ -147,8 +147,7 @@
     <a href="profile.html">โปรไฟล์</a>
   </nav>
   <div class="tb-right">
-    <span class="chiplet" style="color:oklch(0.5 0.13 50)">🔥 7</span>
-    <span class="chiplet" style="color:var(--accent-deep)">⭐ 1,740 XP</span>
+    <span class="chiplet" style="color:var(--accent-deep)" id="xpChip">⭐ 0 XP</span>
     <a class="tb-av" href="profile.html">ใ</a>
   </div>
 </header>
@@ -162,7 +161,7 @@
       <div class="inner"><span class="pct" id="pct">90%</span><span class="lab">คะแนนรวม</span></div>
     </div>
     <h1>ยินดีด้วย ใจดี! คุณสอบผ่าน 🎉</h1>
-    <p class="sub">คุณเรียนจบหลักสูตร Python พื้นฐานครบทั้ง 29 บท และสอบผ่านเกณฑ์ — ปลดล็อกใบประกาศนียบัตรเรียบร้อยแล้ว</p>
+    <p class="sub">คุณเรียนจบหลักสูตร Python พื้นฐานครบทั้ง 24 บท และสอบผ่านเกณฑ์ — ปลดล็อกใบประกาศนียบัตรเรียบร้อยแล้ว</p>
     <div class="passmark">🎯 เกณฑ์ผ่าน 70% · คุณได้ 90%</div>
   </section>
 
@@ -215,7 +214,7 @@
           <div class="cert-title">ใบประกาศนียบัตร</div>
           <div class="cert-sub">มอบให้เพื่อรับรองว่า</div>
           <div class="cert-name">ใจดี โค้ดเก่ง</div>
-          <div class="cert-desc">ได้เรียนจบหลักสูตร <b>“Python พื้นฐาน — ตั้งแต่ศูนย์จนใช้งานได้จริง”</b> ครบทั้ง 29 บท และผ่านแบบทดสอบหลังเรียนด้วยคะแนน 90%</div>
+          <div class="cert-desc">ได้เรียนจบหลักสูตร <b>“Python พื้นฐาน — ตั้งแต่ศูนย์จนใช้งานได้จริง”</b> ครบทั้ง 24 บท และผ่านแบบทดสอบหลังเรียนด้วยคะแนน 90%</div>
           <div class="cert-foot">
             <div class="cf"><div class="v">22 มิ.ย. 2026</div><div class="k">วันที่สำเร็จ</div></div>
             <div class="cf"><div class="v">PY-2026-04817</div><div class="k">รหัสใบประกาศ</div></div>
@@ -270,6 +269,13 @@
       document.body.appendChild(c);setTimeout(()=>c.remove(),5200);}
   }
   const st=document.createElement('style');st.textContent='@keyframes cf{to{transform:translateY(105vh) rotate(680deg);}}';document.head.appendChild(st);
+</script>
+<script type="module">
+  import { requireUser, loadProgress } from './assets/js/progress-store.js';
+  const user = await requireUser();
+  if(!user) throw new Error('redirecting to login'); // requireUser() already navigated away
+  const { completed } = await loadProgress(user.uid);
+  document.getElementById('xpChip').textContent = '⭐ '+(completed.length*15).toLocaleString('en-US')+' XP';
 </script>
 <script src="pystart-fx.js"></script>
 </body>

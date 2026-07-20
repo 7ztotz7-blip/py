@@ -19,6 +19,7 @@
   --warm:oklch(0.68 0.13 62); --warm-s:oklch(0.96 0.04 72); --warm-l:oklch(0.87 0.08 68);
   --ed:oklch(0.152 0.018 260); --ed2:oklch(0.128 0.015 262); --edl:oklch(0.235 0.018 260);
   --edtx:oklch(0.91 0.01 260); --eddim:oklch(0.46 0.025 264);
+  --kw:oklch(0.75 0.13 318); --fn:oklch(0.78 0.12 216); --str:oklch(0.80 0.13 142); --num:oklch(0.80 0.12 56); --cmt:oklch(0.51 0.03 262);
   --shadow-sm:0 2px 8px -2px oklch(0.4 0.06 287/.1);
   --shadow-md:0 8px 28px -8px oklch(0.4 0.08 287/.18);
 }
@@ -104,11 +105,31 @@ code{font-family:'IBM Plex Mono',monospace;}
 .step-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);}
 
 /* title */
-.l-title{font-size:30px;font-weight:700;letter-spacing:-.024em;line-height:1.18;margin-bottom:22px;}
+.l-title{font-size:30px;font-weight:700;letter-spacing:-.024em;line-height:1.18;margin-bottom:12px;}
 .l-title code{font-size:28px;background:var(--accent-s);color:var(--accent-d);padding:2px 10px;border-radius:8px;font-weight:700;}
+.l-desc{font-size:16px;line-height:1.76;color:var(--muted);text-wrap:pretty;margin-bottom:22px;}
+.l-desc:empty{display:none;}
+
+/* goals checklist */
+.goals-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px;}
+.goals-row:empty{display:none;margin:0;}
+.g-chip{display:inline-flex;align-items:center;gap:7px;padding:7px 13px;border-radius:10px;background:var(--bg);border:1px solid var(--line);font-size:13px;font-weight:500;color:var(--muted);transition:all .2s;}
+.g-ic{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--line);background:var(--card);display:grid;place-items:center;flex-shrink:0;transition:.2s;}
+.g-ic svg{opacity:0;transform:scale(.4);transition:.2s;}
+.g-chip.done{color:var(--ok-d);border-color:var(--ok-l);background:var(--ok-s);}
+.g-chip.done .g-ic{background:var(--ok);border-color:var(--ok);color:#fff;}
+.g-chip.done .g-ic svg{opacity:1;transform:none;}
 
 /* divider */
 .sdiv{border:none;height:1px;background:var(--line2);margin:36px 0;}
+
+/* concept grid */
+.concept-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:20px 0;}
+.cc{border-radius:11px;padding:16px 18px;border:1px solid var(--line);background:var(--bg);}
+.cc h4{font-size:14px;font-weight:700;margin-bottom:7px;color:var(--ink);display:flex;align-items:center;gap:7px;}
+.cc p{font-size:13.5px;line-height:1.66;color:var(--muted);}
+.cc code{font-size:12.5px;background:var(--accent-s);color:var(--accent-d);padding:1px 5px;border-radius:4px;}
+@media(max-width:680px){.concept-grid{grid-template-columns:1fr;}}
 
 /* eyebrow */
 .ey{display:flex;align-items:center;gap:9px;margin-bottom:12px;}
@@ -132,8 +153,16 @@ code{font-family:'IBM Plex Mono',monospace;}
 .ic-run{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 10px;border-radius:6px;font-size:11px;font-weight:600;color:var(--ok-d);background:var(--ok-s);border:1px solid var(--ok-l);transition:.15s;}
 .ic-run:hover:not(:disabled){background:var(--ok);color:#fff;border-color:var(--ok);}
 .ic-run:disabled{opacity:.6;cursor:wait;}
-.ic-editor{display:block;width:100%;padding:14px 18px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;line-height:1.82;
-  color:var(--edtx);background:var(--ed);border:none;outline:none;resize:vertical;min-height:80px;}
+/* editor: transparent textarea layered over a syntax-highlighted <pre>,
+   kept in sync on input/scroll so typing shows live coloring. */
+.ic-editor-wrap{display:flex;min-height:110px;max-height:340px;}
+.ic-gut{padding:14px 0 14px 13px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:13.5px;line-height:1.82;color:var(--eddim);background:var(--ed2);border-right:1px solid var(--edl);user-select:none;overflow:hidden;min-width:44px;flex-shrink:0;}
+.ic-gut span{display:block;padding-right:12px;}
+.ic-area{position:relative;flex:1;overflow:auto;}
+.ic-pre,.ic-ta{margin:0;padding:14px 18px;font-family:'IBM Plex Mono',monospace;font-size:13.5px;line-height:1.82;white-space:pre;tab-size:4;border:0;}
+.ic-pre{position:absolute;inset:0;pointer-events:none;color:var(--edtx);min-height:100%;}
+.ic-pre .k{color:var(--kw);}.ic-pre .f{color:var(--fn);}.ic-pre .s{color:var(--str);}.ic-pre .n{color:var(--num);}.ic-pre .c{color:var(--cmt);}
+.ic-ta{position:relative;width:100%;height:100%;background:transparent;color:transparent;caret-color:oklch(0.85 0.01 260);resize:none;outline:none;display:block;}
 .ic-out{border-top:1px solid var(--edl);background:var(--ed2);}
 .ic-out-bar{padding:8px 18px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--eddim);}
 .ic-out-body{margin:0 18px 14px;padding:10px 14px;font-family:'IBM Plex Mono',monospace;font-size:13px;line-height:1.7;
@@ -146,6 +175,7 @@ code{font-family:'IBM Plex Mono',monospace;}
 .tip .tip-tx{font-size:14.5px;line-height:1.7;color:inherit;}
 .tip.note{background:var(--ok-s);border-color:var(--ok-l);color:var(--ok-d);}
 .tip.warn{background:var(--warm-s);border-color:var(--warm-l);color:oklch(0.42 0.1 62);}
+.tip.info{background:var(--accent-s);border-color:var(--accent-l);color:var(--accent-d);}
 
 /* ── QUIZ ── */
 .q-card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:20px 22px;}
@@ -222,6 +252,8 @@ code{font-family:'IBM Plex Mono',monospace;}
 
   <div class="step-pill" id="stepPill"></div>
   <h1 class="l-title" id="lTitle"></h1>
+  <p class="l-desc" id="lDesc"></p>
+  <div class="goals-row" id="goalsRow"></div>
 
   <div id="sectionsContainer"></div>
 
@@ -265,18 +297,65 @@ code{font-family:'IBM Plex Mono',monospace;}
 import { requireUser, loadProgress, saveCompleted } from './assets/js/progress-store.js';
 
 function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+/* ---------- tiny Python syntax highlighter (for the live editor overlay) ---------- */
+const KW=new Set(['for','in','while','if','elif','else','def','return','import','from','as','and','or','not','True','False','None','break','continue','pass','class','with','try','except','finally','lambda','global']);
+const BI=new Set(['print','input','range','int','str','float','len','list','dict','set','tuple','sum','min','max','abs','round','type','sorted','enumerate']);
+function highlight(code){
+  return code.split('\n').map(line=>{
+    let out='',i=0;
+    while(i<line.length){
+      const r=line.slice(i);
+      if(r[0]==='#'){out+='<span class="c">'+esc(r)+'</span>';break;}
+      const sm=r.match(/^(['"])(?:\\.|(?!\1).)*\1?/);
+      if(sm){out+='<span class="s">'+esc(sm[0])+'</span>';i+=sm[0].length;continue;}
+      const nm=r.match(/^\d+\.?\d*/);
+      if(nm){out+='<span class="n">'+esc(nm[0])+'</span>';i+=nm[0].length;continue;}
+      const wm=r.match(/^[A-Za-z_]\w*/);
+      if(wm){const w=wm[0];if(KW.has(w))out+='<span class="k">'+w+'</span>';else if(BI.has(w))out+='<span class="f">'+w+'</span>';else out+=esc(w);i+=w.length;continue;}
+      out+=esc(r[0]);i++;
+    }
+    return out;
+  }).join('\n');
+}
+
 function renderCodeBlock(code,idx){
   const bar='<div class="ic-bar"><span class="ic-dot" style="background:oklch(0.72 0.16 25)"></span><span class="ic-dot" style="background:oklch(0.84 0.13 90)"></span><span class="ic-dot" style="background:oklch(0.76 0.14 150)"></span>'+
     (code.filename?'<span class="ic-fname">'+esc(code.filename)+'</span>':'')+
     '<button class="ic-run" data-run data-idx="'+idx+'">▸ รัน</button>'+
     '<button class="ic-copy" data-copy data-idx="'+idx+'">คัดลอก</button></div>';
-  const editor='<textarea class="ic-editor" id="codeEditor-'+idx+'" spellcheck="false">'+esc(code.source)+'</textarea>';
+  const editor='<div class="ic-editor-wrap">'+
+    '<div class="ic-gut" id="codeGut-'+idx+'"></div>'+
+    '<div class="ic-area"><pre class="ic-pre" id="codePre-'+idx+'" aria-hidden="true"></pre>'+
+    '<textarea class="ic-ta" id="codeEditor-'+idx+'" spellcheck="false" autocomplete="off">'+esc(code.source)+'</textarea></div></div>';
   const out='<div class="ic-out"><div class="ic-out-bar">ผลลัพธ์</div><div class="ic-out-body" id="codeOutput-'+idx+'">กด "รัน" เพื่อรันโค้ดด้านบน</div></div>';
   return '<div class="inline-code">'+bar+editor+out+'</div>';
 }
+function wireEditor(idx){
+  const ta=document.getElementById('codeEditor-'+idx), pre=document.getElementById('codePre-'+idx), gut=document.getElementById('codeGut-'+idx);
+  function render(){
+    pre.innerHTML=highlight(ta.value)+'\n';
+    const n=ta.value.split('\n').length;
+    let g='';for(let i=1;i<=n;i++)g+='<span>'+i+'</span>';
+    gut.innerHTML=g;
+  }
+  ta.addEventListener('input',render);
+  ta.addEventListener('scroll',()=>{pre.scrollTop=ta.scrollTop;pre.scrollLeft=ta.scrollLeft;gut.scrollTop=ta.scrollTop;});
+  ta.addEventListener('keydown',e=>{
+    if(e.key==='Tab'){e.preventDefault();const s=ta.selectionStart,en=ta.selectionEnd;ta.value=ta.value.slice(0,s)+'    '+ta.value.slice(en);ta.selectionStart=ta.selectionEnd=s+4;render();}
+  });
+  render();
+}
 function renderTip(tip){
-  const icon=tip.kind==='warn'?'⚠️':'💡';
-  return '<div class="tip '+(tip.kind==='warn'?'warn':'note')+'"><span class="tip-ic">'+icon+'</span><span class="tip-tx">'+esc(tip.text)+'</span></div>';
+  const icon=tip.kind==='warn'?'⚠️':(tip.kind==='info'?'📌':'💡');
+  const cls=tip.kind==='warn'?'warn':(tip.kind==='info'?'info':'note');
+  return '<div class="tip '+cls+'"><span class="tip-ic">'+icon+'</span><span class="tip-tx">'+esc(tip.text)+'</span></div>';
+}
+function renderSection(s){
+  return '<hr class="sdiv" /><div class="ey"><span class="sn">'+esc(s.num)+'</span><span class="st">'+esc(s.label)+'</span></div><h2 class="sec-h">'+esc(s.title)+'</h2>';
+}
+function renderConceptGrid(g){
+  return '<div class="concept-grid">'+g.items.map(c=>'<div class="cc"><h4>'+esc(c.icon||'')+' '+esc(c.title)+'</h4><p>'+esc(c.desc)+'</p></div>').join('')+'</div>';
 }
 
 /* ---------- run Python code with Skulpt ---------- */
@@ -337,7 +416,7 @@ const lesson=courseData.lessons.find(l=>l.id===lessonId);
 function renderHeader(){
   const c=lesson.content.th;
   const contentLen=Array.isArray(c.blocks)
-    ? c.blocks.reduce((n,b)=>n+((b.text||b.source||'').length),0)
+    ? c.blocks.reduce((n,b)=>n+((b.text||b.source||b.title||'').length),0)
     : (c.desc||'').length+(c.code||'').length;
   const mins=Math.max(4,Math.round(contentLen/220));
   document.title='py — บทที่ '+lessonId+' · '+lesson.title;
@@ -346,6 +425,10 @@ function renderHeader(){
   document.getElementById('stepPill').innerHTML=
     '<span class="step-dot"></span>บทที่ '+lessonId+' จาก '+TOTAL+' &nbsp;·&nbsp; ⏱️ ~'+mins+' นาที &nbsp;·&nbsp; ⭐ +15 XP';
   document.getElementById('lTitle').textContent=lesson.content.th.title||lesson.title;
+  document.getElementById('lDesc').textContent=c.intro||'';
+  document.getElementById('goalsRow').innerHTML=(c.goals||[]).map(g=>
+    '<div class="g-chip"><span class="g-ic"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>'+esc(g)+'</div>'
+  ).join('');
   document.getElementById('progFill').style.width=Math.round(((unlocked-1)/TOTAL)*100)+'%';
   const xp=completed.length*15;
   document.getElementById('xpChip').textContent='⭐ '+xp.toLocaleString('en-US');
@@ -376,21 +459,25 @@ function renderSidebar(){
 function renderContent(){
   let html='';
   let codeIdx=0;
+  const codeIndices=[];
   const c=lesson.content.th;
   if(Array.isArray(c.blocks)){
     c.blocks.forEach(b=>{
       if(b.type==='text') html+='<p class="bt">'+esc(b.text)+'</p>';
-      else if(b.type==='code'){ html+=renderCodeBlock({source:b.source,filename:b.filename||'example.py'},codeIdx); codeIdx++; }
+      else if(b.type==='code'){ html+=renderCodeBlock({source:b.source,filename:b.filename||'example.py'},codeIdx); codeIndices.push(codeIdx); codeIdx++; }
       else if(b.type==='tip') html+=renderTip(b);
+      else if(b.type==='section') html+=renderSection(b);
+      else if(b.type==='concept-grid') html+=renderConceptGrid(b);
     });
   } else {
     (c.desc||'').split(/\n\n+/).map(s=>s.trim()).filter(Boolean).forEach(p=>{
       html+='<p class="bt">'+esc(p)+'</p>';
     });
-    if(c.code){ html+=renderCodeBlock({source:c.code,filename:'example.py'},codeIdx); codeIdx++; }
+    if(c.code){ html+=renderCodeBlock({source:c.code,filename:'example.py'},codeIdx); codeIndices.push(codeIdx); codeIdx++; }
   }
   const container=document.getElementById('sectionsContainer');
   container.innerHTML=html;
+  codeIndices.forEach(wireEditor);
 
   // event delegation: any number of run/copy buttons, one per code block
   container.addEventListener('click',e=>{
@@ -437,6 +524,7 @@ function drawQuiz(){
       document.getElementById('qcard').classList.add('answered');
       if(oi===q.ans){
         passed=true;
+        document.querySelectorAll('#goalsRow .g-chip').forEach(chip=>chip.classList.add('done'));
         document.getElementById('lnSub').textContent=lessonId<TOTAL?'+15 XP · ปลดล็อกบทที่ '+(lessonId+1)+' แล้ว':'+15 XP · เรียนจบหลักสูตรแล้ว! 🎓';
         document.getElementById('lessonNav').style.display='flex';
         const isLastOfUnit=unit.lessons[unit.lessons.length-1]===lessonId;

@@ -382,48 +382,77 @@ print(f"สถานะ: {status}")`
             desc: "วนทำงานซ้ำด้วยลูป for",
             content: {
                 th: {
-                    title: "การวนซ้ำด้วย for loop",
-                    desc: `for loop ใช้ทำงานซ้ำตามจำนวนที่กำหนด หรือวนผ่านสมาชิกแต่ละตัวใน sequence เช่น list, string, range เหมาะเมื่อรู้จำนวนรอบล่วงหน้า
+                    title: "สั่งให้ Python ทำซ้ำด้วยลูป for",
+                    intro: "แทนที่จะเขียน print() ซ้ำหลายสิบบรรทัด — ลูป for ทำให้คุณเขียนแค่ 2 บรรทัดแล้วปล่อยให้ Python จัดการวนซ้ำเองได้เลย",
+                    goals: ["ใช้ for + range() ได้", "วนผ่าน string/list ได้", "ใช้ enumerate() ได้"],
+                    blocks: [
+                        { type: "section", num: "01", label: "แนวคิด", title: "ทำไมต้องมีลูป?" },
+                        { type: "text", text: "สมมติว่าต้องพิมพ์ข้อความเดิม 5 ครั้ง — จะเขียน print() ซ้ำ 5 บรรทัดไหม? ถ้าต้องพิมพ์ 1,000 ครั้งล่ะ?" },
+                        { type: "text", text: "ลูป for คือคำสั่งที่บอกให้ Python \"ทำสิ่งนี้ซ้ำตามจำนวนที่กำหนด\" — เขียนแค่ครั้งเดียว Python จัดการนับและวนให้เองทั้งหมด" },
+                        { type: "code", filename: "why_loop.py", source:
+`# แบบไม่ใช้ลูป (ยาวและซ้ำซ้อน)
+print("สวัสดี")
+print("สวัสดี")
+print("สวัสดี")
 
-ฟังก์ชัน range() ใช้สร้างลำดับตัวเลข มีรูปแบบดังนี้
-- range(n) — ตัวเลข 0 ถึง n-1
-- range(start, stop) — ตัวเลข start ถึง stop-1
-- range(start, stop, step) — ตัวเลข start ถึง stop-1 เพิ่มทีละ step
+# แบบใช้ลูป (สั้นกว่ามาก และขยายจำนวนรอบได้ง่าย)
+for i in range(3):
+    print("สวัสดี")` },
+                        { type: "tip", kind: "note", text: "โค้ดสองแบบด้านบนให้ผลลัพธ์เหมือนกันทุกประการ แต่แบบใช้ลูปจะยิ่งสั้นกว่ามากเมื่อจำนวนรอบเพิ่มขึ้น — ถ้าต้องวน 1,000 รอบ แค่เปลี่ยน 3 เป็น 1000 เท่านั้น" },
 
-for loop ยังใช้วนผ่านตัวอักษรใน String หรือสมาชิกใน List ได้โดยตรง โดยไม่ต้องใช้ range()
-
-ฟังก์ชัน enumerate() ใช้เมื่อต้องการทั้ง index และค่าพร้อมกัน ฟังก์ชัน zip() ใช้วนสองลิสต์พร้อมกัน`,
-                    code:
+                        { type: "section", num: "02", label: "range()", title: "range() มี 3 รูปแบบ" },
+                        { type: "text", text: "range() ใช้สร้างลำดับตัวเลขให้ลูปวนผ่าน แต่ละรูปแบบเหมาะกับสถานการณ์ต่างกัน:" },
+                        { type: "concept-grid", items: [
+                            { icon: "🔢", title: "range(n)", desc: "เริ่มที่ 0 เสมอ วนถึง n-1 — เหมาะเมื่อแค่ต้องการวน n รอบ" },
+                            { icon: "➡️", title: "range(start, stop)", desc: "กำหนดจุดเริ่มต้นได้ และไม่รวมตัว stop" },
+                            { icon: "⏭️", title: "range(start, stop, step)", desc: "ข้ามทีละ step ตัว เช่น เอาแต่เลขคู่" },
+                            { icon: "↵", title: "Indentation", desc: "โค้ดที่เว้น 4 ช่องข้างใน คือสิ่งที่รันซ้ำทุกรอบ — ขาดไม่ได้" }
+                        ] },
+                        { type: "code", filename: "range_forms.py", source:
 `# range(n) — 0 ถึง n-1
 for i in range(5):
     print(i, end=" ")  # 0 1 2 3 4
 
-# range(start, stop)
+# range(start, stop) — ไม่รวม stop
 for i in range(1, 6):
     print(i, end=" ")  # 1 2 3 4 5
 
 # range(start, stop, step)
 for i in range(0, 11, 2):
-    print(i, end=" ")  # 0 2 4 6 8 10
+    print(i, end=" ")  # 0 2 4 6 8 10` },
+                        { type: "tip", kind: "warn", text: "จำให้ขึ้นใจ: range(1, 6) จะให้ค่า 1 ถึง 5 เท่านั้น — ตัวเลขที่เป็น \"จุดจบ\" จะไม่ถูกรวมเสมอ นี่คือสิ่งที่มือใหม่พลาดบ่อยที่สุด" },
 
-# วนผ่าน String
+                        { type: "section", num: "03", label: "วนผ่านข้อมูล", title: "ลูป for วนผ่าน String และ List ได้โดยตรง" },
+                        { type: "text", text: "ไม่ต้องใช้ range() เสมอไป — for loop วนผ่านตัวอักษรใน string หรือสมาชิกใน list ได้ตรง ๆ เลย:" },
+                        { type: "code", filename: "iterate.py", source:
+`# วนผ่านตัวอักษรใน String
 for char in "Python":
     print(char, end="-")  # P-y-t-h-o-n-
 
-# วนผ่าน List
+print()  # ขึ้นบรรทัดใหม่
+
+# วนผ่านสมาชิกใน List
 fruits = ["แอปเปิล", "กล้วย", "ส้ม"]
 for fruit in fruits:
-    print(f"ผลไม้: {fruit}")
+    print(f"ผลไม้: {fruit}")` },
 
-# enumerate() — index + ค่า
+                        { type: "section", num: "04", label: "enumerate()", title: "อยากได้ทั้งลำดับและค่า ใช้ enumerate()" },
+                        { type: "text", text: "ถ้าต้องการทั้งเลขลำดับ (index) และค่าของสมาชิกไปพร้อมกันในแต่ละรอบ ใช้ enumerate() ห่อ list ไว้:" },
+                        { type: "code", filename: "enumerate_ex.py", source:
+`fruits = ["แอปเปิล", "กล้วย", "ส้ม"]
+
+# enumerate(fruits, 1) เริ่มนับลำดับที่ 1 แทนที่จะเริ่มที่ 0
 for i, fruit in enumerate(fruits, 1):
-    print(f"{i}. {fruit}")
+    print(f"{i}. {fruit}")` },
 
-# คำนวณผลรวม 1-100
-total = 0
+                        { type: "section", num: "05", label: "ใช้งานจริง", title: "ตัวอย่างการใช้ลูปคำนวณผลรวม" },
+                        { type: "text", text: "ลูปมักถูกใช้สะสมค่าในตัวแปรระหว่างวน เช่น การหาผลรวมของตัวเลขทั้งหมดตั้งแต่ 1 ถึง 100 — ลองแก้ไขและกดรันโค้ดด้านล่างดูได้เลย:" },
+                        { type: "code", filename: "sum_range.py", source:
+`total = 0
 for num in range(1, 101):
     total += num
-print(f"ผลรวม 1-100 = {total}")  # 5050`
+print(f"ผลรวม 1-100 = {total}")  # 5050` }
+                    ]
                 }
             },
             quiz: {

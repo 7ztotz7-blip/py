@@ -163,7 +163,7 @@
 <script src="pystart-data.js"></script>
 <script src="assets/js/unit-quiz-bank.js"></script>
 <script type="module">
-  import { requireUser, loadProgress, saveUnitScores } from './assets/js/progress-store.js';
+  import { requireUser, loadProgress, saveUnitScores, saveFinalExam } from './assets/js/progress-store.js';
 
   const user = await requireUser();
   if(!user) throw new Error('redirecting to login'); // requireUser() already navigated away
@@ -188,17 +188,25 @@
      correct:0,exp:'การคูณสตริงด้วยตัวเลขคือการทำซ้ำต่อกัน → HiHiHi'}
   ];
 
-  /* ---- resolve unit pre/post test from ?unit=N&type=pre|post, else fall back ---- */
+  /* ---- resolve unit pre/post test from ?unit=N&type=pre|post, or the
+     60-question cumulative final exam from ?type=final, else fall back ---- */
   const qparams=new URLSearchParams(location.search);
   const unitId=parseInt(qparams.get('unit'),10);
   const testType=qparams.get('type');
   const nextParam=qparams.get('next');
   const isUnitTest = typeof unitTests!=='undefined' && unitTests[unitId] && (testType==='pre'||testType==='post') && unitTests[unitId][testType];
   const unit = isUnitTest ? courseUnits.find(u=>u.id===unitId) : null;
+  const isFinalExam = testType==='final' && typeof finalExam!=='undefined' && Array.isArray(finalExam);
 
   const QUESTIONS = isUnitTest
     ? unitTests[unitId][testType].map(item=>({
         q:item.q, code:false, diff: testType==='pre'?'แบบวินิจฉัย':'ทบทวนความเข้าใจ',
+        opts:item.options, correct:item.ans,
+        exp:'คำตอบที่ถูกต้องคือ "'+item.options[item.ans]+'"'
+      }))
+    : isFinalExam
+    ? finalExam.map(item=>({
+        q:item.q, code:false, diff:'ข้อสอบรวม',
         opts:item.options, correct:item.ans,
         exp:'คำตอบที่ถูกต้องคือ "'+item.options[item.ans]+'"'
       }))
@@ -207,6 +215,9 @@
   if(isUnitTest){
     document.getElementById('qtitleText').textContent =
       (testType==='pre'?'แบบทดสอบก่อนเรียน':'แบบทดสอบหลังเรียน')+' · หน่วยที่ '+unit.id+' '+unit.title;
+    document.getElementById('resultsLinkRow').style.display='none';
+  } else if(isFinalExam){
+    document.getElementById('qtitleText').textContent = 'แบบทดสอบรวมท้ายหลักสูตร · ครอบคลุมทั้ง 5 หน่วย';
     document.getElementById('resultsLinkRow').style.display='none';
   }
 
@@ -265,6 +276,8 @@
       if(!unitScores[unitId]) unitScores[unitId]={};
       unitScores[unitId][testType]={score:correctCount,total:QUESTIONS.length,pct:pct};
       saveUnitScores(user.uid,unitScores); // best-effort, doesn't block the result screen
+    } else if(isFinalExam){
+      saveFinalExam(user.uid,{score:correctCount,total:QUESTIONS.length,pct:pct}); // best-effort
     }
 
     const rctaMain=document.getElementById('rctaMain');
@@ -287,6 +300,18 @@
         rctaMain.href=nextParam||'dashboard.html';
       } else {
         rctaMain.style.display='none'; // must pass to move on — only "ทำใหม่อีกครั้ง" is available
+      }
+    } else if(isFinalExam){
+      pass=pct>=70;
+      document.getElementById('rtitle').textContent=pass?'ยินดีด้วย! เรียนจบหลักสูตรแล้ว 🎉':'ยังไม่ผ่าน ลองอีกครั้งนะ';
+      document.getElementById('rsub').textContent=pass
+        ?'คุณผ่านแบบทดสอบรวมทุกหน่วยแล้ว — ไปดูใบประกาศนียบัตรของคุณได้เลย'
+        :'ต้องได้ 70% ขึ้นไปถึงจะปลดล็อกใบประกาศนียบัตรได้ ทบทวนเนื้อหาแล้วกลับมาทำใหม่';
+      if(pass){
+        rctaMain.textContent='ดูใบประกาศนียบัตร →';
+        rctaMain.href=nextParam||'results.html';
+      } else {
+        rctaMain.style.display='none'; // must pass to unlock results.html — only "ทำใหม่อีกครั้ง" is available
       }
     } else {
       pass=pct>=70;

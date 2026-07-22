@@ -242,7 +242,7 @@
       <span class="meta">📦 <b id="metaUnits">5</b> ส่วน</span>
       <span class="meta">📖 <b id="metaLessons">24</b> บทเรียน</span>
       <span class="meta">⏱️ <b id="metaHours">~4</b> ชั่วโมง</span>
-      <span class="meta">🎓 มีใบประกาศเมื่อเรียนจบ</span>
+      <span class="meta">🐍 รันโค้ด Python ได้จริงในเบราว์เซอร์</span>
     </div>
     <div class="hero-prog">
       <div class="ring" id="progRing" style="--p:0"><i id="progPct">0%</i></div>
@@ -271,7 +271,7 @@
 
   const user = await requireUser();
   if(!user) throw new Error('redirecting to login'); // requireUser() already navigated away
-  const { completed, unitScores } = await loadProgress(user.uid);
+  const { completed, unitScores, finalExam } = await loadProgress(user.uid);
   document.getElementById('xpChip').textContent = '⭐ '+(completed.length*15).toLocaleString('en-US')+' XP';
 
   const TOTAL_LESSONS = courseData.lessons.length;
@@ -281,13 +281,15 @@
   const nextLesson = courseData.lessons.find(l=>l.id===nextLessonId);
 
   // find the current frontier unit: either mid-lessons, waiting on its
-  // post-test, or (if every unit is cleared) the whole course is done
+  // post-test, waiting on the cumulative final exam once every unit is
+  // cleared, or (once that's passed too) the whole course is done
   let frontier = {state:'complete', unit:null};
   for(const u of courseUnits){
     const doneInUnit = u.lessons.filter(id=>completed.indexOf(id)>-1).length;
     if(doneInUnit<u.lessons.length){ frontier={state:'lesson',unit:u}; break; }
     if(!pyIsUnitPostPassed(unitScores, u.id)){ frontier={state:'need-post',unit:u}; break; }
   }
+  if(frontier.state==='complete' && !pyIsFinalExamPassed(finalExam)){ frontier={state:'need-final',unit:null}; }
 
   // hero stats + progress ring
   document.getElementById('metaUnits').textContent = courseUnits.length;
@@ -306,10 +308,14 @@
     document.getElementById('progSub').textContent = 'ทำแบบทดสอบหลังเรียนของส่วนที่ '+frontier.unit.id+' ให้ผ่านเพื่อไปต่อ';
     continueBtnText.textContent = 'ทำแบบทดสอบหลังเรียน';
     continueBtn.href = 'quiz.html?unit='+frontier.unit.id+'&type=post&next='+encodeURIComponent('courses.html');
+  } else if(frontier.state==='need-final'){
+    document.getElementById('progSub').textContent = 'เรียนครบทุกหน่วยแล้ว! ทำแบบทดสอบรวมท้ายหลักสูตรให้ผ่านเพื่อปลดล็อกใบประกาศนียบัตร';
+    continueBtnText.textContent = 'ทำแบบทดสอบรวมท้ายหลักสูตร';
+    continueBtn.href = 'quiz.html?type=final&next='+encodeURIComponent('courses.html');
   } else {
     document.getElementById('progSub').textContent = 'เรียนจบหลักสูตรแล้ว 🎉';
-    continueBtnText.textContent = 'ทบทวนบทเรียน';
-    continueBtn.href = 'lesson.html?lesson=1';
+    continueBtnText.textContent = 'ดูใบประกาศนียบัตร';
+    continueBtn.href = 'results.html';
   }
 
   // module + chapter list

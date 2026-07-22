@@ -1519,10 +1519,10 @@ const courseUnits = [
     { id: 5, title: "เขียนโปรแกรมเชิงวัตถุ (OOP)", desc: "Class, Object, การสืบทอด และ Encapsulation", lessons: [21, 22, 23, 24] }
 ];
 
-/* Pre/post test question banks now live in assets/js/unit-quiz-bank.js
-   (loaded alongside this file wherever quiz.html's tests are needed) —
-   kept separate so that file can grow to 30 questions per test without
-   crowding the lesson content here. */
+/* Pre/post test question banks (10 questions each) plus the 60-question
+   cumulative final exam live in assets/js/unit-quiz-bank.js (loaded
+   alongside this file wherever quiz.html's tests are needed) — kept
+   separate so that file can grow without crowding the lesson content here. */
 
 /* ---------- shared progress/gating helpers ----------
    Single source of truth for "what's unlocked", used by courses.html,
@@ -1559,4 +1559,17 @@ function pyComputeUnlockedLessonId(completed, unitScores){
     }
     var last = courseUnits[courseUnits.length - 1];
     return last.lessons[last.lessons.length - 1];
+}
+// The 60-question cumulative final exam (?type=final in quiz.html) only
+// opens once every unit's lessons are done and its post-test passed, and
+// must itself score >=70% before the course counts as fully complete
+// (this is what gates results.html / the certificate).
+function pyIsFinalExamPassed(finalExam){
+    return !!(finalExam && finalExam.pct >= 70);
+}
+function pyIsCourseFullyComplete(completed, unitScores, finalExam){
+    var allUnitsDone = courseUnits.every(function(u){
+        return u.lessons.every(function(id){ return completed.indexOf(id) > -1; }) && pyIsUnitPostPassed(unitScores, u.id);
+    });
+    return allUnitsDone && pyIsFinalExamPassed(finalExam);
 }

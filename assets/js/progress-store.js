@@ -27,7 +27,8 @@ export async function loadProgress(uid){
   const data = snap.exists() ? snap.data() : {};
   return {
     completed: Array.isArray(data.completed) ? data.completed : [],
-    unitScores: (data.unitScores && typeof data.unitScores === 'object') ? data.unitScores : {}
+    unitScores: (data.unitScores && typeof data.unitScores === 'object') ? data.unitScores : {},
+    finalExam: (data.finalExam && typeof data.finalExam === 'object') ? data.finalExam : null
   };
 }
 
@@ -37,6 +38,20 @@ export async function saveCompleted(uid, completed){
 
 export async function saveUnitScores(uid, unitScores){
   await setDoc(doc(db, 'users', uid), { unitScores }, { merge: true });
+}
+
+// { score, total, pct } for the 60-question cumulative final exam —
+// separate from unitScores since it isn't tied to any single unit.
+// Stamps completedAt (ms since epoch) the first time it's called with a
+// passing score, so results.html can show a real completion date.
+export async function saveFinalExam(uid, finalExam){
+  const payload = { ...finalExam };
+  if(finalExam.pct >= 70){
+    const existing = await getDoc(doc(db, 'users', uid));
+    const prior = existing.exists() ? existing.data().finalExam : null;
+    payload.completedAt = (prior && prior.completedAt) ? prior.completedAt : Date.now();
+  }
+  await setDoc(doc(db, 'users', uid), { finalExam: payload }, { merge: true });
 }
 
 export async function loadProfile(uid){

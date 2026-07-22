@@ -178,7 +178,7 @@
   if(!user) throw new Error('redirecting to login'); // requireUser() already navigated away
 
   const [profileDoc, progress] = await Promise.all([loadProfile(user.uid), loadProgress(user.uid)]);
-  const { completed, unitScores } = progress;
+  const { completed, unitScores, finalExam } = progress;
   const displayName = profileDoc.name || user.displayName || user.email.split('@')[0];
 
   document.getElementById('xpChip').textContent = '⭐ '+(completed.length*15).toLocaleString('en-US')+' XP';
@@ -192,13 +192,15 @@
   const nextLesson = courseData.lessons.find(l=>l.id===nextLessonId);
 
   // same frontier logic as courses.html: mid-lessons, waiting on a
-  // post-test, or (once every unit is cleared) the whole course is done
+  // post-test, waiting on the cumulative final exam once every unit is
+  // cleared, or (once that's passed too) the whole course is done
   let frontier = {state:'complete', unit:null};
   for(const u of courseUnits){
     const doneInUnit = u.lessons.filter(id=>completed.indexOf(id)>-1).length;
     if(doneInUnit<u.lessons.length){ frontier={state:'lesson',unit:u}; break; }
     if(!pyIsUnitPostPassed(unitScores, u.id)){ frontier={state:'need-post',unit:u}; break; }
   }
+  if(frontier.state==='complete' && !pyIsFinalExamPassed(finalExam)){ frontier={state:'need-final',unit:null}; }
 
   // resume hero card
   const kickerEl=document.getElementById('resumeKicker'), titleEl=document.getElementById('resumeTitle'),
@@ -216,12 +218,18 @@
     metaEl.textContent = 'ทำแบบทดสอบหลังเรียนให้ผ่าน 70% เพื่อปลดล็อกหน่วยถัดไป';
     ctaEl.textContent = '📝 ทำแบบทดสอบหลังเรียน';
     ctaEl.href = 'quiz.html?unit='+frontier.unit.id+'&type=post&next='+encodeURIComponent('dashboard.html');
+  } else if(frontier.state==='need-final'){
+    kickerEl.textContent = 'เรียนครบทุกหน่วยแล้ว!';
+    titleEl.textContent = 'แบบทดสอบรวมท้ายหลักสูตร';
+    metaEl.textContent = 'ทำแบบทดสอบรวมให้ผ่าน 70% เพื่อปลดล็อกใบประกาศนียบัตร';
+    ctaEl.textContent = '📝 ทำแบบทดสอบรวมท้ายหลักสูตร';
+    ctaEl.href = 'quiz.html?type=final&next='+encodeURIComponent('dashboard.html');
   } else {
     kickerEl.textContent = 'เรียนจบหลักสูตรแล้ว 🎉';
-    titleEl.textContent = 'ทบทวนบทเรียนที่เรียนไปแล้วได้ทุกเมื่อ';
-    metaEl.textContent = 'เก่งมาก! กลับไปทบทวนบทไหนก็ได้จากหน้าหลักสูตร';
-    ctaEl.textContent = '▶ ทบทวนบทเรียน';
-    ctaEl.href = 'lesson.html?lesson=1';
+    titleEl.textContent = 'ดูใบประกาศนียบัตรของคุณ';
+    metaEl.textContent = 'เก่งมาก! คุณผ่านทุกหน่วยและแบบทดสอบรวมแล้ว';
+    ctaEl.textContent = '🎖️ ดูใบประกาศนียบัตร';
+    ctaEl.href = 'results.html';
   }
   progLabelEl.textContent = 'ความคืบหน้ารวม '+completed.length+'/'+TOTAL_LESSONS+' บท · '+pct+'%';
   window.addEventListener('load',()=>{

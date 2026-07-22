@@ -66,21 +66,6 @@
   .lv-md{background:linear-gradient(90deg,var(--accent),var(--accent-2));} .c-md{color:var(--accent-deep);}
   .lv-lo{background:linear-gradient(90deg,var(--warm),var(--warm-deep));} .c-lo{color:var(--warm-deep);}
 
-  /* ===== answer sheet ===== */
-  .sheet-wrap{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;}
-  .sheet{display:grid;grid-template-columns:repeat(10,1fr);gap:9px;}
-  .qd{aspect-ratio:1;border-radius:10px;display:grid;place-items:center;font-family:'IBM Plex Mono',monospace;font-size:13.5px;font-weight:600;
-    position:relative;cursor:default;transition:transform .12s;}
-  .qd:hover{transform:scale(1.08);}
-  .qd.ok{background:var(--ok-soft);color:var(--ok-deep);border:1.5px solid var(--ok-line);}
-  .qd.no{background:oklch(0.96 0.04 25);color:oklch(0.5 0.16 25);border:1.5px solid oklch(0.85 0.08 25);}
-  .sheet-leg{display:flex;flex-direction:column;gap:14px;min-width:150px;}
-  .lg{display:flex;align-items:center;gap:11px;font-size:14px;}
-  .lg .sw{width:26px;height:26px;border-radius:8px;flex-shrink:0;}
-  .lg .sw.ok{background:var(--ok-soft);border:1.5px solid var(--ok-line);}
-  .lg .sw.no{background:oklch(0.96 0.04 25);border:1.5px solid oklch(0.85 0.08 25);}
-  .lg b{font-weight:600;} .lg span{color:var(--muted);font-size:13px;}
-
   /* ===== certificate ===== */
   .certwrap{position:relative;}
   .certificate{position:relative;overflow:hidden;border-radius:18px;padding:40px 46px;color:oklch(0.28 0.04 260);
@@ -125,8 +110,6 @@
   @media (max-width:820px){
     .stats{grid-template-columns:1fr 1fr;}
     .mrow .mname{width:140px;}
-    .sheet-wrap{grid-template-columns:1fr;}
-    .sheet-leg{flex-direction:row;flex-wrap:wrap;}
     .cert-name{min-width:0;font-size:26px;}
     .certificate{padding:30px 24px;}
   }
@@ -156,50 +139,27 @@
 
   <!-- HERO -->
   <section class="hero">
-    <span class="badge-pass">✓ แบบทดสอบหลังเรียน · ผ่านเกณฑ์</span>
-    <div class="scorering" id="scorering" style="--p:90">
-      <div class="inner"><span class="pct" id="pct">90%</span><span class="lab">คะแนนรวม</span></div>
+    <span class="badge-pass">✓ แบบทดสอบรวมท้ายหลักสูตร · ผ่านเกณฑ์</span>
+    <div class="scorering" id="scorering" style="--p:0">
+      <div class="inner"><span class="pct" id="pct">0%</span><span class="lab">คะแนนรวม</span></div>
     </div>
-    <h1>ยินดีด้วย ใจดี! คุณสอบผ่าน 🎉</h1>
-    <p class="sub">คุณเรียนจบหลักสูตร Python พื้นฐานครบทั้ง 24 บท และสอบผ่านเกณฑ์ — ปลดล็อกใบประกาศนียบัตรเรียบร้อยแล้ว</p>
-    <div class="passmark">🎯 เกณฑ์ผ่าน 70% · คุณได้ 90%</div>
+    <h1 id="heroTitle">ยินดีด้วย! คุณสอบผ่าน 🎉</h1>
+    <p class="sub" id="heroSub">คุณเรียนจบหลักสูตร Python พื้นฐานครบทั้ง 24 บท และสอบผ่านเกณฑ์ — ปลดล็อกใบประกาศนียบัตรเรียบร้อยแล้ว</p>
+    <div class="passmark" id="passmark">🎯 เกณฑ์ผ่าน 70%</div>
   </section>
 
   <!-- STATS -->
   <div class="stats">
-    <div class="stat"><div class="ic" style="background:var(--ok-soft);color:var(--ok-deep)">✅</div><div class="n">27<small>/30</small></div><div class="l">ตอบถูก</div></div>
-    <div class="stat"><div class="ic" style="background:oklch(0.96 0.04 25);color:oklch(0.55 0.16 25)">✕</div><div class="n">3<small>/30</small></div><div class="l">ตอบผิด</div></div>
-    <div class="stat"><div class="ic" style="background:var(--accent-soft);color:var(--accent-deep)">⏱️</div><div class="n">28<small> นาที</small></div><div class="l">เวลาที่ใช้</div></div>
-    <div class="stat"><div class="ic" style="background:oklch(0.95 0.05 85);color:var(--gold-deep)">⭐</div><div class="n">+500</div><div class="l">XP ที่ได้รับ</div></div>
+    <div class="stat"><div class="ic" style="background:var(--ok-soft);color:var(--ok-deep)">✅</div><div class="n" id="statCorrect">0<small>/0</small></div><div class="l">ตอบถูก (ข้อสอบรวม)</div></div>
+    <div class="stat"><div class="ic" style="background:oklch(0.96 0.04 25);color:oklch(0.55 0.16 25)">✕</div><div class="n" id="statWrong">0<small>/0</small></div><div class="l">ตอบผิด (ข้อสอบรวม)</div></div>
+    <div class="stat"><div class="ic" style="background:var(--accent-soft);color:var(--accent-deep)">📊</div><div class="n" id="statAvg">0<small>%</small></div><div class="l">คะแนนเฉลี่ยแต่ละหน่วย</div></div>
+    <div class="stat"><div class="ic" style="background:oklch(0.95 0.05 85);color:var(--gold-deep)">⭐</div><div class="n" id="statXp">0</div><div class="l">คะแนนสะสมทั้งหมด (XP)</div></div>
   </div>
 
   <!-- MODULE BREAKDOWN -->
   <div class="section">
-    <div class="stitle"><span class="si">📊</span><h2>คะแนนแยกตามหมวด</h2><span class="ct">7 หมวด · 30 ข้อ</span></div>
-    <div class="card" id="breakdown">
-      <div class="mrow"><span class="mi">1</span><span class="mname">เริ่มต้นกับ Python<small>4 ข้อ</small></span><span class="mbar"><i class="lv-hi" data-w="100"></i></span><span class="mscore c-hi">4/4</span></div>
-      <div class="mrow"><span class="mi">2</span><span class="mname">ตรรกะและการควบคุม<small>5 ข้อ</small></span><span class="mbar"><i class="lv-hi" data-w="100"></i></span><span class="mscore c-hi">5/5</span></div>
-      <div class="mrow"><span class="mi">3</span><span class="mname">โครงสร้างข้อมูล<small>5 ข้อ</small></span><span class="mbar"><i class="lv-md" data-w="80"></i></span><span class="mscore c-md">4/5</span></div>
-      <div class="mrow"><span class="mi">4</span><span class="mname">ฟังก์ชันและโมดูล<small>4 ข้อ</small></span><span class="mbar"><i class="lv-hi" data-w="100"></i></span><span class="mscore c-hi">4/4</span></div>
-      <div class="mrow"><span class="mi">5</span><span class="mname">ข้อผิดพลาดและไฟล์<small>4 ข้อ</small></span><span class="mbar"><i class="lv-md" data-w="75"></i></span><span class="mscore c-md">3/4</span></div>
-      <div class="mrow"><span class="mi">6</span><span class="mname">เขียนโปรแกรมเชิงวัตถุ<small>5 ข้อ</small></span><span class="mbar"><i class="lv-lo" data-w="60"></i></span><span class="mscore c-lo">3/5</span></div>
-      <div class="mrow"><span class="mi">7</span><span class="mname">โปรเจกต์จริง<small>3 ข้อ</small></span><span class="mbar"><i class="lv-hi" data-w="100"></i></span><span class="mscore c-hi">3/3</span></div>
-    </div>
-  </div>
-
-  <!-- ANSWER SHEET -->
-  <div class="section">
-    <div class="stitle"><span class="si">📝</span><h2>แผนผังคำตอบ</h2><span class="ct">คลิกดูเฉลยรายข้อ</span></div>
-    <div class="card">
-      <div class="sheet-wrap">
-        <div class="sheet" id="sheet"></div>
-        <div class="sheet-leg">
-          <div class="lg"><span class="sw ok"></span><div><b>ตอบถูก</b><span> 27 ข้อ</span></div></div>
-          <div class="lg"><span class="sw no"></span><div><b>ตอบผิด</b><span> ข้อ 13, 24, 26</span></div></div>
-          <a href="#" class="btn btn-ghost sm" style="margin-top:4px;">ดูเฉลยทั้งหมด →</a>
-        </div>
-      </div>
-    </div>
+    <div class="stitle"><span class="si">📊</span><h2>คะแนนแบบทดสอบหลังเรียนแยกตามหน่วย</h2><span class="ct" id="breakdownCt">5 หน่วย</span></div>
+    <div class="card" id="breakdown"></div>
   </div>
 
   <!-- CERTIFICATE -->
@@ -213,11 +173,11 @@
           <div class="cert-kick">Certificate of Completion</div>
           <div class="cert-title">ใบประกาศนียบัตร</div>
           <div class="cert-sub">มอบให้เพื่อรับรองว่า</div>
-          <div class="cert-name">ใจดี โค้ดเก่ง</div>
-          <div class="cert-desc">ได้เรียนจบหลักสูตร <b>“Python พื้นฐาน — ตั้งแต่ศูนย์จนใช้งานได้จริง”</b> ครบทั้ง 24 บท และผ่านแบบทดสอบหลังเรียนด้วยคะแนน 90%</div>
+          <div class="cert-name" id="certName">กำลังโหลด...</div>
+          <div class="cert-desc" id="certDesc">ได้เรียนจบหลักสูตร <b>“Python พื้นฐาน — ตั้งแต่ศูนย์จนใช้งานได้จริง”</b> ครบทั้ง 24 บท และผ่านแบบทดสอบรวมท้ายหลักสูตร</div>
           <div class="cert-foot">
-            <div class="cf"><div class="v">22 มิ.ย. 2026</div><div class="k">วันที่สำเร็จ</div></div>
-            <div class="cf"><div class="v">PY-2026-04817</div><div class="k">รหัสใบประกาศ</div></div>
+            <div class="cf"><div class="v" id="certDate">—</div><div class="k">วันที่สำเร็จ</div></div>
+            <div class="cf"><div class="v" id="certId">—</div><div class="k">รหัสใบประกาศ</div></div>
             <div class="cf"><div class="v">py</div><div class="k">ผู้ออกใบรับรอง</div></div>
           </div>
         </div>
@@ -236,31 +196,75 @@
   </div>
 </div>
 
-<div class="toast" id="toast"><div class="ti">🎖️</div><div><b>กำลังเตรียมไฟล์ใบประกาศ…</b><span>ระบบจริงจะสร้าง PDF ให้ดาวน์โหลด</span></div></div>
+<div class="toast" id="toast"><div class="ti">🎖️</div><div><b>คัดลอกลิงก์แล้ว!</b><span>แชร์ความสำเร็จให้เพื่อน ๆ ได้เลย</span></div></div>
 
-<script>
-  // answer sheet (30 questions, wrong = 13,24,26)
-  const wrong=new Set([13,24,26]);
-  const sheet=document.getElementById('sheet');
-  for(let i=1;i<=30;i++){
-    const d=document.createElement('div');
-    d.className='qd '+(wrong.has(i)?'no':'ok');
-    d.textContent=i;
-    d.title='ข้อ '+i+(wrong.has(i)?' · ตอบผิด':' · ตอบถูก');
-    sheet.appendChild(d);
+<script src="pystart-data.js"></script>
+<script type="module">
+  import { requireUser, loadProgress, loadProfile } from './assets/js/progress-store.js';
+
+  const user = await requireUser();
+  if(!user) throw new Error('redirecting to login'); // requireUser() already navigated away
+
+  const [profileDoc, progress] = await Promise.all([loadProfile(user.uid), loadProgress(user.uid)]);
+  const { completed, unitScores, finalExam } = progress;
+  document.getElementById('xpChip').textContent = '⭐ '+(completed.length*15).toLocaleString('en-US')+' XP';
+
+  // this page is the reward for finishing everything — bounce anyone who
+  // hasn't actually earned it back to the dashboard instead of showing a
+  // certificate for progress they don't have
+  if(!pyIsCourseFullyComplete(completed, unitScores, finalExam)){
+    location.href = 'dashboard.html';
+    throw new Error('redirecting — course not fully complete yet');
   }
-  // animate bars + ring on load
+
+  const displayName = profileDoc.name || user.displayName || user.email.split('@')[0];
+  const pct = finalExam.pct;
+
+  document.getElementById('heroTitle').textContent = 'ยินดีด้วย '+displayName+'! คุณสอบผ่าน 🎉';
+  document.getElementById('heroSub').textContent = 'คุณเรียนจบหลักสูตร Python พื้นฐานครบทั้ง '+courseData.lessons.length+' บท และสอบผ่านแบบทดสอบรวมท้ายหลักสูตร — ปลดล็อกใบประกาศนียบัตรเรียบร้อยแล้ว';
+  document.getElementById('passmark').textContent = '🎯 เกณฑ์ผ่าน 70% · คุณได้ '+pct+'%';
+  document.getElementById('pct').textContent = pct+'%';
+
+  document.getElementById('statCorrect').innerHTML = finalExam.score+'<small>/'+finalExam.total+'</small>';
+  document.getElementById('statWrong').innerHTML = (finalExam.total-finalExam.score)+'<small>/'+finalExam.total+'</small>';
+  const unitPcts = courseUnits.map(u=>unitScores[u.id].post.pct);
+  const avgPct = Math.round(unitPcts.reduce((a,b)=>a+b,0)/unitPcts.length);
+  document.getElementById('statAvg').innerHTML = avgPct+'<small>%</small>';
+  document.getElementById('statXp').textContent = (completed.length*15).toLocaleString('en-US');
+
+  // real per-unit post-test breakdown (replaces the old made-up "7 categories")
+  document.getElementById('breakdownCt').textContent = courseUnits.length+' หน่วย';
+  document.getElementById('breakdown').innerHTML = courseUnits.map(u=>{
+    const s=unitScores[u.id].post;
+    const lv = s.pct>=90?'lv-hi':(s.pct>=70?'lv-md':'lv-lo');
+    const c = s.pct>=90?'c-hi':(s.pct>=70?'c-md':'c-lo');
+    return '<div class="mrow"><span class="mi">'+u.id+'</span><span class="mname">'+u.title+'<small>'+s.total+' ข้อ</small></span>'+
+      '<span class="mbar"><i class="'+lv+'" data-w="'+s.pct+'"></i></span><span class="mscore '+c+'">'+s.score+'/'+s.total+'</span></div>';
+  }).join('');
+
+  // certificate
+  document.getElementById('certName').textContent = displayName;
+  document.getElementById('certDesc').innerHTML = 'ได้เรียนจบหลักสูตร <b>“Python พื้นฐาน — ตั้งแต่ศูนย์จนใช้งานได้จริง”</b> ครบทั้ง '+courseData.lessons.length+' บท และผ่านแบบทดสอบรวมท้ายหลักสูตรด้วยคะแนน '+pct+'%';
+  const completedDate = finalExam.completedAt ? new Date(finalExam.completedAt) : new Date();
+  document.getElementById('certDate').textContent = completedDate.toLocaleDateString('th-TH',{year:'numeric',month:'short',day:'numeric'});
+  document.getElementById('certId').textContent = 'PY-'+completedDate.getFullYear()+'-'+user.uid.slice(0,5).toUpperCase();
+
+  // animate bars + ring now that real values are in place
   window.addEventListener('load',()=>{
     document.querySelectorAll('#breakdown .mbar i').forEach(el=>{el.style.width='0';requestAnimationFrame(()=>{el.style.width=el.dataset.w+'%';});});
     const r=document.getElementById('scorering');r.style.setProperty('--p','0');
-    let p=0;const target=90;const iv=setInterval(()=>{p+=2;if(p>=target){p=target;clearInterval(iv);}r.style.setProperty('--p',p);document.getElementById('pct').textContent=p+'%';},18);
+    let p=0;const iv=setInterval(()=>{p+=2;if(p>=pct){p=pct;clearInterval(iv);}r.style.setProperty('--p',p);document.getElementById('pct').textContent=p+'%';},18);
     celebrate();
   });
-  // toast actions
+
+  // toast + real button actions (print-to-PDF, copy the real page link)
   const toast=document.getElementById('toast');
   function showToast(b,s){toast.querySelector('b').textContent=b;toast.querySelector('span').textContent=s;toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>toast.classList.remove('show'),3200);}
-  document.getElementById('dlBtn').addEventListener('click',()=>showToast('กำลังเตรียมไฟล์ใบประกาศ…','ระบบจริงจะสร้าง PDF ให้ดาวน์โหลด'));
-  document.getElementById('shareBtn').addEventListener('click',()=>showToast('คัดลอกลิงก์แล้ว!','แชร์ความสำเร็จให้เพื่อน ๆ ได้เลย'));
+  document.getElementById('dlBtn').addEventListener('click',()=>window.print());
+  document.getElementById('shareBtn').addEventListener('click',()=>{
+    navigator.clipboard.writeText(location.href).then(()=>showToast('คัดลอกลิงก์แล้ว!','แชร์ความสำเร็จให้เพื่อน ๆ ได้เลย'));
+  });
+
   // confetti
   function celebrate(){
     const colors=['oklch(0.78 0.13 85)','oklch(0.7 0.15 150)','oklch(0.7 0.15 284)','oklch(0.72 0.14 200)','oklch(0.8 0.14 80)'];
@@ -269,13 +273,6 @@
       document.body.appendChild(c);setTimeout(()=>c.remove(),5200);}
   }
   const st=document.createElement('style');st.textContent='@keyframes cf{to{transform:translateY(105vh) rotate(680deg);}}';document.head.appendChild(st);
-</script>
-<script type="module">
-  import { requireUser, loadProgress } from './assets/js/progress-store.js';
-  const user = await requireUser();
-  if(!user) throw new Error('redirecting to login'); // requireUser() already navigated away
-  const { completed } = await loadProgress(user.uid);
-  document.getElementById('xpChip').textContent = '⭐ '+(completed.length*15).toLocaleString('en-US')+' XP';
 </script>
 <script src="pystart-fx.js"></script>
 </body>

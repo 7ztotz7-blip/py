@@ -177,28 +177,10 @@ code{font-family:'IBM Plex Mono',monospace;}
 .tip.warn{background:var(--warm-s);border-color:var(--warm-l);color:oklch(0.42 0.1 62);}
 .tip.info{background:var(--accent-s);border-color:var(--accent-l);color:var(--accent-d);}
 
-/* ── QUIZ ── */
-.q-card{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:20px 22px;}
-.q-card.answered{border-color:var(--line2);}
-.q-num{font-family:'IBM Plex Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--warm);margin-bottom:8px;}
-.q-text{font-size:16px;font-weight:600;color:var(--ink);line-height:1.45;margin-bottom:14px;}
-.q-opts{display:flex;flex-direction:column;gap:8px;}
-.q-opt{display:flex;align-items:center;gap:11px;padding:11px 14px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);cursor:pointer;font-size:14.5px;color:var(--ink);transition:border-color .15s,background .15s;text-align:left;}
-.q-opt:hover:not(:disabled){border-color:var(--accent-l);background:var(--accent-s);}
-.q-opt .q-ic{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line);flex-shrink:0;display:grid;place-items:center;font-size:10px;transition:.15s;}
-.q-opt.correct{border-color:var(--ok-l);background:var(--ok-s);color:var(--ok-d);cursor:default;}
-.q-opt.correct .q-ic{background:var(--ok);border-color:var(--ok);color:#fff;}
-.q-opt.wrong{border-color:oklch(0.86 0.08 20);background:oklch(0.97 0.02 20);color:oklch(0.45 0.12 22);cursor:default;}
-.q-opt.wrong .q-ic{background:oklch(0.7 0.15 22);border-color:oklch(0.7 0.15 22);color:#fff;}
-.q-opt.missed{border-color:var(--ok-l);background:oklch(0.97 0.015 155);cursor:default;}
-.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(28px);z-index:60;display:flex;align-items:center;gap:11px;padding:11px 18px 11px 12px;border-radius:13px;background:var(--card);border:1px solid var(--ok-l);opacity:0;pointer-events:none;box-shadow:var(--shadow-md);transition:transform .38s cubic-bezier(.2,.7,.2,1),opacity .28s;}
-.toast.show{transform:translateX(-50%);opacity:1;}
-.toast .t-ic{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;color:#fff;font-size:16px;background:linear-gradient(140deg,var(--ok),var(--ok-d));flex-shrink:0;}
-.toast b{font-size:13px;display:block;line-height:1.3;}
-.toast span{font-size:12px;color:var(--muted);}
-.confetti{position:fixed;inset:0;pointer-events:none;z-index:55;overflow:hidden;}
-.confetti i{position:absolute;top:-12px;width:8px;height:13px;border-radius:2px;animation:fall linear forwards;}
-@keyframes fall{to{transform:translateY(105vh) rotate(600deg);}}
+/* ── KEY TAKEAWAYS ── */
+.tk-list{list-style:none;display:flex;flex-direction:column;gap:10px;}
+.tk-item{display:flex;align-items:flex-start;gap:11px;padding:13px 16px;border-radius:11px;border:1px solid var(--line);background:var(--card);font-size:14.5px;line-height:1.6;color:var(--ink);}
+.tk-item .tk-ic{width:21px;height:21px;border-radius:50%;background:var(--ok-s);border:1.5px solid var(--ok-l);color:var(--ok-d);display:grid;place-items:center;flex-shrink:0;margin-top:1px;}
 
 /* lesson-end nav */
 .lesson-nav{margin-top:24px;padding:18px 20px;border-radius:13px;border:1px solid var(--ok-l);background:var(--ok-s);display:flex;align-items:center;gap:14px;}
@@ -210,10 +192,6 @@ code{font-family:'IBM Plex Mono',monospace;}
 .btn-primary:hover{transform:translateY(-1px);}
 .btn-ghost{color:var(--warm);border:1px solid var(--warm-l);background:var(--card);}
 .btn-ghost:hover{background:oklch(0.99 0.01 70);}
-.retry-box{margin-top:24px;padding:16px 20px;border-radius:13px;border:1px solid var(--warm-l);background:var(--warm-s);display:flex;align-items:center;gap:12px;}
-.retry-box .rb-ic{width:34px;height:34px;border-radius:9px;background:var(--warm);color:#fff;display:grid;place-items:center;font-size:15px;flex-shrink:0;}
-.retry-box b{font-size:14px;font-weight:700;color:var(--warm);display:block;}
-.retry-box span{font-size:12px;color:var(--warm);opacity:.8;}
 
 @media(max-width:680px){.content{padding:36px 22px 60px;}.tb-crumb{display:none;}}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important;}}
@@ -259,20 +237,15 @@ code{font-family:'IBM Plex Mono',monospace;}
 
   <hr class="sdiv" />
 
-  <!-- MINI QUIZ -->
-  <div class="ey"><span class="sn" style="background:linear-gradient(140deg,oklch(0.72 0.13 62),oklch(0.56 0.14 48));">Q</span><span class="st" style="color:var(--warm);">แบบทดสอบท้ายบท</span></div>
-  <h2 class="sec-h">ทบทวนความเข้าใจ</h2>
-  <p class="bt" style="margin-bottom:22px;">ตอบให้ถูกต้องเพื่อปลดล็อกบทถัดไป</p>
-  <div id="quiz" style="display:flex;flex-direction:column;gap:20px;"></div>
+  <!-- KEY TAKEAWAYS -->
+  <div class="ey"><span class="sn" style="background:linear-gradient(140deg,oklch(0.72 0.13 62),oklch(0.56 0.14 48));">✓</span><span class="st" style="color:var(--warm);">สรุปท้ายบท</span></div>
+  <h2 class="sec-h">ประเด็นสำคัญที่ควรจำ</h2>
+  <p class="bt" style="margin-bottom:22px;">อ่านทบทวนก่อนไปบทถัดไป</p>
+  <ul class="tk-list" id="takeaways"></ul>
 
-  <div class="retry-box" id="quizRetry" style="display:none;">
-    <div class="rb-ic">↩</div>
-    <div><b id="retryTxt">ยังไม่ถูก ลองอีกครั้ง</b><span>เลือกคำตอบใหม่ได้เลย</span></div>
-  </div>
-
-  <div class="lesson-nav" id="lessonNav" style="display:none;">
+  <div class="lesson-nav" id="lessonNav">
     <div class="ln-ic">✓</div>
-    <div class="ln-tx"><b id="lnTitle">ผ่านแล้ว!</b><span id="lnSub"></span></div>
+    <div class="ln-tx"><b>พร้อมไปต่อ</b><span id="lnSub"></span></div>
     <button class="btn btn-primary" id="nextLessonBtn">บทถัดไป
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </button>
@@ -286,11 +259,6 @@ code{font-family:'IBM Plex Mono',monospace;}
 <button class="sb-toggle" id="sbToggle" title="เปิด/ปิดเมนู">
   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
 </button>
-
-<div class="toast" id="toast">
-  <div class="t-ic">🎉</div>
-  <div><b>ผ่านแล้ว! เก่งมาก</b><span id="toastSub"></span></div>
-</div>
 
 <script src="pystart-data.js"></script>
 <script type="module">
@@ -427,7 +395,7 @@ function renderHeader(){
   document.getElementById('lTitle').textContent=lesson.content.th.title||lesson.title;
   document.getElementById('lDesc').textContent=c.intro||'';
   document.getElementById('goalsRow').innerHTML=(c.goals||[]).map(g=>
-    '<div class="g-chip"><span class="g-ic"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>'+esc(g)+'</div>'
+    '<div class="g-chip done"><span class="g-ic"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>'+esc(g)+'</div>'
   ).join('');
   document.getElementById('progFill').style.width=Math.round(((unlocked-1)/TOTAL)*100)+'%';
   const xp=completed.length*15;
@@ -496,48 +464,17 @@ function renderContent(){
   });
 }
 
-/* ---------- quiz (single question per lesson) ---------- */
-let passed=false;
-function drawQuiz(){
-  const q=lesson.quiz;
-  const wrap=document.getElementById('quiz');
-  document.getElementById('quizRetry').style.display='none';
-  document.getElementById('lessonNav').style.display='none';
-  wrap.innerHTML=
-    '<div class="q-card" id="qcard">'+
-      '<div class="q-num">คำถามท้ายบท</div>'+
-      '<div class="q-text">'+esc(q.q)+'</div>'+
-      '<div class="q-opts" id="qopts">'+
-        q.options.map((o,oi)=>'<button class="q-opt" data-oi="'+oi+'"><span class="q-ic">'+String.fromCharCode(65+oi)+'</span><span>'+esc(o)+'</span></button>').join('')+
-      '</div>'+
-    '</div>';
-  wrap.querySelectorAll('.q-opt').forEach(btn=>{
-    btn.addEventListener('click',function(){
-      const oi=+this.dataset.oi;
-      const opts=wrap.querySelectorAll('.q-opt');
-      opts.forEach((b,i)=>{
-        b.disabled=true;
-        if(i===q.ans) b.classList.add(oi===q.ans?'correct':'missed');
-        else if(i===oi) b.classList.add('wrong');
-        b.querySelector('.q-ic').textContent=i===q.ans?'✓':(i===oi?'✗':String.fromCharCode(65+i));
-      });
-      document.getElementById('qcard').classList.add('answered');
-      if(oi===q.ans){
-        passed=true;
-        document.querySelectorAll('#goalsRow .g-chip').forEach(chip=>chip.classList.add('done'));
-        document.getElementById('lnSub').textContent=lessonId<TOTAL?'+15 XP · ปลดล็อกบทที่ '+(lessonId+1)+' แล้ว':'+15 XP · เรียนจบหลักสูตรแล้ว! 🎓';
-        document.getElementById('lessonNav').style.display='flex';
-        const isLastOfUnit=unit.lessons[unit.lessons.length-1]===lessonId;
-        celebrate(isLastOfUnit?'+15 XP · ทำแบบทดสอบหลังเรียนเพื่อไปต่อ':(lessonId<TOTAL?'+15 XP · ปลดล็อกบทที่ '+(lessonId+1)+' แล้ว':'+15 XP · เรียนจบหลักสูตรแล้ว!'));
-      } else {
-        document.getElementById('quizRetry').style.display='flex';
-      }
-    });
-  });
+/* ---------- key takeaways (replaces the old end-of-lesson quiz gate) ---------- */
+function renderTakeaways(){
+  const items=lesson.takeaways||[];
+  document.getElementById('takeaways').innerHTML=items.map(t=>
+    '<li class="tk-item"><span class="tk-ic"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>'+esc(t)+'</li>'
+  ).join('');
+  const isLastOfUnit=unit.lessons[unit.lessons.length-1]===lessonId;
+  document.getElementById('lnSub').textContent=isLastOfUnit
+    ? '+15 XP · ทำแบบทดสอบหลังเรียนเพื่อไปต่อ'
+    : (lessonId<TOTAL?'+15 XP · ปลดล็อกบทที่ '+(lessonId+1)+' แล้ว':'+15 XP · เรียนจบหลักสูตรแล้ว! 🎓');
 }
-document.addEventListener('click',e=>{
-  if(e.target.closest('#quizRetry')) drawQuiz();
-});
 
 async function completeLesson(){
   if(completed.indexOf(lessonId)===-1){
@@ -556,18 +493,6 @@ async function completeLesson(){
 }
 document.getElementById('nextLessonBtn').addEventListener('click',completeLesson);
 
-/* ---------- toast / celebrate ---------- */
-const toast=document.getElementById('toast');
-function showToast(){toast.classList.add('show');clearTimeout(showToast._t);showToast._t=setTimeout(()=>toast.classList.remove('show'),3800);}
-function celebrate(msg){
-  if(msg!==undefined) document.getElementById('toastSub').textContent=msg;
-  showToast();
-  const colors=['oklch(0.7 0.15 284)','oklch(0.72 0.14 200)','oklch(0.78 0.14 145)','oklch(0.8 0.14 80)','oklch(0.7 0.16 25)'];
-  const wrap=document.createElement('div');wrap.className='confetti';
-  for(let i=0;i<72;i++){const c=document.createElement('i');c.style.left=Math.random()*100+'vw';c.style.background=colors[i%colors.length];c.style.animationDuration=(2.2+Math.random()*2)+'s';c.style.animationDelay=(Math.random()*.35)+'s';c.style.transform='rotate('+(Math.random()*360)+'deg)';wrap.appendChild(c);}
-  document.body.appendChild(wrap);setTimeout(()=>wrap.remove(),4600);
-}
-
 /* ---------- sidebar toggle ---------- */
 const sidebar=document.getElementById('sidebar'),sbToggle=document.getElementById('sbToggle');
 const sbOpen=localStorage.getItem('pystart_sb')!=='closed';
@@ -583,7 +508,7 @@ sbToggle.style.left=sidebar.classList.contains('closed')?'12px':'272px';
 renderHeader();
 renderSidebar();
 renderContent();
-drawQuiz();
+renderTakeaways();
 </script>
 </body>
 </html>

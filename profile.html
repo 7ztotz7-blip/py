@@ -47,6 +47,25 @@
 
   @media (max-width:900px){.strip{grid-template-columns:1fr 1fr;}}
 
+  /* score breakdown */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 26px;box-shadow:var(--shadow-md);}
+  .mrow{display:flex;align-items:center;gap:16px;padding:13px 0;}
+  .mrow + .mrow{border-top:1px solid var(--line-soft);}
+  .mrow .mi{width:38px;height:38px;border-radius:11px;flex-shrink:0;display:grid;place-items:center;font-family:'IBM Plex Mono',monospace;
+    font-weight:600;font-size:15px;background:var(--accent-soft);color:var(--accent-deep);}
+  .mrow .mi.mi-lock{background:var(--soft);color:var(--faint);}
+  .mrow .mname{width:190px;flex-shrink:0;font-size:14.5px;font-weight:500;}
+  .mrow .mname small{display:block;color:var(--faint);font-weight:400;font-size:12.5px;margin-top:1px;}
+  .mrow .mbar{flex:1;height:11px;border-radius:100px;background:var(--soft);border:1px solid var(--line);overflow:hidden;}
+  .mrow .mbar i{display:block;height:100%;border-radius:100px;transition:width 1s cubic-bezier(.2,.7,.2,1);}
+  .mrow .mscore{width:60px;text-align:right;flex-shrink:0;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;}
+  .lv-hi{background:linear-gradient(90deg,var(--ok),var(--ok-deep));} .c-hi{color:var(--ok-deep);}
+  .lv-md{background:linear-gradient(90deg,var(--accent),var(--accent-2));} .c-md{color:var(--accent-deep);}
+  .lv-lo{background:linear-gradient(90deg,var(--warm),var(--warm-deep));} .c-lo{color:var(--warm-deep);}
+  .lv-empty{background:none;} .c-empty{color:var(--faint);}
+  .mrow-empty .mname{color:var(--faint);}
+  @media (max-width:640px){.mrow .mname{width:120px;}}
+
   /* achievements */
   .section{margin-top:34px;}
   .stitle{display:flex;align-items:center;gap:11px;margin-bottom:16px;}
@@ -116,6 +135,16 @@
     <div class="sc"><div class="ic" style="background:var(--ok-soft);color:var(--ok-deep)">✅</div><div class="n" id="statTests">0</div><div class="l">แบบฝึกหัดที่ทำผ่าน</div></div>
   </div>
 
+  <!-- SCORE BREAKDOWN -->
+  <section class="section">
+    <div class="stitle">
+      <div class="si">📊</div>
+      <h2>คะแนนแยกตามหน่วย</h2>
+      <span class="ct" id="breakdownCt">0 หน่วย</span>
+    </div>
+    <div class="card" id="breakdown"></div>
+  </section>
+
   <!-- ACHIEVEMENTS -->
   <section class="section">
     <div class="stitle">
@@ -174,6 +203,32 @@
   const levelPct=Math.round((xpIntoLevel/levelTarget)*100);
   levelBar.style.width='0';
   requestAnimationFrame(()=>{levelBar.style.transition='width 1s cubic-bezier(.2,.7,.2,1)';levelBar.style.width=levelPct+'%';});
+
+  // ---------- score breakdown ----------
+  // Post-test result per unit, same source of truth as results.html's
+  // breakdown — but unlike that page (which only renders once every unit
+  // is done), a unit here can still be untouched or only pre-tested, so
+  // each row has to degrade gracefully instead of assuming .post exists.
+  document.getElementById('breakdownCt').textContent = courseUnits.length+' หน่วย';
+  document.getElementById('breakdown').innerHTML = courseUnits.map(function(u){
+    const us = unitScores[u.id];
+    const post = us && us.post;
+    if(post){
+      const lv = post.pct>=90?'lv-hi':(post.pct>=70?'lv-md':'lv-lo');
+      const c = post.pct>=90?'c-hi':(post.pct>=70?'c-md':'c-lo');
+      return '<div class="mrow"><span class="mi">'+u.id+'</span><span class="mname">'+u.title+'<small>'+post.total+' ข้อ</small></span>'+
+        '<span class="mbar"><i class="'+lv+'" data-w="'+post.pct+'"></i></span><span class="mscore '+c+'">'+post.score+'/'+post.total+'</span></div>';
+    }
+    const label = us && us.pre ? 'รอทำแบบทดสอบหลังเรียน' : 'ยังไม่เริ่มเรียน';
+    return '<div class="mrow mrow-empty"><span class="mi mi-lock">'+u.id+'</span><span class="mname">'+u.title+'<small>'+label+'</small></span>'+
+      '<span class="mbar"><i class="lv-empty" data-w="0"></i></span><span class="mscore c-empty">—</span></div>';
+  }).join('');
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('#breakdown .mbar i').forEach(function(el){
+      el.style.width='0';
+      requestAnimationFrame(()=>{ el.style.width=el.dataset.w+'%'; });
+    });
+  });
 
   // ---------- achievements ----------
   // Every badge below is derived from data already tracked in Firestore

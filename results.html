@@ -38,8 +38,11 @@
 
   /* ===== stat row ===== */
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:22px;}
-  .stat{background:linear-gradient(180deg,#fff,var(--soft));border:1px solid var(--line);border-radius:17px;padding:20px;box-shadow:var(--shadow-sm);}
-  .stat .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:18px;margin-bottom:12px;}
+  .stat{background:linear-gradient(180deg,#fff,var(--soft));border:1px solid var(--line);border-radius:17px;padding:20px;box-shadow:var(--shadow-sm);
+    transition:transform .18s,box-shadow .18s,border-color .18s;}
+  .stat:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--accent-line);}
+  .stat .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:18px;margin-bottom:12px;
+    box-shadow:0 1px 0 oklch(1 0 0/.4) inset,var(--shadow-sm);}
   .stat .n{font-size:25px;font-weight:600;letter-spacing:-.02em;line-height:1;}
   .stat .n small{font-size:15px;color:var(--faint);font-weight:500;}
   .stat .l{font-size:13px;color:var(--muted);margin-top:6px;}
@@ -48,11 +51,11 @@
   .stitle{display:flex;align-items:center;gap:11px;margin-bottom:16px;}
   .stitle h2{font-size:20px;font-weight:600;letter-spacing:-.01em;}
   .stitle .si{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:#fff;font-size:15px;
-    background:linear-gradient(140deg,var(--accent-2),var(--accent-deep));}
+    background:linear-gradient(140deg,var(--accent-2),var(--accent-deep));box-shadow:0 1px 0 oklch(1 0 0/.4) inset,0 4px 10px -6px oklch(0.4 0.13 288/.5);}
   .stitle .ct{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--faint);}
 
   /* ===== module breakdown ===== */
-  .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px 28px;box-shadow:var(--shadow-sm);}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px 28px;box-shadow:var(--shadow-md);}
   .mrow{display:flex;align-items:center;gap:16px;padding:13px 0;}
   .mrow + .mrow{border-top:1px solid var(--line-soft);}
   .mrow .mi{width:38px;height:38px;border-radius:11px;flex-shrink:0;display:grid;place-items:center;font-family:'IBM Plex Mono',monospace;

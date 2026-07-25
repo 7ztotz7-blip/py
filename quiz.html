@@ -45,7 +45,7 @@
 
   .qmeta{display:flex;align-items:center;gap:11px;margin-bottom:18px;}
   .qmeta .qn{font-family:'IBM Plex Mono',monospace;font-size:13px;font-weight:600;color:#fff;background:linear-gradient(140deg,var(--accent-2),var(--accent-deep));
-    padding:6px 13px;border-radius:9px;}
+    padding:6px 13px;border-radius:9px;box-shadow:0 1px 0 oklch(1 0 0/.35) inset,0 6px 14px -8px oklch(0.4 0.13 288/.6);}
   .qmeta .qtag{font-size:13px;color:var(--muted);}
   .qmeta .qdiff{margin-left:auto;font-size:12.5px;font-weight:600;color:var(--ok-deep);background:var(--ok-soft);border:1px solid var(--ok-line);padding:5px 12px;border-radius:100px;}
 
@@ -58,15 +58,15 @@
 
   .opts{display:flex;flex-direction:column;gap:12px;margin-top:26px;}
   .opt{display:flex;align-items:center;gap:15px;background:var(--card);border:1.5px solid var(--line);border-radius:14px;
-    padding:17px 19px;cursor:pointer;transition:.16s;text-align:left;width:100%;}
-  .opt:hover{border-color:var(--accent-line);background:var(--soft);transform:translateX(3px);}
+    padding:17px 19px;cursor:pointer;transition:transform .16s,box-shadow .16s,border-color .16s,background .16s;text-align:left;width:100%;}
+  .opt:hover{border-color:var(--accent-line);background:var(--soft);transform:translateX(3px);box-shadow:var(--shadow-sm);}
   .opt .key{width:34px;height:34px;border-radius:10px;flex-shrink:0;display:grid;place-items:center;font-family:'IBM Plex Mono',monospace;
     font-weight:600;font-size:15px;background:var(--soft);border:1px solid var(--line);color:var(--muted);transition:.16s;}
   .opt .otx{flex:1;font-size:16px;font-weight:500;}
   .opt .otx code{background:var(--soft);border:1px solid var(--line);padding:1px 7px;border-radius:6px;font-size:14px;color:var(--accent-deep);}
   .opt .mark{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:grid;place-items:center;color:#fff;opacity:0;transform:scale(.5);transition:.18s;}
-  .opt.sel{border-color:var(--accent);background:var(--accent-soft);}
-  .opt.sel .key{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .opt.sel{border-color:var(--accent);background:var(--accent-soft);box-shadow:0 10px 24px -14px oklch(0.4 0.13 288/.5);}
+  .opt.sel .key{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 4px 10px -4px oklch(0.4 0.13 288/.6);}
   /* answered states */
   body.answered .opt{cursor:default;pointer-events:none;}
   .opt.correct{border-color:var(--ok);background:var(--ok-soft);}

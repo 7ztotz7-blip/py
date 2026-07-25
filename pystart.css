@@ -37,16 +37,19 @@ code{font-family:'IBM Plex Mono',monospace;}
   background:color-mix(in oklch,var(--bg) 82%,transparent);-webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4);border-bottom:1px solid var(--line);}
 .tb-logo{display:flex;align-items:center;gap:10px;font-weight:600;font-size:18px;text-decoration:none;color:var(--ink);}
 .tb-mk{width:30px;height:30px;border-radius:8px;display:grid;place-items:center;color:#fff;font-family:'IBM Plex Mono',monospace;
-  font-weight:600;font-size:13px;background:linear-gradient(140deg,var(--accent-2),var(--accent-deep));}
+  font-weight:600;font-size:13px;background:linear-gradient(140deg,var(--accent-2),var(--accent-deep));
+  box-shadow:0 1px 0 oklch(1 0 0/.4) inset,0 0 0 3px var(--accent-soft),0 6px 14px -8px oklch(0.4 0.13 288/.55);}
 .tb-nav{display:flex;gap:4px;margin-left:14px;}
 .tb-nav a{font-size:14.5px;color:var(--muted);padding:8px 14px;border-radius:9px;text-decoration:none;font-weight:500;transition:.15s;}
 .tb-nav a:hover{background:var(--soft);color:var(--ink);}
 .tb-nav a.cur{color:var(--accent-deep);background:var(--accent-soft);font-weight:600;}
 .tb-right{display:flex;align-items:center;gap:10px;margin-left:auto;}
 .chiplet{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 13px;border-radius:10px;border:1px solid var(--line);
-  background:var(--card);font-size:13.5px;font-weight:600;}
+  background:var(--card);font-size:13.5px;font-weight:600;box-shadow:var(--shadow-sm);}
 .tb-av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:600;font-size:14px;text-decoration:none;
-  background:linear-gradient(140deg,oklch(0.7 0.12 30),oklch(0.58 0.14 12));}
+  background:linear-gradient(140deg,oklch(0.7 0.12 30),oklch(0.58 0.14 12));
+  box-shadow:0 1px 0 oklch(1 0 0/.4) inset,0 6px 14px -6px oklch(0.5 0.16 20/.55);transition:transform .18s,box-shadow .18s;}
+.tb-av:hover{transform:translateY(-1px);box-shadow:0 1px 0 oklch(1 0 0/.4) inset,0 10px 20px -6px oklch(0.5 0.16 20/.6);}
 
 /* buttons */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;height:48px;padding:0 24px;border-radius:13px;font-size:15.5px;

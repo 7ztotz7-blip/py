@@ -43,6 +43,27 @@
   .sc .l{font-size:13px;color:var(--muted);margin-top:6px;}
 
   @media (max-width:900px){.strip{grid-template-columns:1fr 1fr;}}
+
+  /* achievements */
+  .section{margin-top:34px;}
+  .stitle{display:flex;align-items:center;gap:11px;margin-bottom:16px;}
+  .stitle h2{font-size:20px;font-weight:600;letter-spacing:-.01em;}
+  .stitle .si{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:#fff;font-size:15px;
+    background:linear-gradient(140deg,var(--gold),var(--gold-deep));}
+  .stitle .ct{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--faint);}
+  .ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
+  .ach{display:flex;align-items:center;gap:14px;background:linear-gradient(180deg,#fff,var(--soft));border:1px solid var(--line);
+    border-radius:16px;padding:16px 18px;box-shadow:var(--shadow-sm);text-decoration:none;color:inherit;transition:transform .18s,box-shadow .18s,border-color .18s;}
+  .ach.unlocked:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--accent-line);}
+  .ach.locked{background:var(--soft);opacity:.55;}
+  .ach-badge{width:44px;height:44px;border-radius:13px;flex-shrink:0;display:grid;place-items:center;font-size:20px;
+    background:linear-gradient(140deg,var(--accent-2),var(--accent-deep));box-shadow:0 1px 0 oklch(1 0 0/.4) inset,0 8px 16px -6px oklch(0.45 0.13 288/.5);}
+  .ach.locked .ach-badge{background:linear-gradient(140deg,oklch(0.82 0.01 255),oklch(0.72 0.012 255));box-shadow:var(--shadow-sm);filter:grayscale(1);}
+  .ach.gold .ach-badge{background:linear-gradient(140deg,var(--gold),var(--gold-deep));}
+  .ach-info{min-width:0;}
+  .ach-name{font-size:14.5px;font-weight:600;letter-spacing:-.005em;}
+  .ach-desc{font-size:12.5px;color:var(--muted);margin-top:2px;}
+  .ach.locked .ach-desc{color:var(--faint);}
 </style>
 </head>
 <body data-fx=".topbar, .phead, .strip > .sc" data-fx-count=".strip .sc .n, .ph-level .lv">
@@ -89,8 +110,19 @@
     <div class="sc"><div class="ic" style="background:var(--accent-soft);color:var(--accent-deep)">📖</div><div class="n" id="statLessons">0</div><div class="l">บทที่เรียนจบ</div></div>
     <div class="sc"><div class="ic" style="background:var(--ok-soft);color:var(--ok-deep)">✅</div><div class="n" id="statTests">0</div><div class="l">แบบฝึกหัดที่ทำผ่าน</div></div>
   </div>
+
+  <!-- ACHIEVEMENTS -->
+  <section class="section">
+    <div class="stitle">
+      <div class="si">🏆</div>
+      <h2>ความสำเร็จ</h2>
+      <span class="ct" id="achCount">0/0 ปลดล็อก</span>
+    </div>
+    <div class="ach-grid" id="achGrid"></div>
+  </section>
 </div>
 
+<script src="pystart-data.js"></script>
 <script type="module">
   import { auth } from './assets/js/firebase.js';
   import { signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
@@ -119,7 +151,7 @@
     ? ('เข้าร่วมเมื่อ '+joined.toLocaleDateString('th-TH',{year:'numeric',month:'long'}))
     : 'เข้าร่วมแล้ว';
 
-  const { completed, unitScores } = await loadProgress(user.uid);
+  const { completed, unitScores, finalExam } = await loadProgress(user.uid);
   const xp = completed.length*15;
   const testsPassed = Object.values(unitScores).reduce((n,u)=>n+(u.pre?1:0)+(u.post?1:0),0);
   document.getElementById('statLessons').textContent = completed.length;
@@ -133,6 +165,35 @@
   const levelPct=Math.round((xpIntoLevel/levelTarget)*100);
   levelBar.style.width='0';
   requestAnimationFrame(()=>{levelBar.style.transition='width 1s cubic-bezier(.2,.7,.2,1)';levelBar.style.width=levelPct+'%';});
+
+  // ---------- achievements ----------
+  // Every badge below is derived from data already tracked in Firestore
+  // (completed lessons, per-unit pre/post scores, final exam) — nothing
+  // fabricated like a login streak, since that isn't tracked anywhere yet.
+  const perfectUnit = Object.values(unitScores).some(function(u){
+    return (u.pre && u.pre.pct === 100) || (u.post && u.post.pct === 100);
+  });
+  const achievements = [
+    { icon:'🚀', name:'ก้าวแรก', desc:'เรียนจบบทแรก', unlocked: completed.length >= 1 },
+    { icon:'⚡', name:'ครึ่งทางแล้ว', desc:'เรียนจบ 12 จาก 24 บท', unlocked: completed.length >= 12 },
+    { icon:'📚', name:'เรียนจบทุกบท', desc:'ครบทั้ง 24 บทเรียน', unlocked: completed.length >= 24 },
+    { icon:'💯', name:'มือฉมัง', desc:'ทำแบบทดสอบได้เต็ม 100%', unlocked: perfectUnit }
+  ].concat(courseUnits.map(function(u){
+    return { icon:String(u.id), name:'จบส่วนที่ '+u.id, desc:u.title, unlocked: pyIsUnitPostPassed(unitScores, u.id) };
+  })).concat([
+    { icon:'🏅', name:'ใบประกาศ', desc:'สอบปลายทางผ่านเกณฑ์', unlocked: pyIsFinalExamPassed(finalExam), gold:true, href:'results.html' }
+  ]);
+
+  const unlockedCount = achievements.filter(function(a){ return a.unlocked; }).length;
+  document.getElementById('achCount').textContent = unlockedCount+'/'+achievements.length+' ปลดล็อก';
+  document.getElementById('achGrid').innerHTML = achievements.map(function(a){
+    const tag = a.unlocked && a.href ? 'a' : 'div';
+    const hrefAttr = a.unlocked && a.href ? ' href="'+a.href+'"' : '';
+    return '<'+tag+hrefAttr+' class="ach '+(a.unlocked?'unlocked':'locked')+(a.gold?' gold':'')+'">'+
+      '<div class="ach-badge">'+(a.unlocked?a.icon:'🔒')+'</div>'+
+      '<div class="ach-info"><div class="ach-name">'+a.name+'</div><div class="ach-desc">'+a.desc+'</div></div>'+
+      '</'+tag+'>';
+  }).join('');
 </script>
 <script src="pystart-fx.js"></script>
 </body>

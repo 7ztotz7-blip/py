@@ -153,7 +153,11 @@
 
   const { completed, unitScores, finalExam } = await loadProgress(user.uid);
   const xp = completed.length*15;
-  const testsPassed = Object.values(unitScores).reduce((n,u)=>n+(u.pre?1:0)+(u.post?1:0),0);
+  // "passed" means the post-test cleared the 70% bar, same rule that
+  // unlocks the next unit (see pyIsUnitPostPassed) — pre-tests are just a
+  // diagnostic baseline and have no pass/fail of their own, so they don't
+  // count here even though they're stored in unitScores too.
+  const testsPassed = Object.values(unitScores).reduce((n,u)=>n+((u.post && u.post.pct>=70)?1:0),0);
   document.getElementById('statLessons').textContent = completed.length;
   document.getElementById('statTests').textContent = testsPassed;
   document.getElementById('xpChiplet').textContent = '⭐ '+xp.toLocaleString('en-US')+' XP';

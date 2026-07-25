@@ -70,5 +70,17 @@ code{font-family:'IBM Plex Mono',monospace;}
 .chip.a{background:var(--accent-soft);border-color:var(--accent-line);color:var(--accent-deep);}
 
 .wrap{max-width:1080px;margin:0 auto;padding:0 26px;}
-@media (max-width:720px){.tb-nav{display:none;}}
+
+/* mobile nav toggle (hamburger) — hidden on desktop, shows the collapsed
+   .tb-nav as a dropdown panel below the topbar when tapped */
+.tb-menu-btn{display:none;width:36px;height:36px;border-radius:9px;border:1px solid var(--line);background:var(--card);
+  align-items:center;justify-content:center;flex-shrink:0;}
+.tb-menu-btn svg{display:block;}
+@media (max-width:720px){
+  .tb-menu-btn{display:inline-flex;order:-1;margin-right:2px;}
+  .tb-nav{display:none;position:absolute;top:62px;left:0;right:0;flex-direction:column;gap:2px;margin-left:0;
+    background:var(--card);border-bottom:1px solid var(--line);padding:10px 16px 14px;box-shadow:var(--shadow-md);z-index:49;}
+  .tb-nav.open{display:flex;}
+  .tb-nav a{padding:12px 14px;}
+}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;}}

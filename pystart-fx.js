@@ -248,3 +248,24 @@
     }
   })();
 })();
+
+/* ===== mobile topbar nav ===== */
+/* .tb-nav collapses to a hidden dropdown under 720px (see pystart.css);
+   this wires the hamburger button up to it and closes on outside click,
+   link tap, or Escape. No-op on pages without a #tbMenuBtn. */
+(function () {
+  var btn = document.getElementById('tbMenuBtn');
+  var nav = document.querySelector('.tb-nav');
+  if (!btn || !nav) return;
+  function close() { nav.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); }
+  function toggle() {
+    var open = nav.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  btn.addEventListener('click', function (e) { e.stopPropagation(); toggle(); });
+  nav.addEventListener('click', function (e) { if (e.target.closest('a')) close(); });
+  document.addEventListener('click', function (e) {
+    if (nav.classList.contains('open') && !nav.contains(e.target) && e.target !== btn) close();
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+})();

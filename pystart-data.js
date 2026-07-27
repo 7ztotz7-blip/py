@@ -686,40 +686,55 @@ for row in matrix:
             content: {
                 th: {
                     title: "List — โครงสร้างข้อมูลที่ยืดหยุ่นที่สุด",
-                    desc: `List คือโครงสร้างข้อมูลที่เก็บค่าหลายค่าในตัวแปรเดียว เป็น ordered (มีลำดับ) และ mutable (แก้ไขได้) สร้างด้วยวงเล็บเหลี่ยม [] โดย index เริ่มจาก 0
+                    intro: "ถ้าต้องเก็บข้อมูลหลายค่าไว้ในที่เดียว เช่น รายชื่อผลไม้หรือคะแนนทั้งห้อง — List คือโครงสร้างข้อมูลแรกที่ควรนึกถึง",
+                    goals: ["สร้างและเข้าถึงสมาชิกใน List ได้", "แก้ไข เพิ่ม ลบสมาชิกด้วยเมธอดต่าง ๆ ได้", "ใช้ slicing ดึงสมาชิกหลายตัวพร้อมกันได้"],
+                    blocks: [
+                        { type: "section", num: "01", label: "แนวคิด", title: "List คืออะไร และเข้าถึงสมาชิกอย่างไร" },
+                        { type: "text", text: "List คือโครงสร้างข้อมูลที่เก็บค่าหลายค่าในตัวแปรเดียว เป็น ordered (มีลำดับ) และ mutable (แก้ไขได้) สร้างด้วยวงเล็บเหลี่ยม [] โดย index เริ่มจาก 0 และ index ติดลบหมายถึงนับจากท้าย:" },
+                        { type: "code", filename: "list_basic.py", source:
+`fruits = ["แอปเปิล", "กล้วย", "ส้ม", "มะม่วง"]
+mixed = [1, "hello", True, 3.14]  # รวมหลายชนิดในลิสต์เดียวได้
 
-การเข้าถึงสมาชิก ใช้ index เช่น list[0] คือสมาชิกตัวแรก index ติดลบหมายถึงนับจากท้าย list[-1] คือตัวสุดท้าย
-
-Slicing ใช้ดึงสมาชิกหลายตัวพร้อมกัน รูปแบบ list[start:stop:step] เช่น list[1:4] ดึงตำแหน่ง 1,2,3
-
-เมธอดสำคัญของ List ได้แก่ append() เพิ่มท้าย, insert() แทรก, remove() ลบตามค่า, pop() ลบตาม index, sort() เรียงลำดับ, reverse() กลับลำดับ, len() นับจำนวน, count() นับค่าซ้ำ, index() หาตำแหน่ง`,
-                    code:
-`# สร้าง List
-fruits = ["แอปเปิล", "กล้วย", "ส้ม", "มะม่วง"]
-numbers = [1, 2, 3, 4, 5]
-mixed = [1, "hello", True, 3.14]  # รวมหลายชนิด
-
-# เข้าถึงสมาชิก
 print(fruits[0])     # แอปเปิล (ตัวแรก)
 print(fruits[-1])    # มะม่วง (ตัวสุดท้าย)
-print(fruits[1:3])   # ['กล้วย', 'ส้ม']
 
 # แก้ไขค่า
 fruits[0] = "ชมพู่"
-print(fruits)
+print(fruits)` },
 
-# เมธอดสำคัญ
+                        { type: "section", num: "02", label: "Slicing", title: "ดึงสมาชิกหลายตัวพร้อมกันด้วย [start:stop]" },
+                        { type: "text", text: "Slicing ใช้รูปแบบ list[start:stop] ดึงตั้งแต่ตำแหน่ง start ถึงก่อนตำแหน่ง stop (ไม่รวม stop เหมือน range()):" },
+                        { type: "code", filename: "slicing.py", source:
+`fruits = ["แอปเปิล", "กล้วย", "ส้ม", "มะม่วง"]
+print(fruits[1:3])   # ['กล้วย', 'ส้ม']` },
+
+                        { type: "section", num: "03", label: "เมธอดสำคัญ", title: "เพิ่ม ลบ เรียงลำดับสมาชิกใน List" },
+                        { type: "concept-grid", items: [
+                            { icon: "➕", title: "append() / insert()", desc: "append() เพิ่มท้ายลิสต์ insert(pos, x) แทรกที่ตำแหน่งที่กำหนด" },
+                            { icon: "➖", title: "remove() / pop()", desc: "remove(x) ลบตามค่า pop() ลบและคืนค่าตัวสุดท้าย" },
+                            { icon: "🔀", title: "sort()", desc: "เรียงลำดับสมาชิก ใส่ reverse=True เพื่อเรียงจากมากไปน้อย" }
+                        ] },
+                        { type: "code", filename: "list_methods.py", source:
+`fruits = ["แอปเปิล", "กล้วย", "ส้ม", "มะม่วง"]
+
 fruits.append("องุ่น")      # เพิ่มท้าย
 fruits.insert(1, "ลิ้นจี่") # แทรกตำแหน่ง 1
 fruits.remove("กล้วย")      # ลบตามค่า
 popped = fruits.pop()        # ลบและคืนค่าตัวสุดท้าย
 
 print(len(fruits))           # จำนวนสมาชิก
-numbers.sort()               # เรียงน้อยไปมาก
-numbers.sort(reverse=True)   # เรียงมากไปน้อย
 
-# ตรวจสอบสมาชิก
-print("ส้ม" in fruits)       # True/False`
+numbers = [3, 1, 4, 1, 5]
+numbers.sort()               # เรียงน้อยไปมาก
+numbers.sort(reverse=True)   # เรียงมากไปน้อย` },
+
+                        { type: "section", num: "04", label: "ใช้งานจริง", title: "ตรวจสอบว่ามีสมาชิกอยู่ในลิสต์หรือไม่" },
+                        { type: "text", text: "ใช้ in ตรวจสอบว่าค่าที่ต้องการอยู่ใน list หรือไม่ ได้ผลลัพธ์เป็น True/False ทันที:" },
+                        { type: "code", filename: "membership.py", source:
+`fruits = ["แอปเปิล", "ส้ม", "มะม่วง"]
+print("ส้ม" in fruits)       # True
+print("กล้วย" in fruits)     # False` }
+                    ]
                 }
             },
             takeaways: [
@@ -736,43 +751,50 @@ print("ส้ม" in fruits)       # True/False`
             content: {
                 th: {
                     title: "Tuple และ Set",
-                    desc: `Tuple คล้าย List แต่ immutable (แก้ไขไม่ได้หลังสร้าง) สร้างด้วยวงเล็บ () หรือไม่ใส่วงเล็บก็ได้ ใช้เก็บข้อมูลที่ไม่ต้องการให้เปลี่ยน เช่น พิกัด RGB สี วันเกิด ข้อดีคือรวดเร็วกว่า List และป้องกันการแก้ไขผิดพลาด
-
-Set คือกลุ่มข้อมูลที่ไม่มีลำดับ (unordered) และไม่มีสมาชิกซ้ำ สร้างด้วยวงเล็บปีกกา {} หรือ set() Set ใช้งานได้ดีมากสำหรับการกรองค่าซ้ำออก และการดำเนินการเซต เช่น union (รวม) intersection (ร่วม) difference (ต่าง)
-
-ข้อควรสังเกต set() ใช้สร้าง Set ว่าง ไม่ใช้ {} เพราะ {} จะสร้าง Dictionary ว่างแทน`,
-                    code:
-`# Tuple — ข้อมูลที่แก้ไขไม่ได้
-point = (10, 20)
-rgb = (255, 128, 0)
+                    intro: "ไม่ใช่ทุกข้อมูลที่อยากให้แก้ไขได้ตลอดเวลาหรือมีค่าซ้ำ — Tuple และ Set คือโครงสร้างข้อมูลสองแบบที่ตอบโจทย์นี้พอดี",
+                    goals: ["เข้าใจความแตกต่างของ Tuple, List และ Set", "ใช้ Tuple เก็บข้อมูลที่ไม่ต้องการให้เปลี่ยนแปลง", "ใช้ Set กรองค่าซ้ำและดำเนินการเซตได้"],
+                    blocks: [
+                        { type: "section", num: "01", label: "Tuple", title: "ข้อมูลที่แก้ไขไม่ได้หลังสร้าง" },
+                        { type: "text", text: "Tuple คล้าย List แต่ immutable (แก้ไขไม่ได้หลังสร้าง) สร้างด้วยวงเล็บ () ใช้เก็บข้อมูลที่ไม่ต้องการให้เปลี่ยน เช่น พิกัด RGB สี หรือวันเกิด:" },
+                        { type: "code", filename: "tuple_basic.py", source:
+`point = (10, 20)
 person = ("Somchai", 18, "ลำพูน")
 
 print(point[0])      # 10
-print(rgb[-1])       # 0
-x, y = point         # Unpacking
+x, y = point         # Unpacking — แยกค่าใส่ตัวแปรได้เลย
 
-# ไม่สามารถแก้ไข Tuple ได้
-# point[0] = 5  # Error!
+# point[0] = 5  # Error! แก้ไข Tuple ไม่ได้
 
-# Tuple ที่มีสมาชิกตัวเดียว ต้องมี ,
+# Tuple ที่มีสมาชิกตัวเดียว ต้องมี , ต่อท้าย
 single = (42,)
-print(type(single))  # <class 'tuple'>
+print(type(single))  # <class 'tuple'>` },
 
-# Set — ไม่ซ้ำ ไม่มีลำดับ
-fruits = {"แอปเปิล", "กล้วย", "ส้ม", "แอปเปิล"}
+                        { type: "section", num: "02", label: "Set", title: "กลุ่มข้อมูลที่ไม่ซ้ำและไม่มีลำดับ" },
+                        { type: "text", text: "Set คือกลุ่มข้อมูลที่ไม่มีลำดับ (unordered) และไม่มีสมาชิกซ้ำ สร้างด้วยวงเล็บปีกกา {} — เหมาะมากสำหรับกรองค่าซ้ำออกจาก List:" },
+                        { type: "code", filename: "set_basic.py", source:
+`fruits = {"แอปเปิล", "กล้วย", "ส้ม", "แอปเปิล"}
 print(fruits)  # แอปเปิลจะมีแค่ตัวเดียว
 
 # กรองค่าซ้ำจาก List
 numbers = [1, 2, 2, 3, 3, 3, 4]
 unique = list(set(numbers))
-print(unique)  # [1, 2, 3, 4]
+print(unique)  # [1, 2, 3, 4]` },
+                        { type: "tip", kind: "warn", text: "set() ใช้สร้าง Set ว่าง ห้ามใช้ {} เฉย ๆ เพราะ {} ว่างจะสร้าง Dictionary ว่างแทน ไม่ใช่ Set" },
 
-# การดำเนินการเซต
-a = {1, 2, 3, 4}
+                        { type: "section", num: "03", label: "การดำเนินการเซต", title: "รวม ร่วม และต่าง ระหว่างสอง Set" },
+                        { type: "text", text: "Set รองรับการดำเนินการทางคณิตศาสตร์แบบเซตได้โดยตรง สะดวกมากเมื่อต้องเทียบข้อมูลสองกลุ่ม:" },
+                        { type: "concept-grid", items: [
+                            { icon: "∪", title: "| Union", desc: "รวมสมาชิกจากทั้งสอง Set เข้าด้วยกัน" },
+                            { icon: "∩", title: "& Intersection", desc: "เอาเฉพาะสมาชิกที่มีอยู่ในทั้งสอง Set" },
+                            { icon: "−", title: "- Difference", desc: "เอาเฉพาะสมาชิกที่มีในตัวแรกแต่ไม่มีในตัวที่สอง" }
+                        ] },
+                        { type: "code", filename: "set_ops.py", source:
+`a = {1, 2, 3, 4}
 b = {3, 4, 5, 6}
 print(a | b)   # Union: {1,2,3,4,5,6}
 print(a & b)   # Intersection: {3,4}
-print(a - b)   # Difference: {1,2}`
+print(a - b)   # Difference: {1,2}` }
+                    ]
                 }
             },
             takeaways: [
@@ -789,49 +811,52 @@ print(a - b)   # Difference: {1,2}`
             content: {
                 th: {
                     title: "Dictionary — ข้อมูลแบบ Key-Value",
-                    desc: `Dictionary เก็บข้อมูลเป็นคู่ key:value สร้างด้วยวงเล็บปีกกา {} โดย key ต้องไม่ซ้ำกันและต้องเป็นชนิดข้อมูลที่ hashable เช่น string หรือ number ส่วน value เป็นอะไรก็ได้
-
-เข้าถึงค่าด้วย dict[key] หรือ dict.get(key) ซึ่งปลอดภัยกว่าเพราะคืน None แทน error เมื่อไม่เจอ key
-
-เมธอดสำคัญ: keys() คืน key ทั้งหมด, values() คืน value ทั้งหมด, items() คืนคู่ (key, value) ทั้งหมด, update() อัพเดตหลาย key พร้อมกัน, pop() ลบ key
-
-Dictionary ใช้งานมากในการเก็บข้อมูล JSON, การนับความถี่ และการ mapping ข้อมูล`,
-                    code:
-`# สร้าง Dictionary
-student = {
+                    intro: "เวลาต้องการเก็บข้อมูลแบบมีชื่อกำกับ เช่น \"name\" คู่กับ \"Somchai\" แทนที่จะจำแค่ตำแหน่ง index — Dictionary คือคำตอบ",
+                    goals: ["สร้างและเข้าถึงค่าใน Dictionary ได้", "ใช้ .get() ป้องกัน error เมื่อไม่เจอ key", "วนลูปผ่าน Dictionary ด้วย items() ได้"],
+                    blocks: [
+                        { type: "section", num: "01", label: "แนวคิด", title: "Dictionary เก็บข้อมูลเป็นคู่ key:value" },
+                        { type: "text", text: "Dictionary สร้างด้วยวงเล็บปีกกา {} โดย key ต้องไม่ซ้ำกัน ส่วน value เป็นอะไรก็ได้ เข้าถึงค่าด้วย dict[key] หรือ dict.get(key):" },
+                        { type: "code", filename: "dict_basic.py", source:
+`student = {
     "name": "Somchai",
     "age": 18,
-    "score": 92.5,
-    "city": "ลำพูน",
-    "passed": True
+    "score": 92.5
 }
 
-# เข้าถึงค่า
 print(student["name"])          # Somchai
 print(student.get("phone"))     # None (ไม่ error)
-print(student.get("phone", "ไม่มีเบอร์"))
+print(student.get("phone", "ไม่มีเบอร์"))` },
+                        { type: "tip", kind: "note", text: "dict.get(key) ปลอดภัยกว่า dict[key] เพราะเมื่อไม่เจอ key มันจะคืนค่า None (หรือค่า default ที่กำหนด) แทนที่จะทำให้โปรแกรม error ทันที" },
+
+                        { type: "section", num: "02", label: "แก้ไขข้อมูล", title: "เพิ่ม แก้ไข และลบข้อมูลใน Dictionary" },
+                        { type: "code", filename: "dict_update.py", source:
+`student = {"name": "Somchai", "age": 18, "city": "ลำพูน"}
 
 # แก้ไขและเพิ่ม
 student["age"] = 19
-student["email"] = "zen@mail.com"
+student["email"] = "somchai@mail.com"
 
 # ลบ
 del student["city"]
-removed = student.pop("passed")
+removed = student.pop("age")` },
 
-# วนลูปผ่าน Dictionary
-for key in student:
-    print(f"{key}: {student[key]}")
+                        { type: "section", num: "03", label: "วนลูป", title: "วนลูปผ่าน Dictionary ด้วย items()" },
+                        { type: "text", text: "การวนลูปตรง ๆ จะได้แค่ key แต่ .items() ให้ทั้ง key และ value มาพร้อมกันในรอบเดียว:" },
+                        { type: "code", filename: "dict_loop.py", source:
+`student = {"name": "Somchai", "age": 19, "score": 92.5}
 
 for key, value in student.items():
-    print(f"  {key} = {value}")
+    print(f"  {key} = {value}")` },
 
-# นับความถี่ของตัวอักษร
-word = "programming"
+                        { type: "section", num: "04", label: "ใช้งานจริง", title: "นับความถี่ตัวอักษรด้วย Dictionary" },
+                        { type: "text", text: "Dictionary เหมาะมากกับงานนับความถี่ — ใช้ .get(char, 0) เพื่อเริ่มนับที่ 0 ถ้ายังไม่เคยเจอตัวอักษรนั้นมาก่อน:" },
+                        { type: "code", filename: "count_freq.py", source:
+`word = "programming"
 freq = {}
 for char in word:
     freq[char] = freq.get(char, 0) + 1
-print(freq)`
+print(freq)` }
+                    ]
                 }
             },
             takeaways: [
@@ -848,44 +873,46 @@ print(freq)`
             content: {
                 th: {
                     title: "String Methods — เครื่องมือจัดการข้อความ",
-                    desc: `String ใน Python มีเมธอดในตัวมากมายสำหรับจัดการข้อความ String เป็น immutable ดังนั้นเมธอดทุกตัวจะคืน String ใหม่ ไม่ได้แก้ไข String เดิม
-
-เมธอดที่ใช้บ่อยที่สุด: upper() แปลงเป็นตัวใหญ่, lower() ตัวเล็ก, strip() ลบช่องว่างหน้าหลัง, split() แยกเป็น List, join() รวม List เป็น String, replace() แทนที่, find() หาตำแหน่ง, startswith() และ endswith() ตรวจสอบต้นและท้าย
-
-String formatting มีหลายวิธี แต่ f-string เป็นวิธีที่แนะนำมากที่สุดในปัจจุบัน เพราะอ่านง่ายและรวดเร็ว`,
-                    code:
+                    intro: "String ใน Python มาพร้อมเมธอดในตัวมากมายที่ช่วยจัดการข้อความโดยไม่ต้องเขียนลูปเองเลย — บทนี้รวมเมธอดที่ใช้บ่อยที่สุด",
+                    goals: ["ใช้เมธอดจัดรูปแบบข้อความพื้นฐานได้", "ค้นหาและแทนที่ข้อความได้", "แยกและรวมข้อความด้วย split()/join() ได้"],
+                    blocks: [
+                        { type: "section", num: "01", label: "จัดรูปแบบ", title: "upper(), lower(), strip(), title()" },
+                        { type: "text", text: "String เป็น immutable ดังนั้นเมธอดทุกตัวจะคืน String ใหม่เสมอ ไม่ได้แก้ String เดิม:" },
+                        { type: "code", filename: "format_basic.py", source:
 `text = "  Hello, Python World!  "
 
-# จัดรูปแบบพื้นฐาน
 print(text.strip())          # ลบช่องว่างหน้าหลัง
 print(text.upper())          # ตัวใหญ่ทั้งหมด
 print(text.lower())          # ตัวเล็กทั้งหมด
-print(text.title())          # ตัวใหญ่ต้นคำ
+print(text.title())          # ตัวใหญ่ต้นคำ` },
 
-# ค้นหาและแทนที่
-msg = "Python is great. Python is fun."
-print(msg.count("Python"))          # 2
-print(msg.find("great"))            # ตำแหน่ง
-print(msg.replace("Python", "Java")) # แทนที่
+                        { type: "section", num: "02", label: "ค้นหา/แทนที่", title: "count(), find(), replace()" },
+                        { type: "code", filename: "search_replace.py", source:
+`msg = "Python is great. Python is fun."
+print(msg.count("Python"))           # 2
+print(msg.find("great"))             # ตำแหน่งที่เจอ
+print(msg.replace("Python", "Java")) # แทนที่ทุกจุดที่เจอ` },
 
-# แยกและรวม
-csv = "แอปเปิล,กล้วย,ส้ม,มะม่วง"
+                        { type: "section", num: "03", label: "แยก/รวม", title: "split() แยกเป็น List, join() รวมกลับเป็น String" },
+                        { type: "code", filename: "split_join.py", source:
+`csv = "แอปเปิล,กล้วย,ส้ม,มะม่วง"
 fruits = csv.split(",")
 print(fruits)  # ['แอปเปิล', 'กล้วย', 'ส้ม', 'มะม่วง']
 
 rejoined = " | ".join(fruits)
-print(rejoined)  # แอปเปิล | กล้วย | ส้ม | มะม่วง
+print(rejoined)  # แอปเปิล | กล้วย | ส้ม | มะม่วง` },
 
-# ตรวจสอบ
-email = "user@example.com"
+                        { type: "section", num: "04", label: "ตรวจสอบและจัดรูปแบบ", title: "endswith(), isdigit() และ f-string ขั้นสูง" },
+                        { type: "text", text: "นอกจากเมธอดตรวจสอบข้อความแล้ว f-string ยังจัดรูปแบบตัวเลขและจัดตำแหน่งข้อความได้ในตัว:" },
+                        { type: "code", filename: "check_format.py", source:
+`email = "user@example.com"
 print(email.endswith(".com"))    # True
 print("123".isdigit())           # True
-print("abc".isalpha())           # True
 
-# f-string ขั้นสูง
 pi = 3.14159
 print(f"Pi = {pi:.2f}")         # 3.14
-print(f"{'กลาง':^20}")          # จัดกึ่งกลาง`
+print(f"{'กลาง':^20}")          # จัดข้อความให้อยู่กึ่งกลาง` }
+                    ]
                 }
             },
             takeaways: [
@@ -902,43 +929,46 @@ print(f"{'กลาง':^20}")          # จัดกึ่งกลาง`
             content: {
                 th: {
                     title: "List Comprehension — Python Style",
-                    desc: `List Comprehension คือวิธีการสร้าง List แบบกระชับและ Pythonic โดยรวม for loop และเงื่อนไขไว้ในบรรทัดเดียว ทำงานได้เร็วกว่าการใช้ for loop ธรรมดา และโค้ดสั้นกว่ามาก
-
-รูปแบบพื้นฐาน: [expression for item in iterable]
-รูปแบบกับเงื่อนไข: [expression for item in iterable if condition]
-
-นอกจาก List Comprehension ยังมี Dictionary Comprehension และ Set Comprehension ที่ใช้รูปแบบเดียวกัน
-
-Generator Expression คล้ายกันแต่ใช้วงเล็บ () แทน [] จะไม่สร้าง List ทันที แต่สร้างค่าทีละตัวเมื่อต้องการ ประหยัดหน่วยความจำมากกว่า`,
-                    code:
+                    intro: "เขียน for loop สร้าง list ทีละ 3 บรรทัดมานานพอแล้ว — List Comprehension ย่อให้เหลือบรรทัดเดียว และเป็นสไตล์การเขียนโค้ดที่ Pythonic ที่สุด",
+                    goals: ["เขียน list comprehension แทน for loop ธรรมดาได้", "เพิ่มเงื่อนไขกรองใน comprehension ได้", "เข้าใจ dictionary comprehension เบื้องต้น"],
+                    blocks: [
+                        { type: "section", num: "01", label: "แนวคิด", title: "จาก for loop 3 บรรทัด เหลือบรรทัดเดียว" },
+                        { type: "text", text: "List Comprehension รวม for loop ไว้ในบรรทัดเดียวด้วยรูปแบบ [expression for item in iterable] ลองเทียบกับ for loop ธรรมดาดู:" },
+                        { type: "code", filename: "comprehension_vs_loop.py", source:
 `# for loop ธรรมดา
 squares = []
 for i in range(1, 6):
     squares.append(i ** 2)
 print(squares)  # [1, 4, 9, 16, 25]
 
-# List Comprehension — กระชับกว่า!
+# List Comprehension — ผลลัพธ์เหมือนกัน กระชับกว่า!
 squares = [i ** 2 for i in range(1, 6)]
-print(squares)  # [1, 4, 9, 16, 25]
+print(squares)  # [1, 4, 9, 16, 25]` },
 
-# เพิ่มเงื่อนไข
-evens = [i for i in range(1, 11) if i % 2 == 0]
+                        { type: "section", num: "02", label: "เพิ่มเงื่อนไข", title: "กรองข้อมูลด้วย if ต่อท้าย" },
+                        { type: "text", text: "เพิ่ม if ต่อท้ายเพื่อกรองเฉพาะสมาชิกที่ต้องการ รูปแบบเต็มคือ [expression for item in iterable if condition]:" },
+                        { type: "code", filename: "comprehension_filter.py", source:
+`evens = [i for i in range(1, 11) if i % 2 == 0]
 print(evens)    # [2, 4, 6, 8, 10]
 
-# แปลงข้อมูล
-names = ["somchai", "python", "code"]
-upper_names = [name.upper() for name in names]
-print(upper_names)  # ['SOMCHAI', 'PYTHON', 'CODE']
-
-# กรองและแปลง
 scores = [85, 42, 91, 38, 76, 55, 88]
 passing = [s for s in scores if s >= 60]
-print(passing)  # [85, 91, 76, 55, 88]
+print(passing)  # [85, 91, 76, 55, 88]` },
 
-# Dictionary Comprehension
-words = ["apple", "cat", "elephant"]
+                        { type: "section", num: "03", label: "แปลงข้อมูล", title: "ใช้ comprehension แปลงข้อมูลทั้ง list" },
+                        { type: "code", filename: "comprehension_transform.py", source:
+`names = ["somchai", "python", "code"]
+upper_names = [name.upper() for name in names]
+print(upper_names)  # ['SOMCHAI', 'PYTHON', 'CODE']` },
+
+                        { type: "section", num: "04", label: "Dictionary Comprehension", title: "หลักการเดียวกัน ใช้สร้าง Dictionary ได้ด้วย" },
+                        { type: "text", text: "รูปแบบเดียวกันนี้ใช้สร้าง Dictionary ได้ทันที แค่เปลี่ยนจาก [] เป็น {} และใส่ key:value:" },
+                        { type: "code", filename: "dict_comprehension.py", source:
+`words = ["apple", "cat", "elephant"]
 lengths = {w: len(w) for w in words}
-print(lengths)  # {'apple': 5, 'cat': 3, 'elephant': 8}`
+print(lengths)  # {'apple': 5, 'cat': 3, 'elephant': 8}` },
+                        { type: "tip", kind: "note", text: "Generator Expression คล้ายกันแต่ใช้วงเล็บ () แทน [] เช่น (i**2 for i in range(5)) — จะไม่สร้าง list ทันทีแต่สร้างค่าทีละตัวเมื่อต้องการ ประหยัดหน่วยความจำกว่าเมื่อข้อมูลมีขนาดใหญ่มาก" }
+                    ]
                 }
             },
             takeaways: [

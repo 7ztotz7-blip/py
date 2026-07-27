@@ -202,13 +202,13 @@
     ? unitTests[unitId][testType].map(item=>({
         q:item.q, code:false, diff: testType==='pre'?'แบบวินิจฉัย':'ทบทวนความเข้าใจ',
         opts:item.options, correct:item.ans,
-        exp:'คำตอบที่ถูกต้องคือ "'+item.options[item.ans]+'"'
+        exp:item.explanation||('คำตอบที่ถูกต้องคือ "'+item.options[item.ans]+'"')
       }))
     : isFinalExam
     ? finalExam.map(item=>({
         q:item.q, code:false, diff:'ข้อสอบรวม',
         opts:item.options, correct:item.ans,
-        exp:'คำตอบที่ถูกต้องคือ "'+item.options[item.ans]+'"'
+        exp:item.explanation||('คำตอบที่ถูกต้องคือ "'+item.options[item.ans]+'"')
       }))
     : DEFAULT_QUESTIONS;
 

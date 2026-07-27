@@ -352,16 +352,14 @@ print(score >= 60 and score < 80)  # True (อยู่ในช่วงเก�
             content: {
                 th: {
                     title: "การตัดสินใจด้วย if / elif / else",
-                    desc: `คำสั่ง if ใช้ให้โปรแกรมตัดสินใจตามเงื่อนไข หากเงื่อนไขเป็น True จะทำงานในบล็อกนั้น หากเป็น False จะข้ามไป สิ่งสำคัญมากใน Python คือการย่อหน้า (Indentation) ด้วย Spacebar 4 ครั้ง เพื่อบอกว่าโค้ดบรรทัดไหนอยู่ภายใน if
-
-elif (ย่อจาก else if) ใช้เพิ่มเงื่อนไขทางเลือก Python จะตรวจสอบเงื่อนไขตามลำดับจากบนลงล่าง หากพบเงื่อนไขที่เป็นจริงก็จะทำงานและข้ามเงื่อนไขที่เหลือ
-
-else คือบล็อกสุดท้ายที่จะทำงานเมื่อไม่มีเงื่อนไขใดเป็นจริงเลย ไม่จำเป็นต้องมีเสมอ แต่มักใช้เพื่อรองรับกรณีที่ไม่ได้คาดไว้
-
-Nested if คือ if ซ้อนภายใน if อีกทีหนึ่ง ใช้เมื่อต้องการตรวจสอบเงื่อนไขย่อยภายในเงื่อนไขหลัก`,
-                    code:
-`# if พื้นฐาน
-score = 75
+                    intro: "โปรแกรมที่ฉลาดต้องตัดสินใจได้เอง — if คือคำสั่งที่ทำให้โค้ดของคุณเลือกทำงานต่างกันไปตามสถานการณ์ ไม่ใช่ทำอย่างเดียวกันทุกครั้ง",
+                    goals: ["เขียนเงื่อนไข if/elif/else ได้", "เข้าใจความสำคัญของ indentation", "ใช้ nested if และ ternary operator ได้"],
+                    blocks: [
+                        { type: "section", num: "01", label: "แนวคิด", title: "if ตรวจสอบเงื่อนไข ทำงานเมื่อเป็นจริง" },
+                        { type: "text", text: "คำสั่ง if ใช้ให้โปรแกรมตัดสินใจตามเงื่อนไข หากเงื่อนไขเป็น True จะทำงานในบล็อกที่ย่อหน้าไว้ หากเป็น False จะข้ามไปทันที" },
+                        { type: "text", text: "elif (ย่อจาก else if) ใช้เพิ่มเงื่อนไขทางเลือก Python ตรวจสอบตามลำดับจากบนลงล่าง พบข้อแรกที่จริงก็ทำงานแล้วข้ามที่เหลือทั้งหมด ส่วน else คือทางเลือกสุดท้ายเมื่อไม่มีเงื่อนไขใดเป็นจริงเลย:" },
+                        { type: "code", filename: "grade.py", source:
+`score = 75
 
 if score >= 80:
     print("เกรด A — ยอดเยี่ยม!")
@@ -372,21 +370,29 @@ elif score >= 60:
 elif score >= 50:
     print("เกรด D — อ่อน")
 else:
-    print("เกรด F — ตก")
+    print("เกรด F — ตก")` },
+                        { type: "tip", kind: "warn", text: "Python ใช้การย่อหน้า (Indentation) ด้วย 4 ช่องว่างบอกว่าโค้ดบรรทัดไหนอยู่ภายใน if — ย่อหน้าไม่ตรงกันจะทำให้เกิด IndentationError ทันที" },
 
-# ตัวอย่างจริง: ตรวจสอบอายุ
-age = 20
+                        { type: "section", num: "02", label: "if ซ้อน if", title: "Nested if — ตรวจสอบเงื่อนไขย่อยภายในเงื่อนไขหลัก" },
+                        { type: "text", text: "บางสถานการณ์ต้องตรวจสอบเงื่อนไขซ้อนกันหลายชั้น เช่น ต้องผ่านเงื่อนไขแรกก่อนถึงจะไปตรวจเงื่อนไขที่สองต่อ:" },
+                        { type: "code", filename: "nested_if.py", source:
+`age = 20
+
 if age >= 18:
     if age >= 60:
         print("ผู้สูงอายุ")
     else:
         print("ผู้ใหญ่")
 else:
-    print("ยังไม่บรรลุนิติภาวะ")
+    print("ยังไม่บรรลุนิติภาวะ")` },
 
-# Ternary Operator (if แบบสั้น)
+                        { type: "section", num: "03", label: "เขียนให้สั้นลง", title: "Ternary Operator — if แบบบรรทัดเดียว" },
+                        { type: "text", text: "ถ้าเงื่อนไขง่าย ๆ แค่เลือกค่าใดค่าหนึ่ง ไม่จำเป็นต้องเขียน if หลายบรรทัด ใช้ ternary operator ย่อให้เหลือบรรทัดเดียวได้:" },
+                        { type: "code", filename: "ternary.py", source:
+`score = 75
 status = "ผ่าน" if score >= 60 else "ไม่ผ่าน"
-print(f"สถานะ: {status}")`
+print(f"สถานะ: {status}")` }
+                    ]
                 }
             },
             takeaways: [
@@ -489,16 +495,13 @@ print(f"ผลรวม 1-100 = {total}")  # 5050` }
             content: {
                 th: {
                     title: "การวนซ้ำด้วย while loop",
-                    desc: `while loop จะทำงานซ้ำตราบใดที่เงื่อนไขยังคงเป็น True เหมาะเมื่อไม่รู้จำนวนรอบล่วงหน้า เช่น รอรับข้อมูลจากผู้ใช้จนกว่าจะถูกต้อง
-
-ข้อควรระวังสำคัญมากคือ Infinite Loop (ลูปไม่มีที่สิ้นสุด) เกิดขึ้นเมื่อเงื่อนไขเป็น True ตลอดไปโดยไม่มีการเปลี่ยนแปลง ต้องแน่ใจว่าภายในลูปมีการเปลี่ยนแปลงค่าที่ทำให้เงื่อนไขเป็น False ในที่สุด
-
-do-while ใน Python ไม่มีคำสั่ง do-while ตรงๆ แต่เราจำลองได้ด้วย while True: ร่วมกับ break
-
-while loop ใช้บ่อยมากในการทำ input validation (ตรวจสอบข้อมูลที่รับเข้ามา) และการทำเมนูโปรแกรม`,
-                    code:
-`# while พื้นฐาน
-count = 1
+                    intro: "for loop ต้องรู้จำนวนรอบล่วงหน้า แต่ถ้าไม่รู้ล่ะ? — while loop คือคำตอบ มันวนซ้ำไปเรื่อย ๆ ตราบใดที่เงื่อนไขยังเป็นจริง",
+                    goals: ["ใช้ while loop ทำงานซ้ำตามเงื่อนไขได้", "หลีกเลี่ยง infinite loop ได้", "ใช้ while True + break ทำ input validation ได้"],
+                    blocks: [
+                        { type: "section", num: "01", label: "แนวคิด", title: "while ทำงานซ้ำตราบใดที่เงื่อนไขยังจริง" },
+                        { type: "text", text: "while เหมาะเมื่อไม่รู้จำนวนรอบล่วงหน้า เช่น รอรับข้อมูลจากผู้ใช้จนกว่าจะถูกต้อง — ต่างจาก for ที่กำหนดจำนวนรอบตายตัวไว้ก่อน:" },
+                        { type: "code", filename: "while_basic.py", source:
+`count = 1
 while count <= 5:
     print(f"รอบที่ {count}")
     count += 1    # สำคัญ! ต้องเพิ่มไม่งั้น infinite loop
@@ -508,18 +511,23 @@ n = 10
 while n > 0:
     print(n, end=" ")
     n -= 1
-print("Go!")
+print("Go!")` },
+                        { type: "tip", kind: "warn", text: "Infinite Loop (ลูปไม่มีที่สิ้นสุด) เกิดขึ้นเมื่อเงื่อนไขเป็น True ตลอดไปโดยไม่มีการเปลี่ยนแปลง ต้องแน่ใจเสมอว่าภายในลูปมีจุดที่ทำให้เงื่อนไขกลายเป็น False ในที่สุด เช่น count += 1 ในตัวอย่างด้านบน" },
 
-# Input Validation — รับจนกว่าจะถูก
-while True:
+                        { type: "section", num: "02", label: "ใช้งานจริง", title: "while True + break ทำ Input Validation" },
+                        { type: "text", text: "Python ไม่มีคำสั่ง do-while ตรง ๆ แต่จำลองได้ด้วย while True: ร่วมกับ break — วนรับค่าไปเรื่อย ๆ จนกว่าจะถูกต้องแล้วค่อยออกจากลูป:" },
+                        { type: "code", filename: "input_validation.py", source:
+`while True:
     age = int(input("ใส่อายุ (1-120): "))
     if 1 <= age <= 120:
         print(f"อายุ {age} ปี รับแล้ว!")
         break
-    print("อายุไม่ถูกต้อง ลองใหม่")
+    print("อายุไม่ถูกต้อง ลองใหม่")` },
 
-# เมนูโปรแกรม
-while True:
+                        { type: "section", num: "03", label: "ใช้งานจริง", title: "เมนูโปรแกรมที่วนจนกว่าผู้ใช้จะเลือกออก" },
+                        { type: "text", text: "รูปแบบ while True + break เดียวกันนี้ใช้ทำเมนูโปรแกรมได้ด้วย โดยให้ผู้ใช้เลือกซ้ำไปเรื่อย ๆ จนกว่าจะเลือกออก:" },
+                        { type: "code", filename: "menu.py", source:
+`while True:
     print("\\n1. เพิ่มข้อมูล")
     print("2. ดูข้อมูล")
     print("0. ออก")
@@ -528,7 +536,8 @@ while True:
         print("ขอบคุณ!")
         break
     elif choice == "1":
-        print("เพิ่มข้อมูล...")`
+        print("เพิ่มข้อมูล...")` }
+                    ]
                 }
             },
             takeaways: [
@@ -545,39 +554,46 @@ while True:
             content: {
                 th: {
                     title: "คำสั่งควบคุมลูป: break, continue, pass",
-                    desc: `Python มีคำสั่งพิเศษ 3 ตัวสำหรับควบคุมการทำงานของลูป
+                    intro: "บางครั้งลูปธรรมดายังไม่พอ — Python มีคำสั่งพิเศษ 3 ตัวให้ควบคุมการทำงานของลูปได้ละเอียดขึ้น: หยุดทันที ข้ามรอบ หรือไม่ทำอะไรเลย",
+                    goals: ["ใช้ break ออกจากลูปก่อนครบรอบได้", "ใช้ continue ข้ามรอบที่ไม่ต้องการได้", "เข้าใจ pass และ for-else"],
+                    blocks: [
+                        { type: "section", num: "01", label: "ภาพรวม", title: "break, continue, pass ต่างกันอย่างไร" },
+                        { type: "concept-grid", items: [
+                            { icon: "⏹️", title: "break", desc: "หยุดลูปทันทีและออกจากลูปเลย แม้ยังไม่ครบจำนวนรอบ" },
+                            { icon: "⏭️", title: "continue", desc: "ข้ามการทำงานรอบนี้ ไปเริ่มรอบถัดไปทันที โดยไม่ออกจากลูป" },
+                            { icon: "➖", title: "pass", desc: "ไม่ทำอะไรเลย ใช้เป็น placeholder เมื่อไวยากรณ์ต้องการโค้ดแต่ยังไม่อยากเขียน" }
+                        ] },
 
-break — หยุดลูปทันทีและออกจากลูป แม้ยังไม่ครบจำนวนรอบ ใช้เมื่อหาสิ่งที่ต้องการพบแล้ว หรือเจอเงื่อนไขที่ต้องหยุด
-
-continue — ข้ามการทำงานในรอบปัจจุบันและไปเริ่มรอบถัดไปทันที โดยไม่หยุดลูป ใช้เมื่อต้องการข้ามค่าบางค่าในลูป
-
-pass — ไม่ทำอะไรเลย ใช้เป็น placeholder เมื่อ Python ต้องการโค้ดอย่างน้อย 1 บรรทัดในบล็อก แต่เราไม่อยากทำอะไรในตอนนี้ เช่น ฟังก์ชันหรือ if ที่ยังไม่ได้เขียน
-
-for-else และ while-else คือ feature พิเศษของ Python โดย else จะทำงานเมื่อลูปจบตามปกติ (ไม่ได้จบด้วย break)`,
-                    code:
-`# break — หยุดลูป
-print("หา 7 ใน 1-10:")
+                        { type: "section", num: "02", label: "break", title: "หยุดลูปทันทีเมื่อเจอสิ่งที่ต้องการ" },
+                        { type: "text", text: "ใช้ break เมื่อหาสิ่งที่ต้องการเจอแล้วและไม่จำเป็นต้องวนต่อ:" },
+                        { type: "code", filename: "break_ex.py", source:
+`print("หา 7 ใน 1-10:")
 for i in range(1, 11):
     if i == 7:
         print(f"เจอ {i} แล้ว!")
         break
-    print(i, end=" ")
+    print(i, end=" ")` },
 
-# continue — ข้ามรอบ
-print("\\nเลขคู่ใน 1-10:")
+                        { type: "section", num: "03", label: "continue", title: "ข้ามรอบที่ไม่ต้องการ แต่ลูปยังทำงานต่อ" },
+                        { type: "text", text: "ใช้ continue เมื่อต้องการข้ามค่าบางค่าในลูปโดยไม่หยุดลูปทั้งหมด:" },
+                        { type: "code", filename: "continue_ex.py", source:
+`print("เลขคู่ใน 1-10:")
 for i in range(1, 11):
     if i % 2 != 0:
         continue    # ข้ามเลขคี่
-    print(i, end=" ")
+    print(i, end=" ")` },
 
-# pass — ไม่ทำอะไร (placeholder)
+                        { type: "section", num: "04", label: "pass และ for-else", title: "placeholder และ feature พิเศษของลูป" },
+                        { type: "text", text: "pass ใช้เมื่อ Python ต้องการโค้ดอย่างน้อย 1 บรรทัดในบล็อกแต่ยังไม่อยากเขียนอะไรตอนนี้ ส่วน for-else เป็น feature พิเศษ: else จะทำงานก็ต่อเมื่อลูปจบตามปกติ ไม่ได้จบด้วย break:" },
+                        { type: "code", filename: "pass_forelse.py", source:
+`# pass — ไม่ทำอะไร (placeholder)
 for i in range(5):
     if i == 3:
         pass        # TODO: ทำอะไรบางอย่างทีหลัง
     else:
         print(i, end=" ")
 
-# for-else
+# for-else — else ทำงานเมื่อลูปจบโดยไม่มี break
 numbers = [1, 3, 5, 7, 9]
 target = 6
 for num in numbers:
@@ -585,7 +601,8 @@ for num in numbers:
         print(f"เจอ {target}")
         break
 else:
-    print(f"ไม่เจอ {target} ในลิสต์")`
+    print(f"ไม่เจอ {target} ในลิสต์")` }
+                    ]
                 }
             },
             takeaways: [
@@ -602,22 +619,22 @@ else:
             content: {
                 th: {
                     title: "ลูปซ้อนกัน (Nested Loop)",
-                    desc: `Nested Loop คือลูปที่อยู่ภายในลูปอีกชั้นหนึ่ง ลูปด้านนอกเรียกว่า outer loop และลูปด้านในเรียกว่า inner loop
-
-การทำงาน: ในแต่ละรอบของ outer loop, inner loop จะวนครบทั้งหมดก่อน แล้วจึงไปรอบถัดไปของ outer loop ถ้า outer loop วน 3 รอบ และ inner loop วน 4 รอบ โค้ดใน inner loop จะถูกรัน 3 × 4 = 12 ครั้ง
-
-Nested loop ใช้งานบ่อยในการสร้าง pattern รูปแบบต่างๆ, ประมวลผลตาราง 2 มิติ (matrix), และการเปรียบเทียบข้อมูลหลายชุด
-
-ควรระวัง: Nested loop ที่ลึกหลายชั้นอาจทำให้โปรแกรมช้าลง และโค้ดอ่านยากขึ้น ควรใช้เมื่อจำเป็นจริงๆ`,
-                    code:
-`# สร้างตาราง 3x3
-for i in range(1, 4):           # outer loop
+                    intro: "อยากสร้างตาราง วาดลวดลาย หรือประมวลผลข้อมูลเป็นแถว-คอลัมน์? — ต้องใช้ลูปซ้อนลูป (Nested Loop) ซึ่งเป็นเทคนิคที่ใช้บ่อยมากในงานจริง",
+                    goals: ["เข้าใจการทำงานของ nested loop ได้", "สร้างลวดลายด้วย nested loop ได้", "ประมวลผลข้อมูล 2 มิติ (matrix) ได้"],
+                    blocks: [
+                        { type: "section", num: "01", label: "แนวคิด", title: "outer loop กับ inner loop ทำงานร่วมกันอย่างไร" },
+                        { type: "text", text: "Nested Loop คือลูปที่อยู่ภายในลูปอีกชั้นหนึ่ง ลูปด้านนอกเรียกว่า outer loop และลูปด้านในเรียกว่า inner loop ในแต่ละรอบของ outer loop, inner loop จะวนครบทั้งหมดก่อนแล้วจึงไปรอบถัดไปของ outer loop:" },
+                        { type: "code", filename: "table.py", source:
+`for i in range(1, 4):           # outer loop
     for j in range(1, 4):       # inner loop
         print(f"{i}x{j}={i*j}", end="  ")
-    print()  # ขึ้นบรรทัดใหม่
+    print()  # ขึ้นบรรทัดใหม่เมื่อ inner loop วนจบ 1 รอบ` },
+                        { type: "tip", kind: "note", text: "ถ้า outer loop วน 3 รอบ และ inner loop วน 4 รอบ โค้ดใน inner loop จะถูกรันรวม 3 × 4 = 12 ครั้งเสมอ — คูณจำนวนรอบของทั้งสองลูปเข้าด้วยกัน" },
 
-# สร้างรูปสามเหลี่ยมดาว
-rows = 5
+                        { type: "section", num: "02", label: "สร้างลวดลาย", title: "วาดรูปสามเหลี่ยมดาวด้วย Nested Loop" },
+                        { type: "text", text: "Nested loop ใช้สร้าง pattern ต่าง ๆ ได้ดีมาก โดยควบคุมจำนวนที่พิมพ์ในแต่ละแถวด้วยตัวแปรของ outer loop:" },
+                        { type: "code", filename: "triangle.py", source:
+`rows = 5
 for i in range(1, rows + 1):
     for j in range(i):
         print("*", end="")
@@ -626,15 +643,18 @@ for i in range(1, rows + 1):
 # **
 # ***
 # ****
-# *****
+# *****` },
 
-# ตารางสูตรคูณ
+                        { type: "section", num: "03", label: "ใช้งานจริง", title: "ตารางสูตรคูณและข้อมูล 2 มิติ (Matrix)" },
+                        { type: "text", text: "อีกตัวอย่างที่พบบ่อยคือตารางสูตรคูณ และการวนผ่านข้อมูลที่เก็บเป็นตาราง (List ซ้อน List หรือ matrix):" },
+                        { type: "code", filename: "matrix.py", source:
+`# ตารางสูตรคูณ
 for i in range(1, 4):
     for j in range(1, 11):
         print(f"{i}x{j:2d}={i*j:3d}", end="  ")
     print()
 
-# ค้นหาในตาราง 2 มิติ
+# วนผ่านข้อมูล 2 มิติ
 matrix = [
     [1, 2, 3],
     [4, 5, 6],
@@ -643,7 +663,9 @@ matrix = [
 for row in matrix:
     for num in row:
         print(num, end=" ")
-    print()`
+    print()` },
+                        { type: "tip", kind: "warn", text: "Nested loop ที่ลึกหลายชั้น (3-4 ชั้นขึ้นไป) อาจทำให้โปรแกรมช้าลงมากและโค้ดอ่านยากขึ้น ควรใช้เท่าที่จำเป็นจริง ๆ เท่านั้น" }
+                    ]
                 }
             },
             takeaways: [

@@ -60,7 +60,7 @@ print(3.14)
 แนวทางการตั้งชื่อที่ดี ควรใช้ชื่อที่สื่อความหมาย เช่น student_name แทน n, และใช้รูปแบบ snake_case (ตัวเล็กทั้งหมด คั่นด้วย underscore) สำหรับตัวแปรทั่วไป`,
                     code:
 `# การสร้างตัวแปรใน Python
-name = "Zenith"          # เก็บข้อความ
+name = "Somchai"          # เก็บข้อความ
 age = 18                  # เก็บตัวเลขจำนวนเต็ม
 height = 175.5            # เก็บทศนิยม
 is_student = True         # เก็บค่าจริง/เท็จ
@@ -111,7 +111,7 @@ n = "Somchai"              # ไม่ดี — ไม่รู้ว่า n �
 เราสามารถตรวจสอบชนิดข้อมูลด้วยฟังก์ชัน type() และแปลงชนิดข้อมูลด้วยฟังก์ชัน int(), float(), str(), bool()`,
                     code:
 `# String — ข้อความ
-name = "Zenith Academy"
+name = "py Academy"
 city = 'ลำพูน'
 print(type(name))          # <class 'str'>
 
@@ -673,7 +673,7 @@ Set คือกลุ่มข้อมูลที่ไม่มีลำด�
 `# Tuple — ข้อมูลที่แก้ไขไม่ได้
 point = (10, 20)
 rgb = (255, 128, 0)
-person = ("Zenith", 18, "ลำพูน")
+person = ("Somchai", 18, "ลำพูน")
 
 print(point[0])      # 10
 print(rgb[-1])       # 0
@@ -727,7 +727,7 @@ Dictionary ใช้งานมากในการเก็บข้อมู
                     code:
 `# สร้าง Dictionary
 student = {
-    "name": "Zenith",
+    "name": "Somchai",
     "age": 18,
     "score": 92.5,
     "city": "ลำพูน",
@@ -735,7 +735,7 @@ student = {
 }
 
 # เข้าถึงค่า
-print(student["name"])          # Zenith
+print(student["name"])          # Somchai
 print(student.get("phone"))     # None (ไม่ error)
 print(student.get("phone", "ไม่มีเบอร์"))
 
@@ -854,9 +854,9 @@ evens = [i for i in range(1, 11) if i % 2 == 0]
 print(evens)    # [2, 4, 6, 8, 10]
 
 # แปลงข้อมูล
-names = ["zenith", "python", "code"]
+names = ["somchai", "python", "code"]
 upper_names = [name.upper() for name in names]
-print(upper_names)  # ['ZENITH', 'PYTHON', 'CODE']
+print(upper_names)  # ['SOMCHAI', 'PYTHON', 'CODE']
 
 # กรองและแปลง
 scores = [85, 42, 91, 38, 76, 55, 88]
@@ -911,7 +911,7 @@ def greet_person(name, lang="ไทย"):
     else:
         print(f"Hello {name}!")
 
-greet_person("Zenith")           # ค่า default
+greet_person("Somchai")          # ค่า default
 greet_person("Bob", "อังกฤษ")    # ระบุ lang
 
 # ฟังก์ชันคืนค่า
@@ -983,7 +983,7 @@ def show_info(**info):
     for key, value in info.items():
         print(f"  {key}: {value}")
 
-show_info(name="Zenith", age=18, city="ลำพูน")
+show_info(name="Somchai", age=18, city="ลำพูน")
 
 # รวมกันทั้งหมด
 def full_func(required, *args, default=10, **kwargs):
@@ -1240,14 +1240,14 @@ Class Methods (@classmethod) และ Static Methods (@staticmethod) คือ 
         return f"Student({self.name}, {self.grade})"
 
 # ใช้งาน
-s1 = Student("Zenith", 18, "ปวส.2")
+s1 = Student("Suda", 18, "ปวส.2")
 s2 = Student("Somchai", 19, "ปวส.2")
 
 s1.introduce()
 s1.add_score("Python", 92)
 s1.add_score("Math", 85)
 print(f"คะแนนเฉลี่ย: {s1.average_score():.1f}")
-print(s1)    # Student(Zenith, ปวส.2)
+print(s1)    # Student(Suda, ปวส.2)
 print(f"นักศึกษาทั้งหมด: {Student.student_count}")`
                 }
             },
@@ -1373,7 +1373,7 @@ print(isinstance(dog, Cat))     # False`
         print(f"  ยอดปัจจุบัน: {self.__balance:,} บาท")
 
 # ใช้งาน
-acc = BankAccount("Zenith", 1000)
+acc = BankAccount("Somchai", 1000)
 acc.deposit(500)
 acc.withdraw(200)
 print(f"ยอดเงิน: {acc.balance:,} บาท")  # ผ่าน property
@@ -1449,12 +1449,12 @@ function pyComputeUnlockedLessonId(completed, unitScores){
 // opens once every unit's lessons are done and its post-test passed, and
 // must itself score >=70% before the course counts as fully complete
 // (this is what gates results.html / the certificate).
-function pyIsFinalExamPassed(finalExam){
-    return !!(finalExam && finalExam.pct >= 70);
+function pyIsFinalExamPassed(finalScore){
+    return !!(finalScore && finalScore.pct >= 70);
 }
-function pyIsCourseFullyComplete(completed, unitScores, finalExam){
+function pyIsCourseFullyComplete(completed, unitScores, finalScore){
     var allUnitsDone = courseUnits.every(function(u){
         return u.lessons.every(function(id){ return completed.indexOf(id) > -1; }) && pyIsUnitPostPassed(unitScores, u.id);
     });
-    return allUnitsDone && pyIsFinalExamPassed(finalExam);
+    return allUnitsDone && pyIsFinalExamPassed(finalScore);
 }

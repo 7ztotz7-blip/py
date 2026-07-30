@@ -82,5 +82,12 @@ code{font-family:'IBM Plex Mono',monospace;}
     background:var(--card);border-bottom:1px solid var(--line);padding:10px 16px 14px;box-shadow:var(--shadow-md);z-index:49;}
   .tb-nav.open{display:flex;}
   .tb-nav a{padding:12px 14px;}
+  /* logo + hamburger + chiplet + a text button + avatar all fighting for
+     375px caused real overflow on profile.html — collapse any button
+     marked .tb-compact down to icon-only so tb-right always fits. */
+  .tb-right{gap:6px;}
+  .btn.tb-compact{padding:0;width:36px;}
+  .tb-compact .tb-compact-tx{display:none;}
+  .tb-compact svg{width:15px;height:15px;flex-shrink:0;}
 }
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;}}

@@ -96,6 +96,18 @@ code{font-family:'IBM Plex Mono',monospace;}
 }
 .sb-toggle:hover{background:var(--accent-s);border-color:var(--accent-l);color:var(--accent-d);}
 .sidebar.closed~.content-wrap .sb-toggle{left:12px;}
+.sb-backdrop{display:none;}
+@media(max-width:900px){
+  /* below this width the sidebar overlays the page instead of squeezing
+     content into a sliver — sliding a fixed-width panel in/out rather
+     than shrinking it to 0, so lesson text never gets crushed. */
+  .sidebar{position:fixed;top:52px;left:0;bottom:0;height:auto;
+    transform:translateX(0);box-shadow:0 20px 50px -20px oklch(0 0 0/.5);}
+  .sidebar.closed{width:260px;border-right:1px solid oklch(0.21 0.015 262);transform:translateX(-100%);}
+  .sb-backdrop{display:block;position:fixed;inset:52px 0 0 0;z-index:39;
+    background:oklch(0.15 0.02 260/.5);opacity:0;pointer-events:none;transition:opacity .25s ease;}
+  .sidebar:not(.closed)~.sb-backdrop{opacity:1;pointer-events:auto;}
+}
 /* content wrap */
 .content-wrap{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden;}
 /* ── CONTENT ── */
@@ -225,6 +237,7 @@ code{font-family:'IBM Plex Mono',monospace;}
       <div class="xp-track"><div class="xp-fill" id="xpFill"></div></div>
     </div>
   </aside>
+  <div class="sb-backdrop" id="sbBackdrop"></div>
 
   <div class="content-wrap">
 <div class="content">
@@ -496,7 +509,11 @@ document.getElementById('nextLessonBtn').addEventListener('click',completeLesson
 
 /* ---------- sidebar toggle ---------- */
 const sidebar=document.getElementById('sidebar'),sbToggle=document.getElementById('sbToggle');
-const sbOpen=localStorage.getItem('pystart_sb')!=='closed';
+const sbPref=localStorage.getItem('pystart_sb');
+// first-time visitors get a sensible default per screen size (closed on
+// narrow/mobile so the 260px sidebar doesn't crush the lesson content);
+// anyone who has explicitly toggled it before keeps that choice always.
+const sbOpen=sbPref===null ? window.innerWidth>900 : sbPref!=='closed';
 if(!sbOpen)sidebar.classList.add('closed');
 sbToggle.addEventListener('click',()=>{
   sidebar.classList.toggle('closed');
@@ -504,6 +521,11 @@ sbToggle.addEventListener('click',()=>{
   sbToggle.style.left=sidebar.classList.contains('closed')?'12px':'272px';
 });
 sbToggle.style.left=sidebar.classList.contains('closed')?'12px':'272px';
+document.getElementById('sbBackdrop').addEventListener('click',()=>{
+  sidebar.classList.add('closed');
+  localStorage.setItem('pystart_sb','closed');
+  sbToggle.style.left='12px';
+});
 
 /* ---------- go ---------- */
 renderHeader();

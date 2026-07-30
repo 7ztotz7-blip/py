@@ -989,55 +989,54 @@ print(lengths)  # {'apple': 5, 'cat': 3, 'elephant': 8}` },
             content: {
                 th: {
                     title: "การสร้างและเรียกใช้ฟังก์ชัน",
-                    desc: `ฟังก์ชัน (Function) คือกลุ่มโค้ดที่รวมไว้ด้วยกันเพื่อทำงานเฉพาะอย่าง สามารถเรียกใช้ซ้ำได้ ทำให้โค้ดเป็นระเบียบ อ่านง่าย และไม่ต้องเขียนซ้ำ
-
-หลักการ DRY (Don't Repeat Yourself) คือหัวใจของการเขียนฟังก์ชัน ถ้ามีโค้ดที่ต้องใช้ซ้ำ ให้แยกเป็นฟังก์ชัน
-
-Parameters คือตัวแปรที่รับค่าเข้ามา Arguments คือค่าที่ส่งให้ฟังก์ชันตอนเรียกใช้
-
-return ส่งค่ากลับจากฟังก์ชัน ถ้าไม่มี return ฟังก์ชันคืน None ฟังก์ชันสามารถ return หลายค่าพร้อมกันได้ในรูปแบบ Tuple
-
-Docstring คือ comment พิเศษที่อธิบายฟังก์ชัน เขียนด้วย triple quotes """ ทันทีหลังบรรทัด def`,
-                    code:
-`# ฟังก์ชันพื้นฐาน
-def greet():
+                    intro: "เขียนโค้ดเดิมซ้ำ ๆ หลายที่ในโปรแกรมมาพอแล้ว — ฟังก์ชันคือวิธีรวมโค้ดที่ใช้บ่อยไว้ในที่เดียว แล้วเรียกใช้ซ้ำได้ทุกที่ที่ต้องการ",
+                    goals: ["สร้างและเรียกใช้ฟังก์ชันได้", "ใช้ parameter และ return value ได้", "เข้าใจหลักการ DRY (Don't Repeat Yourself)"],
+                    blocks: [
+                        { type: "section", num: "01", label: "แนวคิด", title: "ฟังก์ชันพื้นฐานและการรับ Parameters" },
+                        { type: "text", text: "ฟังก์ชันสร้างด้วย def ตามด้วยชื่อและวงเล็บ — ถ้าต้องการให้รับค่าเข้ามาใช้งาน ใส่ parameter ไว้ในวงเล็บ พร้อมกำหนดค่า default ได้ด้วย:" },
+                        { type: "code", filename: "function_basic.py", source:
+`def greet():
     print("สวัสดี!")
 
 greet()    # เรียกใช้
 
-# ฟังก์ชันรับ Parameters
 def greet_person(name, lang="ไทย"):
-    """ทักทายบุคคลตามภาษาที่กำหนด"""
     if lang == "ไทย":
         print(f"สวัสดีคุณ {name}!")
     else:
         print(f"Hello {name}!")
 
 greet_person("Somchai")          # ค่า default
-greet_person("Bob", "อังกฤษ")    # ระบุ lang
+greet_person("Bob", "อังกฤษ")    # ระบุ lang` },
+                        { type: "tip", kind: "note", text: "Docstring คือ comment พิเศษที่อธิบายฟังก์ชัน เขียนด้วย triple quotes \"\"\" ทันทีหลังบรรทัด def เช่น \"\"\"ทักทายบุคคลตามภาษาที่กำหนด\"\"\"" },
 
-# ฟังก์ชันคืนค่า
-def add(a, b):
+                        { type: "section", num: "02", label: "return", title: "ส่งค่ากลับจากฟังก์ชัน" },
+                        { type: "text", text: "return ส่งค่ากลับจากฟังก์ชัน ถ้าไม่มี return ฟังก์ชันจะคืน None และฟังก์ชันสามารถ return หลายค่าพร้อมกันในรูปแบบ Tuple ได้ด้วย:" },
+                        { type: "code", filename: "return_values.py", source:
+`def add(a, b):
     return a + b
 
 result = add(5, 3)
 print(f"5 + 3 = {result}")
 
-# คืนหลายค่า
+# คืนหลายค่าพร้อมกัน
 def min_max(numbers):
     return min(numbers), max(numbers)
 
 lo, hi = min_max([3, 1, 4, 1, 5, 9, 2])
-print(f"Min: {lo}, Max: {hi}")
+print(f"Min: {lo}, Max: {hi}")` },
 
-# ฟังก์ชันคำนวณเกรด
-def get_grade(score):
+                        { type: "section", num: "03", label: "ใช้งานจริง", title: "ฟังก์ชันคำนวณเกรดจากคะแนน" },
+                        { type: "text", text: "ตัวอย่างการรวม if/elif กับ return ไว้ในฟังก์ชันเดียว เรียกใช้ซ้ำกับคะแนนกี่คนก็ได้:" },
+                        { type: "code", filename: "get_grade.py", source:
+`def get_grade(score):
     if score >= 80: return "A"
     elif score >= 70: return "B"
     elif score >= 60: return "C"
     else: return "F"
 
-print(get_grade(75))   # B`
+print(get_grade(75))   # B` }
+                    ]
                 }
             },
             takeaways: [
@@ -1054,47 +1053,49 @@ print(get_grade(75))   # B`
             content: {
                 th: {
                     title: "Arguments พิเศษ: *args และ **kwargs",
-                    desc: `Python มี parameter พิเศษที่ทำให้ฟังก์ชันรับค่าได้หลากหลายและยืดหยุ่น
-
-Default Parameters คือการกำหนดค่าเริ่มต้นให้ parameter ถ้าไม่ส่งค่ามา ฟังก์ชันจะใช้ค่า default แทน ต้องเขียน parameter ที่มี default ไว้ท้ายเสมอ
-
-*args (Arbitrary Arguments) ใช้รับ arguments ที่ไม่กำหนดจำนวนในรูปแบบ positional Python จะรวบรวมทั้งหมดเป็น Tuple
-
-**kwargs (Keyword Arguments) ใช้รับ arguments ที่ไม่กำหนดจำนวนในรูปแบบ keyword Python จะรวบรวมทั้งหมดเป็น Dictionary
-
-Keyword Arguments ในการเรียกฟังก์ชัน คือการระบุชื่อ parameter เมื่อเรียกใช้ ทำให้เปลี่ยนลำดับได้และอ่านโค้ดชัดขึ้น`,
-                    code:
-`# Default Parameters
-def power(base, exponent=2):
+                    intro: "บางฟังก์ชันไม่รู้ล่วงหน้าว่าจะมีคนส่ง argument มากี่ตัว — Python มี parameter พิเศษที่รับมือกับสถานการณ์แบบนี้ได้อย่างยืดหยุ่น",
+                    goals: ["ใช้ default parameter ได้", "ใช้ *args รับ argument ไม่จำกัดจำนวนได้", "ใช้ **kwargs รับ keyword argument ได้"],
+                    blocks: [
+                        { type: "section", num: "01", label: "Default Parameters", title: "กำหนดค่าเริ่มต้นให้ parameter" },
+                        { type: "text", text: "ถ้าไม่ส่งค่ามา ฟังก์ชันจะใช้ค่า default แทน — ต้องเขียน parameter ที่มี default ไว้ท้ายสุดเสมอ:" },
+                        { type: "code", filename: "default_param.py", source:
+`def power(base, exponent=2):
     return base ** exponent
 
 print(power(3))      # 9  (3^2)
-print(power(3, 3))   # 27 (3^3)
+print(power(3, 3))   # 27 (3^3)` },
 
-# *args — รับหลาย arguments
-def add_all(*numbers):
+                        { type: "section", num: "02", label: "*args", title: "รับ argument ไม่จำกัดจำนวนแบบ positional" },
+                        { type: "text", text: "*args รวบรวม argument ที่ส่งเข้ามาไม่จำกัดจำนวนไว้เป็น Tuple ให้ใช้งานภายในฟังก์ชัน:" },
+                        { type: "code", filename: "args_ex.py", source:
+`def add_all(*numbers):
     print(f"ประเภท: {type(numbers)}")  # tuple
     return sum(numbers)
 
 print(add_all(1, 2))           # 3
-print(add_all(1, 2, 3, 4, 5))  # 15
+print(add_all(1, 2, 3, 4, 5))  # 15` },
 
-# **kwargs — รับ keyword arguments
-def show_info(**info):
+                        { type: "section", num: "03", label: "**kwargs", title: "รับ keyword argument ไม่จำกัดจำนวน" },
+                        { type: "text", text: "**kwargs รวบรวม keyword argument ที่ส่งเข้ามาไว้เป็น Dictionary:" },
+                        { type: "code", filename: "kwargs_ex.py", source:
+`def show_info(**info):
     print(f"ประเภท: {type(info)}")  # dict
     for key, value in info.items():
         print(f"  {key}: {value}")
 
-show_info(name="Somchai", age=18, city="ลำพูน")
+show_info(name="Somchai", age=18, city="ลำพูน")` },
 
-# รวมกันทั้งหมด
-def full_func(required, *args, default=10, **kwargs):
+                        { type: "section", num: "04", label: "รวมกันทั้งหมด", title: "required, *args, default และ **kwargs ในฟังก์ชันเดียว" },
+                        { type: "code", filename: "full_signature.py", source:
+`def full_func(required, *args, default=10, **kwargs):
     print(f"required: {required}")
     print(f"args: {args}")
     print(f"default: {default}")
     print(f"kwargs: {kwargs}")
 
-full_func("A", 1, 2, 3, default=20, x=4, y=5)`
+full_func("A", 1, 2, 3, default=20, x=4, y=5)` },
+                        { type: "tip", kind: "warn", text: "ลำดับ parameter ในฟังก์ชันต้องเรียงตามนี้เสมอ: required → *args → default parameter → **kwargs สลับลำดับกันจะเกิด SyntaxError" }
+                    ]
                 }
             },
             takeaways: [
@@ -1111,30 +1112,34 @@ full_func("A", 1, 2, 3, default=20, x=4, y=5)`
             content: {
                 th: {
                     title: "ขอบเขตของตัวแปร (Variable Scope)",
-                    desc: `Scope คือขอบเขตที่ตัวแปรสามารถเข้าถึงได้ Python ใช้กฎ LEGB Rule ในการค้นหาตัวแปร
+                    intro: "ตัวแปรชื่อเดียวกันสองตัวเป็นคนละตัวกันได้ ถ้าอยู่คนละ \"ขอบเขต\" (Scope) — บทนี้พาไปเข้าใจว่า Python รู้ได้อย่างไรว่าจะใช้ตัวแปรตัวไหน",
+                    goals: ["เข้าใจความต่างระหว่าง Local กับ Global scope", "ใช้ global keyword แก้ไขตัวแปร global จากในฟังก์ชันได้", "รู้จัก LEGB Rule"],
+                    blocks: [
+                        { type: "section", num: "01", label: "แนวคิด", title: "LEGB Rule — ลำดับการค้นหาตัวแปรของ Python" },
+                        { type: "text", text: "Scope คือขอบเขตที่ตัวแปรสามารถเข้าถึงได้ Python ค้นหาตัวแปรตามลำดับ LEGB นี้เสมอ:" },
+                        { type: "concept-grid", items: [
+                            { icon: "L", title: "Local Scope", desc: "ตัวแปรที่สร้างในฟังก์ชัน ใช้ได้เฉพาะในฟังก์ชันนั้น" },
+                            { icon: "E", title: "Enclosing Scope", desc: "ตัวแปรในฟังก์ชันที่ครอบอยู่ (สำหรับ nested function)" },
+                            { icon: "G", title: "Global Scope", desc: "ตัวแปรที่สร้างนอกฟังก์ชัน ใช้ได้ทุกที่ในไฟล์" },
+                            { icon: "B", title: "Built-in Scope", desc: "ชื่อที่ Python จองไว้ให้แล้ว เช่น print, len, range" }
+                        ] },
 
-L — Local Scope: ตัวแปรที่สร้างในฟังก์ชัน ใช้ได้เฉพาะในฟังก์ชันนั้น
-
-E — Enclosing Scope: ตัวแปรในฟังก์ชันที่ครอบ (สำหรับ nested function)
-
-G — Global Scope: ตัวแปรที่สร้างนอกฟังก์ชัน ใช้ได้ทุกที่ในไฟล์
-
-B — Built-in Scope: ชื่อที่ Python จองไว้เช่น print, len, range
-
-การใช้ global keyword ช่วยให้แก้ไขตัวแปร global ได้จากในฟังก์ชัน แต่ควรใช้อย่างระมัดระวัง เพราะทำให้โค้ดตามยากและ debug ยาก หลักการที่ดีคือส่งค่าผ่าน parameter และรับค่ากลับผ่าน return`,
-                    code:
-`# Global vs Local
-x = 10   # Global variable
+                        { type: "section", num: "02", label: "Local vs Global", title: "ตัวแปรชื่อเดียวกัน คนละ scope คือคนละตัว" },
+                        { type: "text", text: "ตัวแปรที่สร้างในฟังก์ชันเป็น local ใช้ได้แค่ในฟังก์ชันนั้น แม้ตั้งชื่อซ้ำกับตัวแปร global ก็เป็นคนละตัวกัน:" },
+                        { type: "code", filename: "local_global.py", source:
+`x = 10   # Global variable
 
 def show():
     x = 20   # Local variable (คนละตัวกับ global)
     print(f"ใน function: x = {x}")   # 20
 
 show()
-print(f"นอก function: x = {x}")     # 10
+print(f"นอก function: x = {x}")     # 10 — ไม่เปลี่ยนตาม` },
 
-# ใช้ global keyword
-count = 0
+                        { type: "section", num: "03", label: "global keyword", title: "แก้ไขตัวแปร global จากภายในฟังก์ชัน" },
+                        { type: "text", text: "ถ้าต้องการแก้ไขตัวแปร global จริง ๆ (ไม่ใช่สร้างตัวแปร local ใหม่) ต้องประกาศด้วย global ก่อน:" },
+                        { type: "code", filename: "global_keyword.py", source:
+`count = 0
 
 def increment():
     global count     # บอกว่าจะแก้ global
@@ -1142,25 +1147,20 @@ def increment():
 
 increment()
 increment()
-print(f"count = {count}")  # 2
+print(f"count = {count}")  # 2` },
 
-# Nested function (Enclosing scope)
-def outer():
-    msg = "Hello"
-    def inner():
-        print(msg)   # เข้าถึง enclosing scope ได้
-    inner()
-
-outer()
-
-# Best Practice — ใช้ return แทน global
-def add_to(value, amount):
+                        { type: "section", num: "04", label: "แนวปฏิบัติที่ดี", title: "ใช้ return แทน global keyword" },
+                        { type: "text", text: "การใช้ global บ่อย ๆ ทำให้โค้ดตามรอยยากและ debug ยาก เพราะฟังก์ชันไปแก้ค่าที่อื่นเงียบ ๆ โดยไม่บอกผ่าน return — วิธีที่ดีกว่าคือส่งค่าเข้าและรับค่ากลับผ่าน parameter/return แทน:" },
+                        { type: "code", filename: "best_practice.py", source:
+`def add_to(value, amount):
     return value + amount   # ดีกว่าการใช้ global
 
 total = 0
 total = add_to(total, 5)
 total = add_to(total, 3)
-print(total)  # 8`
+print(total)  # 8` },
+                        { type: "tip", kind: "warn", text: "การใช้ global keyword ควรใช้อย่างระมัดระวัง เพราะทำให้ยากต่อการรู้ว่าฟังก์ชันไหนแก้ไขตัวแปรอะไรบ้างเมื่อโปรแกรมมีขนาดใหญ่ขึ้น" }
+                    ]
                 }
             },
             takeaways: [
@@ -1177,18 +1177,13 @@ print(total)  # 8`
             content: {
                 th: {
                     title: "การจัดการข้อผิดพลาด (Exception Handling)",
-                    desc: `Exception คือเหตุการณ์ที่เกิดขึ้นระหว่างรันโปรแกรมและทำให้โปรแกรมหยุดทำงานโดยผิดปกติ เช่น หารด้วยศูนย์ เรียก index เกิน list หรือเปิดไฟล์ที่ไม่มี
-
-try-except ใช้ดักจับและจัดการ Exception โค้ดใน try จะถูกทดลองรัน ถ้าเกิด Exception จะไปทำใน except แทน ทำให้โปรแกรมไม่หยุดและสามารถรองรับข้อผิดพลาดได้อย่างสวยงาม
-
-except สามารถดักจับ Exception หลายชนิดต่างๆ กัน หรือใช้ Exception เป็น base class เพื่อดักทุกชนิด
-
-finally ทำงานเสมอไม่ว่าจะเกิด Exception หรือไม่ ใช้สำหรับทำความสะอาด เช่น ปิดไฟล์หรือ connection
-
-raise ใช้สร้าง Exception เองเมื่อต้องการ`,
-                    code:
-`# try-except พื้นฐาน
-try:
+                    intro: "โปรแกรมพังกะทันหันเพราะผู้ใช้พิมพ์ผิดหรือหารด้วยศูนย์ ไม่ใช่ประสบการณ์ที่ดี — try-except ช่วยให้โปรแกรมรับมือกับข้อผิดพลาดได้อย่างสวยงามแทนที่จะล้มไปเลย",
+                    goals: ["ใช้ try-except ดักจับข้อผิดพลาดได้", "ดักจับ Exception เฉพาะชนิดต่างกันได้", "ใช้ finally และ raise ได้"],
+                    blocks: [
+                        { type: "section", num: "01", label: "แนวคิด", title: "try-except ดักจับข้อผิดพลาดไม่ให้โปรแกรมหยุด" },
+                        { type: "text", text: "โค้ดใน try จะถูกทดลองรัน ถ้าเกิด Exception จะกระโดดไปทำใน except ที่ตรงชนิดแทน โดยระบุชนิด Exception ได้เจาะจงเพื่อจัดการแต่ละกรณีต่างกัน:" },
+                        { type: "code", filename: "try_except.py", source:
+`try:
     num = int(input("ใส่ตัวเลข: "))
     result = 100 / num
     print(f"100 / {num} = {result}")
@@ -1201,17 +1196,22 @@ except Exception as e:
 else:
     print("คำนวณสำเร็จ!")    # รันเมื่อไม่เกิด error
 finally:
-    print("จบการทำงาน")       # รันเสมอ
+    print("จบการทำงาน")       # รันเสมอ` },
+                        { type: "tip", kind: "note", text: "finally ทำงานเสมอไม่ว่าจะเกิด Exception หรือไม่ เหมาะมากสำหรับงานที่ต้องทำให้เสร็จแน่ ๆ เช่น ปิดไฟล์หรือปิด connection ฐานข้อมูล" },
 
-# ดักจับหลายชนิดพร้อมกัน
-try:
+                        { type: "section", num: "02", label: "ดักจับหลายชนิด", title: "except ดักจับ Exception หลายชนิดพร้อมกันได้" },
+                        { type: "text", text: "ถ้าอยากจัดการหลาย Exception ด้วยวิธีเดียวกัน ใส่เป็น tuple ไว้ใน except ได้เลย:" },
+                        { type: "code", filename: "multi_except.py", source:
+`try:
     data = [1, 2, 3]
     print(data[10])
 except (IndexError, KeyError) as e:
-    print(f"Index/Key ผิดพลาด: {e}")
+    print(f"Index/Key ผิดพลาด: {e}")` },
 
-# raise — สร้าง Exception เอง
-def set_age(age):
+                        { type: "section", num: "03", label: "raise", title: "สร้าง Exception ขึ้นมาเองเมื่อข้อมูลไม่สมเหตุสมผล" },
+                        { type: "text", text: "ใช้ raise เมื่อต้องการแจ้งข้อผิดพลาดของตัวเอง เช่น ตรวจพบว่าค่าที่รับมาไม่สมเหตุสมผล:" },
+                        { type: "code", filename: "raise_ex.py", source:
+`def set_age(age):
     if age < 0 or age > 150:
         raise ValueError(f"อายุ {age} ไม่สมเหตุสมผล")
     return age
@@ -1219,7 +1219,8 @@ def set_age(age):
 try:
     set_age(-5)
 except ValueError as e:
-    print(e)`
+    print(e)` }
+                    ]
                 }
             },
             takeaways: [
@@ -1240,52 +1241,56 @@ except ValueError as e:
             content: {
                 th: {
                     title: "การเขียนโปรแกรมเชิงวัตถุ (OOP)",
-                    desc: `OOP (Object-Oriented Programming) คือแนวคิดการเขียนโปรแกรมที่มองทุกสิ่งเป็นวัตถุ (Object) ที่มีคุณสมบัติและความสามารถ เป็นวิธีที่นักพัฒนาซอฟต์แวร์มืออาชีพใช้ในการสร้างโปรแกรมขนาดใหญ่
+                    intro: "ถึงเวลาเปลี่ยนวิธีคิด — แทนที่จะเขียนแค่ตัวแปรกับฟังก์ชันแยกกัน OOP มองทุกสิ่งเป็น \"วัตถุ\" ที่มีทั้งข้อมูลและความสามารถในตัวเอง วิธีที่มืออาชีพใช้สร้างโปรแกรมขนาดใหญ่",
+                    goals: ["เข้าใจแนวคิด OOP และหลักการ 4 ข้อ", "สร้าง Class และ Object ได้", "เรียกใช้ method ของ Object ได้"],
+                    blocks: [
+                        { type: "section", num: "01", label: "แนวคิด", title: "หลักการ 4 ข้อของ OOP" },
+                        { type: "text", text: "OOP (Object-Oriented Programming) คือแนวคิดการเขียนโปรแกรมที่มองทุกสิ่งเป็นวัตถุ (Object) ที่มีคุณสมบัติและความสามารถ ยึดหลักการสำคัญ 4 ข้อ:" },
+                        { type: "concept-grid", items: [
+                            { icon: "🔒", title: "Encapsulation", desc: "การซ่อนข้อมูลภายในไม่ให้เข้าถึงจากภายนอกโดยตรง" },
+                            { icon: "🧬", title: "Inheritance", desc: "การสืบทอดคุณสมบัติจาก Class หนึ่งไปอีก Class หนึ่ง" },
+                            { icon: "🎭", title: "Polymorphism", desc: "การให้ Object ต่างชนิดตอบสนองต่อ method เดียวกันต่างรูปแบบ" },
+                            { icon: "🎁", title: "Abstraction", desc: "การซ่อนความซับซ้อนภายใน เหลือแค่ส่วนที่จำเป็นต้องใช้" }
+                        ] },
 
-หลักการสำคัญ 4 ประการของ OOP: Encapsulation (การซ่อนข้อมูล), Inheritance (การสืบทอด), Polymorphism (การมีหลายรูป), Abstraction (การซ่อนความซับซ้อน)
+                        { type: "section", num: "02", label: "Class และ Object", title: "Class คือพิมพ์เขียว Object คือของจริง" },
+                        { type: "text", text: "Class คือพิมพ์เขียว (Blueprint) ที่กำหนดว่าวัตถุจะมีอะไรได้บ้าง ส่วน Object คือวัตถุจริงที่สร้างขึ้นจาก Class นั้น — จาก Class เดียวสร้าง Object ได้หลายตัว:" },
+                        { type: "code", filename: "class_object.py", source:
+`class Dog:
+    species = "Canis familiaris"  # Class Attribute (ร่วมกันทุก instance)
 
-Class คือพิมพ์เขียว (Blueprint) หรือแม่แบบที่กำหนดว่าวัตถุจะมีคุณสมบัติและความสามารถอะไร เปรียบเหมือนแบบแปลนบ้าน
-
-Object (Instance) คือวัตถุจริงที่สร้างจาก Class เปรียบเหมือนบ้านจริงที่สร้างจากแบบแปลน จาก Class เดียวสร้าง Object ได้หลายตัว`,
-                    code:
-`# สร้าง Class
-class Dog:
-    # Class Attribute (ร่วมกันทุก instance)
-    species = "Canis familiaris"
-    
     def bark(self):
         print("โฮ่ง โฮ่ง!")
-    
+
     def sleep(self):
         print("กำลังนอนหลับ...")
 
-# สร้าง Object จาก Class
 dog1 = Dog()    # สร้าง instance ที่ 1
 dog2 = Dog()    # สร้าง instance ที่ 2
 
-# เรียกใช้ method
 dog1.bark()
 dog2.sleep()
 
-# ตรวจสอบ
 print(type(dog1))              # <class '__main__.Dog'>
 print(isinstance(dog1, Dog))   # True
-print(dog1.species)            # Canis familiaris
+print(dog1.species)            # Canis familiaris` },
 
-# Class กับข้อมูลจริง
-class Car:
+                        { type: "section", num: "03", label: "ใช้งานจริง", title: "อีกตัวอย่าง: Class Car" },
+                        { type: "code", filename: "car_class.py", source:
+`class Car:
     wheels = 4
-    
+
     def start(self):
         print("วรรรมม! รถสตาร์ทแล้ว")
-    
+
     def honk(self):
         print("บี๊บ บี๊บ!")
 
 my_car = Car()
 my_car.start()
 my_car.honk()
-print(f"มีล้อ {my_car.wheels} ล้อ")`
+print(f"มีล้อ {my_car.wheels} ล้อ")` }
+                    ]
                 }
             },
             takeaways: [
@@ -1302,47 +1307,50 @@ print(f"มีล้อ {my_car.wheels} ล้อ")`
             content: {
                 th: {
                     title: "Attributes, Methods และ __init__",
-                    desc: `__init__ (Constructor) คือ method พิเศษที่ Python เรียกอัตโนมัติทุกครั้งที่สร้าง Object ใหม่ ใช้กำหนดค่าเริ่มต้นให้ attributes
+                    intro: "Class เปล่า ๆ ยังไม่มีประโยชน์เท่าไหร่ — ต้องมี __init__ กำหนดค่าเริ่มต้น และ attributes เก็บข้อมูลเฉพาะของแต่ละ Object ถึงจะใช้งานได้จริง",
+                    goals: ["ใช้ __init__ กำหนดค่าเริ่มต้นให้ Object ได้", "เข้าใจ self และแยก Instance/Class attribute ได้", "เขียน method ที่ทำงานกับข้อมูลของ Object ได้"],
+                    blocks: [
+                        { type: "section", num: "01", label: "แนวคิด", title: "__init__ และ self คืออะไร" },
+                        { type: "text", text: "__init__ คือ method พิเศษที่ Python เรียกอัตโนมัติทุกครั้งที่สร้าง Object ใหม่ ใช้กำหนดค่าเริ่มต้นให้ attributes ส่วน self คือตัว Object เองที่กำลังถูกเรียกใช้ ต้องใส่เป็น parameter แรกของทุก method เสมอ" },
+                        { type: "concept-grid", items: [
+                            { icon: "🏗️", title: "Instance Attribute", desc: "attribute ที่แต่ละ Object มีค่าของตัวเองแยกกัน สร้างด้วย self.ชื่อ ใน __init__" },
+                            { icon: "🌐", title: "Class Attribute", desc: "attribute ที่ทุก Object ของ Class แบ่งกันใช้ สร้างไว้นอก __init__" }
+                        ] },
 
-self คือ parameter ตัวแรกของทุก method ใน class หมายถึงตัว Object เองที่กำลังถูกเรียกใช้ ต้องใส่เสมอแม้ไม่ได้ใช้ Python จะส่งค่านี้ให้อัตโนมัติตอนเรียกใช้ method
-
-Instance Attributes คือ attributes ที่แต่ละ Object มีแยกกัน สร้างใน __init__ ด้วย self.attribute_name
-
-Class Attributes คือ attributes ที่ทุก Object ของ class แบ่งกัน สร้างนอก __init__
-
-Class Methods (@classmethod) และ Static Methods (@staticmethod) คือ method พิเศษที่มีพฤติกรรมต่างจาก instance method ปกติ`,
-                    code:
+                        { type: "section", num: "02", label: "ใช้งานจริง", title: "Class Student ครบชุด: attributes + methods" },
+                        { type: "text", text: "ตัวอย่างนี้รวม instance attribute (name, age, scores), class attribute (school, student_count) และ method ที่ทำงานกับข้อมูลของ Object เอง:" },
+                        { type: "code", filename: "student_class.py", source:
 `class Student:
-    # Class Attribute
-    school = "วิทยาลัยเทคนิคลำพูน"
+    school = "วิทยาลัยเทคนิคลำพูน"  # Class Attribute
     student_count = 0
-    
+
     def __init__(self, name, age, grade):
-        # Instance Attributes
-        self.name = name
+        self.name = name    # Instance Attributes
         self.age = age
         self.grade = grade
         self.scores = []
         Student.student_count += 1
-    
+
     def introduce(self):
         print(f"สวัสดี ผม/หนู {self.name}")
         print(f"อายุ {self.age} ปี ชั้น {self.grade}")
-    
+
     def add_score(self, subject, score):
         self.scores.append({"subject": subject, "score": score})
-    
+
     def average_score(self):
         if not self.scores:
             return 0
         total = sum(s["score"] for s in self.scores)
         return total / len(self.scores)
-    
-    def __str__(self):   # method พิเศษสำหรับ print()
-        return f"Student({self.name}, {self.grade})"
 
-# ใช้งาน
-s1 = Student("Suda", 18, "ปวส.2")
+    def __str__(self):   # method พิเศษสำหรับ print()
+        return f"Student({self.name}, {self.grade})"` },
+                        { type: "tip", kind: "note", text: "__str__ เป็น method พิเศษที่กำหนดว่าจะแสดงผล Object อย่างไรเมื่อใช้ print() — ถ้าไม่เขียนไว้ print(object) จะแสดงที่อยู่หน่วยความจำที่อ่านไม่รู้เรื่องแทน" },
+
+                        { type: "section", num: "03", label: "เรียกใช้งาน", title: "สร้าง Object และเรียกใช้ methods" },
+                        { type: "code", filename: "use_student.py", source:
+`s1 = Student("Suda", 18, "ปวส.2")
 s2 = Student("Somchai", 19, "ปวส.2")
 
 s1.introduce()
@@ -1350,7 +1358,8 @@ s1.add_score("Python", 92)
 s1.add_score("Math", 85)
 print(f"คะแนนเฉลี่ย: {s1.average_score():.1f}")
 print(s1)    # Student(Suda, ปวส.2)
-print(f"นักศึกษาทั้งหมด: {Student.student_count}")`
+print(f"นักศึกษาทั้งหมด: {Student.student_count}")` }
+                    ]
                 }
             },
             takeaways: [
@@ -1367,47 +1376,47 @@ print(f"นักศึกษาทั้งหมด: {Student.student_count}")
             content: {
                 th: {
                     title: "Inheritance — การสืบทอด",
-                    desc: `Inheritance คือกลไกที่ให้ Child Class (Subclass) สืบทอด attributes และ methods ทั้งหมดจาก Parent Class (Superclass) ช่วยลดการเขียนโค้ดซ้ำและสร้างลำดับชั้นของ class ที่มีความสัมพันธ์กัน
-
-Child Class เข้าถึง method ของ Parent ได้ทันที และสามารถ Override (เขียนทับ) method ที่ต้องการพฤติกรรมต่างออกไปได้
-
-super() ใช้เรียก method ของ Parent class จาก Child class มักใช้ใน __init__ ของ Child เพื่อเรียก __init__ ของ Parent ก่อน แล้วค่อยเพิ่ม attributes เพิ่มเติม
-
-Multiple Inheritance Python รองรับการสืบทอดจากหลาย Parent class ซึ่งต่างจากภาษาอย่าง Java ที่รองรับ single inheritance เท่านั้น`,
-                    code:
-`# Parent Class
-class Animal:
+                    intro: "ถ้า Dog กับ Cat มีคุณสมบัติหลายอย่างเหมือนกัน (มีชื่อ กินอาหารได้) ทำไมต้องเขียนโค้ดซ้ำ? — Inheritance ให้สร้าง Class ร่วมแล้วสืบทอดคุณสมบัติไปได้เลย",
+                    goals: ["สร้าง Child Class ที่สืบทอดจาก Parent Class ได้", "ใช้ super() เรียก Parent constructor ได้", "Override method เพื่อเปลี่ยนพฤติกรรมเฉพาะได้"],
+                    blocks: [
+                        { type: "section", num: "01", label: "แนวคิด", title: "Parent Class ที่ทุก Child จะสืบทอดไป" },
+                        { type: "text", text: "Inheritance คือกลไกที่ให้ Child Class (Subclass) สืบทอด attributes และ methods ทั้งหมดจาก Parent Class (Superclass) ได้ทันที เริ่มจากสร้าง Parent Class ที่มีคุณสมบัติร่วมกันก่อน:" },
+                        { type: "code", filename: "animal_parent.py", source:
+`class Animal:
     def __init__(self, name, sound):
         self.name = name
         self.sound = sound
-    
+
     def speak(self):
         print(f"{self.name} พูดว่า: {self.sound}")
-    
-    def eat(self):
-        print(f"{self.name} กำลังกิน")
-    
-    def __str__(self):
-        return f"{type(self).__name__}({self.name})"
 
-# Child Class — สืบทอดจาก Animal
-class Dog(Animal):
+    def eat(self):
+        print(f"{self.name} กำลังกิน")` },
+
+                        { type: "section", num: "02", label: "สืบทอด", title: "Child Class + super() เรียก Parent constructor" },
+                        { type: "text", text: "Child Class เขียน class Dog(Animal) เพื่อสืบทอดจาก Animal แล้วใช้ super().__init__() เรียก constructor ของ Parent ก่อน ค่อยเพิ่ม attribute ของตัวเอง:" },
+                        { type: "code", filename: "dog_child.py", source:
+`class Dog(Animal):
     def __init__(self, name, breed):
         super().__init__(name, "โฮ่ง!")  # เรียก Parent __init__
         self.breed = breed
-    
-    def fetch(self):   # method เพิ่มเติมของ Dog
-        print(f"{self.name} วิ่งไปเอาของ!")
 
-class Cat(Animal):
+    def fetch(self):   # method เพิ่มเติมเฉพาะของ Dog
+        print(f"{self.name} วิ่งไปเอาของ!")` },
+
+                        { type: "section", num: "03", label: "Override", title: "เขียนทับ method ของ Parent เพื่อเปลี่ยนพฤติกรรม" },
+                        { type: "text", text: "ถ้า Child Class ต้องการพฤติกรรมต่างจาก Parent เฉพาะบาง method ให้เขียนทับ (Override) method ชื่อเดียวกันได้เลย:" },
+                        { type: "code", filename: "cat_override.py", source:
+`class Cat(Animal):
     def __init__(self, name):
         super().__init__(name, "เหมียว!")
-    
-    def speak(self):   # Override method
-        print(f"{self.name} พูดเบาๆ ว่า: เหมียว~")
 
-# ใช้งาน
-dog = Dog("บั๊ดดี้", "Golden Retriever")
+    def speak(self):   # Override method ของ Animal
+        print(f"{self.name} พูดเบาๆ ว่า: เหมียว~")` },
+
+                        { type: "section", num: "04", label: "ใช้งานจริง", title: "ทดสอบด้วย isinstance()" },
+                        { type: "code", filename: "test_inheritance.py", source:
+`dog = Dog("บั๊ดดี้", "Golden Retriever")
 cat = Cat("มะลิ")
 
 dog.speak()     # โฮ่ง! (จาก Parent)
@@ -1417,7 +1426,8 @@ cat.speak()     # เหมียว~ (Override)
 
 print(isinstance(dog, Animal))  # True
 print(isinstance(dog, Dog))     # True
-print(isinstance(dog, Cat))     # False`
+print(isinstance(dog, Cat))     # False` }
+                    ]
                 }
             },
             takeaways: [
@@ -1434,31 +1444,39 @@ print(isinstance(dog, Cat))     # False`
             content: {
                 th: {
                     title: "Encapsulation — การซ่อนข้อมูล",
-                    desc: `Encapsulation คือการปกป้องข้อมูลภายใน Object ไม่ให้ถูกเข้าถึงหรือแก้ไขจากภายนอกโดยตรง และควบคุมการเข้าถึงผ่าน method พิเศษ
+                    intro: "ข้อมูลสำคัญอย่างยอดเงินในบัญชี ไม่ควรให้ใครก็ได้มาแก้ตรง ๆ — Encapsulation คือหลักการปกป้องข้อมูลภายใน Object ให้ถูกแก้ไขผ่านทางที่ตรวจสอบแล้วเท่านั้น",
+                    goals: ["เข้าใจการซ่อนข้อมูลด้วย protected/private ได้", "ใช้ @property สร้าง getter ที่ปลอดภัยได้", "สร้างคลาสที่ป้องกันข้อมูลผิดพลาดได้"],
+                    blocks: [
+                        { type: "section", num: "01", label: "แนวคิด", title: "protected และ private ต่างกันอย่างไร" },
+                        { type: "text", text: "Python ใช้ underscore เป็น convention บอกระดับการเข้าถึง ไม่ได้บังคับห้ามจริง ๆ แต่เป็นสัญญาณบอกผู้เขียนโค้ดคนอื่น:" },
+                        { type: "concept-grid", items: [
+                            { icon: "🔓", title: "_name (protected)", desc: "ไม่ควรเข้าถึงจากภายนอก แต่ Python ยอมให้ทำได้" },
+                            { icon: "🔒", title: "__name (private)", desc: "Python ทำ Name Mangling เปลี่ยนชื่อภายใน ทำให้เข้าถึงตรง ๆ จากภายนอกไม่ได้ง่าย" }
+                        ] },
 
-ใน Python ใช้ convention ดังนี้: _name (single underscore) หมายถึง protected ไม่ควรเข้าถึงจากภายนอก แต่ทำได้, __name (double underscore) หมายถึง private Python จะทำ name mangling ทำให้เข้าถึงตรงๆ ไม่ได้
-
-@property decorator ทำให้ method เหมือน attribute เมื่อเรียกใช้ ไม่ต้องใส่วงเล็บ ใช้สร้าง getter ที่อ่านได้แต่มีการตรวจสอบ
-
-@property.setter ทำให้กำหนดค่าได้พร้อมตรวจสอบความถูกต้อง Encapsulation ช่วยให้ข้อมูลภายใน Object ถูกต้องและสอดคล้องกันเสมอ`,
-                    code:
+                        { type: "section", num: "02", label: "@property", title: "getter ที่อ่านค่าได้แต่แก้ไขตรง ๆ ไม่ได้" },
+                        { type: "text", text: "@property decorator ทำให้เรียก method ได้เหมือน attribute (ไม่ต้องใส่วงเล็บ) ใช้สร้าง getter ที่อ่านค่า private attribute ออกมาอย่างปลอดภัย:" },
+                        { type: "code", filename: "bank_account_init.py", source:
 `class BankAccount:
     def __init__(self, owner, initial_balance=0):
         self.owner = owner
         self.__balance = initial_balance  # private
         self.__transactions = []
-    
+
     @property
     def balance(self):    # getter
-        return self.__balance
-    
-    def deposit(self, amount):
+        return self.__balance` },
+
+                        { type: "section", num: "03", label: "ใช้งานจริง", title: "ตรวจสอบค่าก่อนแก้ไขข้อมูลภายใน" },
+                        { type: "text", text: "method deposit/withdraw ควบคุมการเข้าถึง __balance โดยตรวจสอบความถูกต้องก่อนแก้ไขทุกครั้ง แทนที่จะปล่อยให้ใครก็แก้ __balance ตรง ๆ ได้:" },
+                        { type: "code", filename: "bank_account_methods.py", source:
+`    def deposit(self, amount):
         if amount <= 0:
             raise ValueError("ฝากเงินต้องมากกว่า 0")
         self.__balance += amount
         self.__transactions.append(f"+{amount}")
         print(f"ฝาก {amount:,} บาท ยอดรวม: {self.__balance:,} บาท")
-    
+
     def withdraw(self, amount):
         if amount <= 0:
             raise ValueError("ถอนเงินต้องมากกว่า 0")
@@ -1466,23 +1484,18 @@ print(isinstance(dog, Cat))     # False`
             raise ValueError("ยอดเงินไม่พอ")
         self.__balance -= amount
         self.__transactions.append(f"-{amount}")
-        print(f"ถอน {amount:,} บาท ยอดคงเหลือ: {self.__balance:,} บาท")
-    
-    def show_statement(self):
-        print(f"\\n=== Statement ของ {self.owner} ===")
-        for t in self.__transactions:
-            print(f"  {t}")
-        print(f"  ยอดปัจจุบัน: {self.__balance:,} บาท")
+        print(f"ถอน {amount:,} บาท ยอดคงเหลือ: {self.__balance:,} บาท")` },
 
-# ใช้งาน
-acc = BankAccount("Somchai", 1000)
+                        { type: "section", num: "04", label: "เรียกใช้งาน", title: "เข้าถึงยอดเงินผ่าน property เท่านั้น" },
+                        { type: "code", filename: "use_bank_account.py", source:
+`acc = BankAccount("Somchai", 1000)
 acc.deposit(500)
 acc.withdraw(200)
 print(f"ยอดเงิน: {acc.balance:,} บาท")  # ผ่าน property
-acc.show_statement()
 
-# ไม่สามารถเข้าถึง __balance ตรงๆ ได้
-# print(acc.__balance)  # AttributeError!`
+# print(acc.__balance)  # AttributeError! เข้าถึงตรง ๆ ไม่ได้` },
+                        { type: "tip", kind: "warn", text: "เพราะ Name Mangling ทำให้ __balance ถูกเปลี่ยนชื่อจริงภายในเป็น _BankAccount__balance การเขียน acc.__balance ตรง ๆ จากภายนอกจึงหาไม่เจอและเกิด AttributeError — ต้องผ่าน acc.balance (property) เท่านั้น" }
+                    ]
                 }
             },
             takeaways: [

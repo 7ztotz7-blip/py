@@ -216,7 +216,7 @@
       (testType==='pre'?'แบบทดสอบก่อนเรียน':'แบบทดสอบหลังเรียน')+' · หน่วยที่ '+unit.id+' '+unit.title;
     document.getElementById('resultsLinkRow').style.display='none';
   } else if(isFinalExam){
-    document.getElementById('qtitleText').textContent = 'แบบทดสอบรวมท้ายหลักสูตร · ครอบคลุมทั้ง 5 หน่วย';
+    document.getElementById('qtitleText').textContent = 'แบบทดสอบรวมท้ายหลักสูตร · ครอบคลุมทั้ง '+courseUnits.length+' หน่วย';
     document.getElementById('resultsLinkRow').style.display='none';
   }
 

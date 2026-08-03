@@ -126,7 +126,7 @@
         <div class="lv" id="profLevel">0%</div>
         <div class="ll">ความคืบหน้ารวม</div>
         <div class="lbar"><i id="profLevelBar"></i></div>
-        <div class="lx" id="profXpLabel">0 / 24 บท</div>
+        <div class="lx" id="profXpLabel">0 / 29 บท</div>
       </div>
     </div>
   </section>
@@ -237,10 +237,11 @@
   const perfectUnit = Object.values(unitScores).some(function(u){
     return (u.pre && u.pre.pct === 100) || (u.post && u.post.pct === 100);
   });
+  const halfwayLessons = Math.round(totalLessons/2);
   const achievements = [
     { icon:'🚀', name:'ก้าวแรก', desc:'เรียนจบบทแรก', unlocked: completed.length >= 1 },
-    { icon:'⚡', name:'ครึ่งทางแล้ว', desc:'เรียนจบ 12 จาก 24 บท', unlocked: completed.length >= 12 },
-    { icon:'📚', name:'เรียนจบทุกบท', desc:'ครบทั้ง 24 บทเรียน', unlocked: completed.length >= 24 },
+    { icon:'⚡', name:'ครึ่งทางแล้ว', desc:'เรียนจบ '+halfwayLessons+' จาก '+totalLessons+' บท', unlocked: completed.length >= halfwayLessons },
+    { icon:'📚', name:'เรียนจบทุกบท', desc:'ครบทั้ง '+totalLessons+' บทเรียน', unlocked: completed.length >= totalLessons },
     { icon:'💯', name:'มือฉมัง', desc:'ทำแบบทดสอบได้เต็ม 100%', unlocked: perfectUnit }
   ].concat(courseUnits.map(function(u){
     return { icon:String(u.id), name:'จบส่วนที่ '+u.id, desc:u.title, unlocked: pyIsUnitPostPassed(unitScores, u.id) };

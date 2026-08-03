@@ -108,7 +108,7 @@
     <a href="profile.html">โปรไฟล์</a>
   </nav>
   <div class="tb-right">
-    <span class="chiplet" style="color:var(--accent-deep)" id="xpChip">⭐ 0 XP</span>
+    <span class="chiplet" style="color:var(--accent-deep)" id="xpChip">📊 0%</span>
     <a class="tb-av" href="profile.html">ใ</a>
   </div>
 </header>
@@ -143,8 +143,8 @@
           <div class="sn" id="statLessons">0</div><div class="sl">บทที่เรียนจบ</div>
         </div>
         <div class="stat">
-          <div class="si" style="background:linear-gradient(140deg,var(--gold),var(--gold-deep))">⭐</div>
-          <div class="sn" id="statXp">0</div><div class="sl">คะแนนสะสม (XP)</div>
+          <div class="si" style="background:linear-gradient(140deg,var(--gold),var(--gold-deep))">📊</div>
+          <div class="sn" id="statXp">0%</div><div class="sl">ความคืบหน้ารวม</div>
         </div>
       </div>
 
@@ -182,7 +182,7 @@
   const { completed, unitScores, finalExam } = progress;
   const displayName = profileDoc.name || user.displayName || user.email.split('@')[0];
 
-  document.getElementById('xpChip').textContent = '⭐ '+(completed.length*15).toLocaleString('en-US')+' XP';
+  document.getElementById('xpChip').textContent = '📊 '+Math.round((completed.length/courseData.lessons.length)*100)+'%';
   document.getElementById('greetName').textContent = displayName;
   document.getElementById('greetDate').textContent = new Date().toLocaleDateString('th-TH',{weekday:'long',day:'numeric',month:'short',year:'numeric'});
 
@@ -239,7 +239,7 @@
 
   // stat row
   document.getElementById('statLessons').textContent = completed.length;
-  document.getElementById('statXp').textContent = (completed.length*15).toLocaleString('en-US');
+  document.getElementById('statXp').textContent = pct+'%';
 
   // "เรียนต่อไปนี้" — next up to 3 lessons in real course order, starting
   // from the current unlock frontier

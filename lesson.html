@@ -220,7 +220,7 @@ code{font-family:'IBM Plex Mono',monospace;}
   <a class="tb-logo" href="dashboard.html"><span class="tb-mk">py</span></a>
   <div class="tb-crumb" id="tbCrumb"></div>
   <div class="tb-right">
-    <span class="chiplet" style="color:var(--accent-d)" id="xpChip">⭐ 0</span>
+    <span class="chiplet" style="color:var(--accent-d)" id="xpChip">📊 0%</span>
     <a class="tb-av" href="profile.html">ใ</a>
   </div>
 </header>
@@ -233,7 +233,7 @@ code{font-family:'IBM Plex Mono',monospace;}
     <div class="sb-head" id="sbHead"></div>
     <div class="sb-body" id="sbBody"></div>
     <div class="sb-foot">
-      <div class="xp-label"><span>XP รวม</span><strong id="xpTotal">0 XP</strong></div>
+      <div class="xp-label"><span>ความคืบหน้ารวม</span><strong id="xpTotal">0/0 บท</strong></div>
       <div class="xp-track"><div class="xp-fill" id="xpFill"></div></div>
     </div>
   </aside>
@@ -405,17 +405,17 @@ function renderHeader(){
   document.getElementById('tbCrumb').innerHTML=
     '<span>หน่วยที่ '+unit.id+' · '+esc(unit.title)+'</span><span class="sep">›</span><span class="cur">บทที่ '+lessonId+' · '+esc(lesson.title)+'</span>';
   document.getElementById('stepPill').innerHTML=
-    '<span class="step-dot"></span>บทที่ '+lessonId+' จาก '+TOTAL+' &nbsp;·&nbsp; ⏱️ ~'+mins+' นาที &nbsp;·&nbsp; ⭐ +15 XP';
+    '<span class="step-dot"></span>บทที่ '+lessonId+' จาก '+TOTAL+' &nbsp;·&nbsp; ⏱️ ~'+mins+' นาที';
   document.getElementById('lTitle').textContent=lesson.content.th.title||lesson.title;
   document.getElementById('lDesc').textContent=c.intro||'';
   document.getElementById('goalsRow').innerHTML=(c.goals||[]).map(g=>
     '<div class="g-chip done"><span class="g-ic"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>'+esc(g)+'</div>'
   ).join('');
   document.getElementById('progFill').style.width=Math.round(((unlocked-1)/TOTAL)*100)+'%';
-  const xp=completed.length*15;
-  document.getElementById('xpChip').textContent='⭐ '+xp.toLocaleString('en-US');
-  document.getElementById('xpTotal').textContent=xp.toLocaleString('en-US')+' XP';
-  document.getElementById('xpFill').style.width=Math.round((completed.length/TOTAL)*100)+'%';
+  const pct=Math.round((completed.length/TOTAL)*100);
+  document.getElementById('xpChip').textContent='📊 '+pct+'%';
+  document.getElementById('xpTotal').textContent=completed.length+'/'+TOTAL+' บท';
+  document.getElementById('xpFill').style.width=pct+'%';
 }
 
 /* ---------- render sidebar (current unit's lessons) ---------- */
@@ -486,8 +486,8 @@ function renderTakeaways(){
   ).join('');
   const isLastOfUnit=unit.lessons[unit.lessons.length-1]===lessonId;
   document.getElementById('lnSub').textContent=isLastOfUnit
-    ? '+15 XP · ทำแบบทดสอบหลังเรียนเพื่อไปต่อ'
-    : (lessonId<TOTAL?'+15 XP · ปลดล็อกบทที่ '+(lessonId+1)+' แล้ว':'+15 XP · เรียนจบหลักสูตรแล้ว! 🎓');
+    ? 'ทำแบบทดสอบหลังเรียนเพื่อไปต่อ'
+    : (lessonId<TOTAL?'ปลดล็อกบทที่ '+(lessonId+1)+' แล้ว':'เรียนจบหลักสูตรแล้ว! 🎓');
 }
 
 async function completeLesson(){

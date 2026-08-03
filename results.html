@@ -36,7 +36,7 @@
     background:oklch(1 0 0/.1);border:1px solid oklch(1 0 0/.2);padding:8px 16px;border-radius:100px;}
 
   /* ===== stat row ===== */
-  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:22px;}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px;}
   .stat{background:linear-gradient(180deg,#fff,var(--soft));border:1px solid var(--line);border-radius:17px;padding:20px;box-shadow:var(--shadow-sm);
     transition:transform .18s,box-shadow .18s,border-color .18s;}
   .stat:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--accent-line);}
@@ -132,7 +132,7 @@
     <a href="profile.html">โปรไฟล์</a>
   </nav>
   <div class="tb-right">
-    <span class="chiplet" style="color:var(--accent-deep)" id="xpChip">⭐ 0 XP</span>
+    <span class="chiplet" style="color:var(--accent-deep)" id="xpChip">📊 0%</span>
     <a class="tb-av" href="profile.html">ใ</a>
   </div>
 </header>
@@ -155,7 +155,6 @@
     <div class="stat"><div class="ic" style="background:var(--ok-soft);color:var(--ok-deep)">✅</div><div class="n" id="statCorrect">0<small>/0</small></div><div class="l">ตอบถูก (ข้อสอบรวม)</div></div>
     <div class="stat"><div class="ic" style="background:oklch(0.96 0.04 25);color:oklch(0.55 0.16 25)">✕</div><div class="n" id="statWrong">0<small>/0</small></div><div class="l">ตอบผิด (ข้อสอบรวม)</div></div>
     <div class="stat"><div class="ic" style="background:var(--accent-soft);color:var(--accent-deep)">📊</div><div class="n" id="statAvg">0<small>%</small></div><div class="l">คะแนนเฉลี่ยแต่ละหน่วย</div></div>
-    <div class="stat"><div class="ic" style="background:oklch(0.95 0.05 85);color:var(--gold-deep)">⭐</div><div class="n" id="statXp">0</div><div class="l">คะแนนสะสมทั้งหมด (XP)</div></div>
   </div>
 
   <!-- MODULE BREAKDOWN -->
@@ -209,7 +208,7 @@
 
   const [profileDoc, progress] = await Promise.all([loadProfile(user.uid), loadProgress(user.uid)]);
   const { completed, unitScores, finalExam } = progress;
-  document.getElementById('xpChip').textContent = '⭐ '+(completed.length*15).toLocaleString('en-US')+' XP';
+  document.getElementById('xpChip').textContent = '📊 '+Math.round((completed.length/courseData.lessons.length)*100)+'%';
 
   // this page is the reward for finishing everything — bounce anyone who
   // hasn't actually earned it back to the dashboard instead of showing a
@@ -232,7 +231,6 @@
   const unitPcts = courseUnits.map(u=>unitScores[u.id].post.pct);
   const avgPct = Math.round(unitPcts.reduce((a,b)=>a+b,0)/unitPcts.length);
   document.getElementById('statAvg').innerHTML = avgPct+'<small>%</small>';
-  document.getElementById('statXp').textContent = (completed.length*15).toLocaleString('en-US');
 
   // real per-unit post-test breakdown (replaces the old made-up "7 categories")
   document.getElementById('breakdownCt').textContent = courseUnits.length+' หน่วย';

@@ -245,7 +245,7 @@
     <a href="profile.html">โปรไฟล์</a>
   </nav>
   <div class="tb-right">
-    <span class="chiplet" style="color:var(--accent-deep)" id="xpChip">⭐ 0 XP</span>
+    <span class="chiplet" style="color:var(--accent-deep)" id="xpChip">📊 0%</span>
     <div class="tb-av">ใ</div>
   </div>
 </header>
@@ -291,7 +291,7 @@
   const user = await requireUser();
   if(!user) throw new Error('redirecting to login'); // requireUser() already navigated away
   const { completed, unitScores, finalExam } = await loadProgress(user.uid);
-  document.getElementById('xpChip').textContent = '⭐ '+(completed.length*15).toLocaleString('en-US')+' XP';
+  document.getElementById('xpChip').textContent = '📊 '+Math.round((completed.length/courseData.lessons.length)*100)+'%';
 
   const TOTAL_LESSONS = courseData.lessons.length;
   const unlocked = pyComputeUnlockedLessonId(completed, unitScores);

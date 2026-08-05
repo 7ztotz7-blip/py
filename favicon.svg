@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="g" x1="10%" y1="0%" x2="90%" y2="100%">
+      <stop offset="0%" stop-color="#4A72F0"/>
+      <stop offset="100%" stop-color="#2748B8"/>
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="56" height="56" rx="16" fill="url(#g)"/>
+  <text x="32" y="34" text-anchor="middle" dominant-baseline="central"
+        font-family="'IBM Plex Mono',Consolas,Menlo,monospace" font-weight="700"
+        font-size="26" fill="#ffffff">py</text>
+</svg>

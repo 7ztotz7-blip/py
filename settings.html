@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>py — การตั้งค่า</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="pystart.css" rel="stylesheet" />
+<style>
+  body{padding-bottom:70px;}
+  .page-head{margin-top:30px;}
+  .page-head h1{font-size:28px;font-weight:600;letter-spacing:-.02em;}
+  .page-head p{color:var(--muted);font-size:15px;margin-top:6px;}
+
+  .section{margin-top:30px;}
+  .stitle{display:flex;align-items:center;gap:11px;margin-bottom:16px;}
+  .stitle h2{font-size:18.5px;font-weight:600;letter-spacing:-.01em;}
+  .stitle .si{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:#fff;font-size:15px;
+    background:linear-gradient(140deg,var(--accent-2),var(--accent-deep));}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 26px;box-shadow:var(--shadow-md);}
+
+  .set-form{max-width:360px;display:flex;flex-direction:column;gap:14px;}
+  .set-row label{display:block;font-size:13.5px;font-weight:600;margin-bottom:6px;}
+  .set-row input{width:100%;height:46px;border:1.5px solid var(--line);border-radius:11px;padding:0 14px;
+    font-size:14.5px;color:var(--ink);background:var(--card);transition:.18s;}
+  .set-row input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);}
+  .set-msg{display:none;padding:11px 14px;border-radius:10px;font-size:13.5px;line-height:1.5;}
+  .set-msg.set-error{background:oklch(0.97 0.03 25);border:1px solid oklch(0.85 0.08 25);color:oklch(0.45 0.14 25);}
+  .set-msg.set-success{background:oklch(0.97 0.05 155);border:1px solid oklch(0.82 0.09 155);color:oklch(0.4 0.1 155);}
+  .set-submit{align-self:flex-start;}
+</style>
+</head>
+<body data-fx=".topbar, .page-head, .section">
+
+<header class="topbar">
+  <a class="tb-logo" href="index.html"><span class="tb-mk">py</span></a>
+  <button class="tb-menu-btn" id="tbMenuBtn" type="button" aria-label="เมนู" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+  <nav class="tb-nav">
+    <a href="courses.html">หลักสูตร</a>
+    <a href="dashboard.html">ภาพรวมการเรียน</a>
+    <a href="profile.html">โปรไฟล์</a>
+    <a href="settings.html" class="cur">ตั้งค่า</a>
+  </nav>
+  <div class="tb-right">
+    <span class="chiplet" style="color:var(--accent-deep)" id="xpChiplet">📊 0%</span>
+    <button class="btn btn-ghost sm tb-compact" id="signOutBtn" type="button" title="ออกจากระบบ">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      <span class="tb-compact-tx">ออกจากระบบ</span>
+    </button>
+    <a class="tb-av" href="profile.html" id="tbAvatar">?</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="page-head">
+    <h1>การตั้งค่า</h1>
+    <p>จัดการชื่อที่แสดงและรหัสผ่านของบัญชีคุณ</p>
+  </div>
+
+  <!-- DISPLAY NAME -->
+  <section class="section">
+    <div class="stitle">
+      <div class="si">👤</div>
+      <h2>ชื่อที่แสดง</h2>
+    </div>
+    <div class="card">
+      <form id="nameForm" class="set-form">
+        <div class="set-msg set-error" id="nameError"></div>
+        <div class="set-msg set-success" id="nameSuccess"></div>
+        <div class="set-row">
+          <label>ชื่อที่ใช้แสดงในเว็บไซต์</label>
+          <input type="text" id="nameInput" placeholder="เช่น ใจดี โค้ดเก่ง" required />
+        </div>
+        <button type="submit" class="btn btn-primary set-submit" id="nameSubmitBtn">บันทึกชื่อ</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- CHANGE PASSWORD -->
+  <section class="section">
+    <div class="stitle">
+      <div class="si">🔐</div>
+      <h2>เปลี่ยนรหัสผ่าน</h2>
+    </div>
+    <div class="card">
+      <form id="pwForm" class="set-form">
+        <div class="set-msg set-error" id="pwError"></div>
+        <div class="set-msg set-success" id="pwSuccess"></div>
+        <div class="set-row">
+          <label>รหัสผ่านปัจจุบัน</label>
+          <input type="password" id="curPw" placeholder="รหัสผ่านปัจจุบัน" required autocomplete="current-password" />
+        </div>
+        <div class="set-row">
+          <label>รหัสผ่านใหม่</label>
+          <input type="password" id="newPw" placeholder="อย่างน้อย 8 ตัวอักษร" required minlength="8" autocomplete="new-password" />
+        </div>
+        <div class="set-row">
+          <label>ยืนยันรหัสผ่านใหม่</label>
+          <input type="password" id="confirmPw" placeholder="พิมพ์รหัสผ่านใหม่อีกครั้ง" required minlength="8" autocomplete="new-password" />
+        </div>
+        <button type="submit" class="btn btn-primary set-submit" id="pwSubmitBtn">เปลี่ยนรหัสผ่าน</button>
+      </form>
+    </div>
+  </section>
+</div>
+
+<script src="pystart-data.js"></script>
+<script type="module">
+  import { auth } from './assets/js/firebase.js';
+  import {
+    signOut, updateProfile, EmailAuthProvider, reauthenticateWithCredential, updatePassword
+  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { requireUser, loadProgress, loadProfile, saveProfileName } from './assets/js/progress-store.js';
+
+  document.getElementById('signOutBtn').addEventListener('click', async ()=>{
+    await signOut(auth);
+    location.href='index.html';
+  });
+
+  const user = await requireUser();
+  if(!user) throw new Error('redirecting to login'); // requireUser() already navigated away
+
+  const profileDoc = await loadProfile(user.uid);
+  let displayName = profileDoc.name || user.displayName || user.email.split('@')[0];
+  const initial = displayName.trim().charAt(0).toUpperCase() || '?';
+  document.getElementById('tbAvatar').textContent = initial;
+  document.getElementById('nameInput').value = displayName;
+
+  const { completed } = await loadProgress(user.uid);
+  const overallPct = Math.round((completed.length/courseData.lessons.length)*100);
+  document.getElementById('xpChiplet').textContent = '📊 '+overallPct+'%';
+
+  // ---------- display name ----------
+  const nameForm = document.getElementById('nameForm');
+  const nameError = document.getElementById('nameError');
+  const nameSuccess = document.getElementById('nameSuccess');
+  const nameSubmitBtn = document.getElementById('nameSubmitBtn');
+  nameForm.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    nameError.style.display='none';
+    nameSuccess.style.display='none';
+    const newName = document.getElementById('nameInput').value.trim();
+    if(!newName){ nameError.textContent='กรุณาใส่ชื่อที่ต้องการแสดง'; nameError.style.display='block'; return; }
+
+    nameSubmitBtn.disabled=true;
+    const originalText=nameSubmitBtn.textContent;
+    nameSubmitBtn.textContent='กำลังบันทึก...';
+    try{
+      await saveProfileName(user.uid, newName);
+      await updateProfile(user, { displayName: newName });
+      displayName = newName;
+      document.getElementById('tbAvatar').textContent = newName.trim().charAt(0).toUpperCase() || '?';
+      nameSuccess.textContent='บันทึกชื่อสำเร็จแล้ว';
+      nameSuccess.style.display='block';
+    } catch(err){
+      nameError.textContent='เกิดข้อผิดพลาด: '+err.message;
+      nameError.style.display='block';
+    } finally {
+      nameSubmitBtn.disabled=false;
+      nameSubmitBtn.textContent=originalText;
+    }
+  });
+
+  // ---------- change password ----------
+  const pwForm = document.getElementById('pwForm');
+  const pwError = document.getElementById('pwError');
+  const pwSuccess = document.getElementById('pwSuccess');
+  const pwSubmitBtn = document.getElementById('pwSubmitBtn');
+  const PW_ERRORS = {
+    'auth/wrong-password': 'รหัสผ่านปัจจุบันไม่ถูกต้อง',
+    'auth/invalid-credential': 'รหัสผ่านปัจจุบันไม่ถูกต้อง',
+    'auth/weak-password': 'รหัสผ่านใหม่สั้นเกินไป ต้องมีอย่างน้อย 6 ตัวอักษร',
+    'auth/too-many-requests': 'ลองผิดหลายครั้งเกินไป กรุณารอสักครู่แล้วลองใหม่'
+  };
+  pwForm.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    pwError.style.display='none';
+    pwSuccess.style.display='none';
+    const curPw=document.getElementById('curPw').value;
+    const newPw=document.getElementById('newPw').value;
+    const confirmPw=document.getElementById('confirmPw').value;
+    if(newPw.length<8){ pwError.textContent='รหัสผ่านใหม่ต้องมีอย่างน้อย 8 ตัวอักษร'; pwError.style.display='block'; return; }
+    if(newPw!==confirmPw){ pwError.textContent='รหัสผ่านใหม่ทั้งสองช่องไม่ตรงกัน'; pwError.style.display='block'; return; }
+
+    pwSubmitBtn.disabled=true;
+    const originalText=pwSubmitBtn.textContent;
+    pwSubmitBtn.textContent='กำลังเปลี่ยน...';
+    try{
+      const cred=EmailAuthProvider.credential(user.email,curPw);
+      await reauthenticateWithCredential(user,cred);
+      await updatePassword(user,newPw);
+      pwSuccess.textContent='เปลี่ยนรหัสผ่านสำเร็จแล้ว';
+      pwSuccess.style.display='block';
+      pwForm.reset();
+    } catch(err){
+      pwError.textContent=PW_ERRORS[err.code] || ('เกิดข้อผิดพลาด: '+err.message);
+      pwError.style.display='block';
+    } finally {
+      pwSubmitBtn.disabled=false;
+      pwSubmitBtn.textContent=originalText;
+    }
+  });
+</script>
+<script src="pystart-fx.js"></script>
+</body>
+</html>

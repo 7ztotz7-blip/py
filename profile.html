@@ -88,17 +88,6 @@
   .ach-name{font-size:14.5px;font-weight:600;letter-spacing:-.005em;}
   .ach-desc{font-size:12.5px;color:var(--muted);margin-top:2px;}
   .ach.locked .ach-desc{color:var(--faint);}
-
-  /* account settings — change password */
-  .pw-form{max-width:360px;display:flex;flex-direction:column;gap:14px;}
-  .pw-row label{display:block;font-size:13.5px;font-weight:600;margin-bottom:6px;}
-  .pw-row input{width:100%;height:46px;border:1.5px solid var(--line);border-radius:11px;padding:0 14px;
-    font-size:14.5px;color:var(--ink);background:var(--card);transition:.18s;}
-  .pw-row input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft);}
-  .pw-msg{display:none;padding:11px 14px;border-radius:10px;font-size:13.5px;line-height:1.5;}
-  .pw-msg.pw-error{background:oklch(0.97 0.03 25);border:1px solid oklch(0.85 0.08 25);color:oklch(0.45 0.14 25);}
-  .pw-msg.pw-success{background:oklch(0.97 0.05 155);border:1px solid oklch(0.82 0.09 155);color:oklch(0.4 0.1 155);}
-  .pw-submit{align-self:flex-start;}
 </style>
 </head>
 <body data-fx=".topbar, .phead, .strip > .sc" data-fx-count=".strip .sc .n, .ph-level .lv">
@@ -113,6 +102,7 @@
     <a href="courses.html">หลักสูตร</a>
     <a href="dashboard.html">ภาพรวมการเรียน</a>
     <a href="profile.html" class="cur">โปรไฟล์</a>
+    <a href="settings.html">ตั้งค่า</a>
   </nav>
   <div class="tb-right">
     <span class="chiplet" style="color:var(--accent-deep)" id="xpChiplet">📊 0%</span>
@@ -168,41 +158,12 @@
     </div>
     <div class="ach-grid" id="achGrid"></div>
   </section>
-
-  <!-- ACCOUNT SETTINGS -->
-  <section class="section">
-    <div class="stitle">
-      <div class="si">🔐</div>
-      <h2>ตั้งค่าบัญชี</h2>
-    </div>
-    <div class="card">
-      <form id="pwForm" class="pw-form">
-        <div class="pw-msg pw-error" id="pwError"></div>
-        <div class="pw-msg pw-success" id="pwSuccess"></div>
-        <div class="pw-row">
-          <label>รหัสผ่านปัจจุบัน</label>
-          <input type="password" id="curPw" placeholder="รหัสผ่านปัจจุบัน" required autocomplete="current-password" />
-        </div>
-        <div class="pw-row">
-          <label>รหัสผ่านใหม่</label>
-          <input type="password" id="newPw" placeholder="อย่างน้อย 8 ตัวอักษร" required minlength="8" autocomplete="new-password" />
-        </div>
-        <div class="pw-row">
-          <label>ยืนยันรหัสผ่านใหม่</label>
-          <input type="password" id="confirmPw" placeholder="พิมพ์รหัสผ่านใหม่อีกครั้ง" required minlength="8" autocomplete="new-password" />
-        </div>
-        <button type="submit" class="btn btn-primary pw-submit" id="pwSubmitBtn">เปลี่ยนรหัสผ่าน</button>
-      </form>
-    </div>
-  </section>
 </div>
 
 <script src="pystart-data.js"></script>
 <script type="module">
   import { auth } from './assets/js/firebase.js';
-  import {
-    signOut, EmailAuthProvider, reauthenticateWithCredential, updatePassword
-  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+  import { signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
   import { requireUser, loadProgress, loadProfile } from './assets/js/progress-store.js';
 
   document.getElementById('signOutBtn').addEventListener('click', async ()=>{
@@ -300,46 +261,6 @@
       '<div class="ach-info"><div class="ach-name">'+a.name+'</div><div class="ach-desc">'+a.desc+'</div></div>'+
       '</'+tag+'>';
   }).join('');
-
-  // ---------- change password ----------
-  const pwForm = document.getElementById('pwForm');
-  const pwError = document.getElementById('pwError');
-  const pwSuccess = document.getElementById('pwSuccess');
-  const pwSubmitBtn = document.getElementById('pwSubmitBtn');
-  const PW_ERRORS = {
-    'auth/wrong-password': 'รหัสผ่านปัจจุบันไม่ถูกต้อง',
-    'auth/invalid-credential': 'รหัสผ่านปัจจุบันไม่ถูกต้อง',
-    'auth/weak-password': 'รหัสผ่านใหม่สั้นเกินไป ต้องมีอย่างน้อย 6 ตัวอักษร',
-    'auth/too-many-requests': 'ลองผิดหลายครั้งเกินไป กรุณารอสักครู่แล้วลองใหม่'
-  };
-  pwForm.addEventListener('submit', async (e)=>{
-    e.preventDefault();
-    pwError.style.display='none';
-    pwSuccess.style.display='none';
-    const curPw=document.getElementById('curPw').value;
-    const newPw=document.getElementById('newPw').value;
-    const confirmPw=document.getElementById('confirmPw').value;
-    if(newPw.length<8){ pwError.textContent='รหัสผ่านใหม่ต้องมีอย่างน้อย 8 ตัวอักษร'; pwError.style.display='block'; return; }
-    if(newPw!==confirmPw){ pwError.textContent='รหัสผ่านใหม่ทั้งสองช่องไม่ตรงกัน'; pwError.style.display='block'; return; }
-
-    pwSubmitBtn.disabled=true;
-    const originalText=pwSubmitBtn.textContent;
-    pwSubmitBtn.textContent='กำลังเปลี่ยน...';
-    try{
-      const cred=EmailAuthProvider.credential(user.email,curPw);
-      await reauthenticateWithCredential(user,cred);
-      await updatePassword(user,newPw);
-      pwSuccess.textContent='เปลี่ยนรหัสผ่านสำเร็จแล้ว';
-      pwSuccess.style.display='block';
-      pwForm.reset();
-    } catch(err){
-      pwError.textContent=PW_ERRORS[err.code] || ('เกิดข้อผิดพลาด: '+err.message);
-      pwError.style.display='block';
-    } finally {
-      pwSubmitBtn.disabled=false;
-      pwSubmitBtn.textContent=originalText;
-    }
-  });
 </script>
 <script src="pystart-fx.js"></script>
 </body>

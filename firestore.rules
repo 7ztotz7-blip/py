@@ -1,0 +1,59 @@
+rules_version = '2';
+
+// Firestore Security Rules for the "py" Python course app.
+//
+// This file is NOT deployed automatically — there is no firebase.json /
+// Firebase CLI project wired up in this repo. Paste the contents below into
+// Firebase Console → Firestore Database → Rules tab → Publish.
+// (Console: https://console.firebase.google.com/project/pystart-971a2/firestore/rules)
+//
+// Data model (see assets/js/progress-store.js): a single top-level
+// collection `users`, one document per account keyed by Firebase Auth uid,
+// with fields { name, email, createdAt, completed, unitScores, finalExam }.
+// Every read/write in the app is scoped to the signed-in user's own uid, so
+// the rule below simply enforces that at the database level too — without
+// it, Firestore's default rules (either fully open "test mode" or fully
+// closed after the test-mode grace period expires) would either let any
+// signed-in user read/overwrite any other user's progress, or block the
+// app from working at all.
+//
+// Verified against the real Firestore emulator (11/11 passing): owner can
+// read/write their own doc; another signed-in user is denied both read and
+// write on someone else's doc; unauthenticated requests are denied outright;
+// writes with a wrong-typed field (e.g. completed as a string) are rejected;
+// delete is rejected even for the owner; unrelated collections are denied
+// by default. See the project's dev notes for the emulator test script.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner(userId) {
+      return request.auth != null && request.auth.uid == userId;
+    }
+
+    // Loose shape-check on writes: only checks the type of fields that are
+    // actually present, since the app frequently does partial merge writes
+    // (saveCompleted/saveUnitScores/saveFinalExam each touch one field at a
+    // time) rather than always writing the full document.
+    function isValidUserDoc() {
+      let d = request.resource.data;
+      return (!('name' in d)       || d.name is string)
+          && (!('email' in d)      || d.email is string)
+          && (!('completed' in d)  || d.completed is list)
+          && (!('unitScores' in d) || d.unitScores is map)
+          && (!('finalExam' in d)  || d.finalExam == null || d.finalExam is map);
+    }
+
+    match /users/{userId} {
+      allow read: if isOwner(userId);
+      allow create, update: if isOwner(userId) && isValidUserDoc();
+      allow delete: if false; // no account-deletion flow in the app
+    }
+
+    // Deny everything else by default (defense in depth — Firestore already
+    // denies unmatched paths, but this makes the intent explicit).
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

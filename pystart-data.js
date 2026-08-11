@@ -1624,13 +1624,13 @@ print(f"นักศึกษาทั้งหมด: {Student.student_count}")
 
         {
             id: 28,
-            title: "Inheritance",
-            desc: "การสืบทอดคุณสมบัติระหว่าง Class",
+            title: "Inheritance และ Polymorphism",
+            desc: "การสืบทอดคุณสมบัติระหว่าง Class และการเรียก method เดียวกันแต่ได้ผลต่างกัน",
             content: {
                 th: {
                     title: "Inheritance — การสืบทอด",
                     intro: "ถ้า Dog กับ Cat มีคุณสมบัติหลายอย่างเหมือนกัน (มีชื่อ กินอาหารได้) ทำไมต้องเขียนโค้ดซ้ำ? — Inheritance ให้สร้าง Class ร่วมแล้วสืบทอดคุณสมบัติไปได้เลย",
-                    goals: ["สร้าง Child Class ที่สืบทอดจาก Parent Class ได้", "ใช้ super() เรียก Parent constructor ได้", "Override method เพื่อเปลี่ยนพฤติกรรมเฉพาะได้"],
+                    goals: ["สร้าง Child Class ที่สืบทอดจาก Parent Class ได้", "ใช้ super() เรียก Parent constructor ได้", "Override method เพื่อเปลี่ยนพฤติกรรมเฉพาะได้", "เข้าใจ Polymorphism และเขียนโค้ดที่ใช้ได้กับหลาย Class พร้อมกันได้"],
                     blocks: [
                         { type: "section", num: "01", label: "แนวคิด", title: "Parent Class ที่ทุก Child จะสืบทอดไป" },
                         { type: "text", text: "Inheritance คือกลไกที่ให้ Child Class (Subclass) สืบทอด attributes และ methods ทั้งหมดจาก Parent Class (Superclass) ได้ทันทีโดยไม่ต้องเขียนโค้ดซ้ำ เริ่มจากสร้าง Parent Class ที่มีคุณสมบัติร่วมกันของทุก Child ไว้ก่อน:" },
@@ -1682,26 +1682,52 @@ cat.speak()     # เหมียว~ (Override)
 print(isinstance(dog, Animal))  # True
 print(isinstance(dog, Dog))     # True
 print(isinstance(dog, Cat))     # False` },
-                        { type: "text", text: "dog.speak() ใช้ method speak ของ Animal ตรง ๆ (Dog ไม่ได้ override ไว้) จึงพิมพ์ \"บั๊ดดี้ พูดว่า: โฮ่ง!\" ตามที่ Animal กำหนด แต่ cat.speak() ใช้เวอร์ชันที่ Cat override ไว้เอง จึงพิมพ์ \"มะลิ พูดเบาๆ ว่า: เหมียว~\" ต่างออกไปจาก Animal โดยสิ้นเชิง — ผลของ isinstance() ก็สมเหตุสมผลตามนี้: dog เป็นทั้ง Dog และ Animal (เพราะ Dog สืบทอดมาจาก Animal) แต่ไม่ใช่ Cat เพราะทั้งสองเป็น Child คนละสายที่แยกจากกัน แม้จะมี Parent เดียวกันก็ตาม" }
+                        { type: "text", text: "dog.speak() ใช้ method speak ของ Animal ตรง ๆ (Dog ไม่ได้ override ไว้) จึงพิมพ์ \"บั๊ดดี้ พูดว่า: โฮ่ง!\" ตามที่ Animal กำหนด แต่ cat.speak() ใช้เวอร์ชันที่ Cat override ไว้เอง จึงพิมพ์ \"มะลิ พูดเบาๆ ว่า: เหมียว~\" ต่างออกไปจาก Animal โดยสิ้นเชิง — ผลของ isinstance() ก็สมเหตุสมผลตามนี้: dog เป็นทั้ง Dog และ Animal (เพราะ Dog สืบทอดมาจาก Animal) แต่ไม่ใช่ Cat เพราะทั้งสองเป็น Child คนละสายที่แยกจากกัน แม้จะมี Parent เดียวกันก็ตาม" },
+
+                        { type: "section", num: "05", label: "แนวคิดใหม่", title: "Polymorphism — เรียก method เดียวกัน แต่ได้พฤติกรรมต่างกัน" },
+                        { type: "text", text: "จากตัวอย่าง dog.speak() กับ cat.speak() ที่ผ่านมา จริง ๆ แล้วคุณเพิ่งได้เห็น Polymorphism ไปแล้วโดยไม่รู้ตัว — Polymorphism คือการที่ Object ต่างชนิดกัน ตอบสนองต่อ method ชื่อเดียวกัน ด้วยพฤติกรรมของตัวเอง โดยที่โค้ดฝั่งที่เรียกใช้ไม่จำเป็นต้องรู้เลยว่าแต่ละ Object ทำงานข้างในต่างกันอย่างไร ขอแค่เรียกชื่อ method เดียวกันก็พอ ลองดูอีกตัวอย่างที่เห็นภาพชัดขึ้น — คำนวณพื้นที่รูปทรงต่าง ๆ ที่สืบทอดจาก Class เดียวกัน:" },
+                        { type: "code", filename: "shapes_polymorphism.py", source:
+`class Shape:
+    def area(self):
+        return 0
+
+class Circle(Shape):
+    def __init__(self, radius):
+        self.radius = radius
+    def area(self):    # override — คำนวณแบบวงกลม
+        return 3.14 * self.radius ** 2
+
+class Square(Shape):
+    def __init__(self, side):
+        self.side = side
+    def area(self):    # override — คำนวณแบบสี่เหลี่ยม
+        return self.side ** 2
+
+shapes = [Circle(3), Square(4)]
+for shape in shapes:
+    print(f"พื้นที่: {shape.area():.2f}")` },
+                        { type: "text", text: "ไล่ทีละรอบ: ลูปนี้เรียก shape.area() เหมือนกันทุกตัวโดยไม่สนใจว่า shape ตัวนั้นเป็น Circle หรือ Square แต่ผลลัพธ์ต่างกัน เพราะ Circle กับ Square ต่าง override area() ของตัวเองไว้ (เหมือนหลักการ override ที่เรียนไปข้างต้น) โค้ดในลูปจึงไม่ต้องเขียน if isinstance(shape, Circle) ... elif isinstance(shape, Square) ... แยกเงื่อนไขทีละชนิดเลย — นี่คือประโยชน์หลักของ Polymorphism: เขียนโค้ดที่ใช้ได้กับหลาย Class พร้อมกัน สั้นและขยายเพิ่มรูปทรงใหม่ได้ง่าย โดยไม่ต้องแก้โค้ดส่วนที่เรียกใช้เลย" },
+                        { type: "tip", kind: "note", text: "Polymorphism กับ Method Overriding เป็นเรื่องเดียวกันคนละมุมมอง: Overriding คือ \"วิธีทำ\" (เขียนทับ method ของ Parent ในแต่ละ Child) ส่วน Polymorphism คือ \"ผลลัพธ์ที่ได้\" (เรียก method ชื่อเดียวกัน แต่ได้พฤติกรรมต่างกันตามชนิดของ Object)" }
                     ]
                 }
             },
             takeaways: [
                 "Inheritance ให้ Child class สืบทอด attribute และ method ทั้งหมดจาก Parent class ได้ทันที",
                 "super().__init__() ใช้เรียก constructor ของ Parent ก่อน แล้วค่อยเพิ่ม attribute ของ Child เอง",
-                "Child class override method ของ Parent เพื่อเปลี่ยนพฤติกรรมเฉพาะของตัวเองได้"
+                "Child class override method ของ Parent เพื่อเปลี่ยนพฤติกรรมเฉพาะของตัวเองได้",
+                "Polymorphism คือการเรียก method ชื่อเดียวกันกับ Object ต่างชนิด แล้วได้พฤติกรรมตามชนิดของแต่ละ Object เอง ทำให้เขียนโค้ดที่ใช้ได้กับหลาย Class พร้อมกันได้โดยไม่ต้องแยกเงื่อนไข"
             ]
         },
 
         {
             id: 29,
-            title: "Encapsulation",
-            desc: "การซ่อนข้อมูลและ Property",
+            title: "Encapsulation และ Abstraction",
+            desc: "การซ่อนข้อมูล, Property และการซ่อนความซับซ้อนภายใน",
             content: {
                 th: {
                     title: "Encapsulation — การซ่อนข้อมูล",
                     intro: "ข้อมูลสำคัญอย่างยอดเงินในบัญชี ไม่ควรให้ใครก็ได้มาแก้ตรง ๆ — Encapsulation คือหลักการปกป้องข้อมูลภายใน Object ให้ถูกแก้ไขผ่านทางที่ตรวจสอบแล้วเท่านั้น",
-                    goals: ["เข้าใจการซ่อนข้อมูลด้วย protected/private ได้", "ใช้ @property สร้าง getter ที่ปลอดภัยได้", "สร้างคลาสที่ป้องกันข้อมูลผิดพลาดได้"],
+                    goals: ["เข้าใจการซ่อนข้อมูลด้วย protected/private ได้", "ใช้ @property สร้าง getter ที่ปลอดภัยได้", "สร้างคลาสที่ป้องกันข้อมูลผิดพลาดได้", "เข้าใจ Abstraction และแยกความต่างจาก Encapsulation ได้"],
                     blocks: [
                         { type: "section", num: "01", label: "แนวคิด", title: "protected และ private ต่างกันอย่างไร" },
                         { type: "text", text: "Python ใช้ underscore นำหน้าชื่อ attribute เป็น convention (ธรรมเนียมที่ตกลงกันในหมู่นักพัฒนา) บอกระดับการเข้าถึง ไม่ได้บังคับห้ามจริง ๆ เหมือนบางภาษา แต่เป็นสัญญาณบอกผู้เขียนโค้ดคนอื่น (รวมถึงตัวเองในอนาคต) ว่าไม่ควรยุ่งกับ attribute นี้จากภายนอกโดยตรง:" },
@@ -1752,14 +1778,20 @@ acc.withdraw(200)
 print(f"ยอดเงิน: {acc.balance:,} บาท")  # ผ่าน property
 
 # print(acc.__balance)  # AttributeError! เข้าถึงตรง ๆ ไม่ได้` },
-                        { type: "tip", kind: "warn", text: "เพราะ Name Mangling ทำให้ __balance ถูกเปลี่ยนชื่อจริงภายในเป็น _BankAccount__balance การเขียน acc.__balance ตรง ๆ จากภายนอกจึงหาไม่เจอและเกิด AttributeError — ต้องผ่าน acc.balance (property) เท่านั้น" }
+                        { type: "tip", kind: "warn", text: "เพราะ Name Mangling ทำให้ __balance ถูกเปลี่ยนชื่อจริงภายในเป็น _BankAccount__balance การเขียน acc.__balance ตรง ๆ จากภายนอกจึงหาไม่เจอและเกิด AttributeError — ต้องผ่าน acc.balance (property) เท่านั้น" },
+
+                        { type: "section", num: "05", label: "แนวคิดใหม่", title: "Abstraction — ซ่อนความซับซ้อน เหลือแค่ส่วนที่ต้องใช้" },
+                        { type: "text", text: "Abstraction คล้ายกับ Encapsulation แต่เน้นคนละมุม: Encapsulation เน้น \"ปกป้องข้อมูล\" ไม่ให้ใครมาแก้มั่ว ส่วน Abstraction เน้น \"ซ่อนความซับซ้อน\" ให้คนใช้งาน Object ไม่ต้องรู้รายละเอียดเบื้องหลังเลย รู้แค่ว่าเรียก method ไหนแล้วได้ผลลัพธ์อะไรก็พอ" },
+                        { type: "text", text: "ย้อนกลับไปดูตัวอย่าง BankAccount ก่อนหน้านี้: ตอนเรียก acc.deposit(500) คนเรียกไม่จำเป็นต้องรู้เลยว่าข้างในมีการเช็คเงื่อนไข amount <= 0 ยังไง บวกเข้า __balance ยังไง หรือบันทึกลง __transactions ยังไง — รู้แค่ว่า \"เรียก deposit() แล้วเงินจะเข้าบัญชี\" ก็พอใช้งานได้แล้ว รายละเอียดการทำงานภายในถูกซ่อนไว้เป็น Abstraction ให้เรียบร้อย" },
+                        { type: "tip", kind: "note", text: "พูดง่าย ๆ คือทุกครั้งที่ออกแบบ Class แล้วเปิดแค่ method ที่จำเป็นให้คนอื่นเรียกใช้ (เช่น deposit, withdraw, balance) โดยไม่เปิด attribute ภายในตรง ๆ (__balance, __transactions) คุณกำลังทำทั้ง Encapsulation และ Abstraction ไปพร้อมกันอยู่แล้วโดยไม่รู้ตัว" }
                     ]
                 }
             },
             takeaways: [
                 "Encapsulation ปกป้องข้อมูลภายใน Object ไม่ให้ถูกแก้ไขจากภายนอกโดยตรง",
                 "_name หมายถึง protected (เข้าถึงได้แต่ไม่ควร), __name หมายถึง private (เข้าถึงตรงๆ จากภายนอกไม่ได้)",
-                "@property ทำให้เรียก method ได้เหมือน attribute พร้อมตรวจสอบความถูกต้องของค่าก่อนกำหนด (setter)"
+                "@property ทำให้เรียก method ได้เหมือน attribute พร้อมตรวจสอบความถูกต้องของค่าก่อนกำหนด (setter)",
+                "Abstraction คือการซ่อนความซับซ้อนภายใน เปิดให้ใช้แค่ method ที่จำเป็น — Class ที่ทำ Encapsulation ดีมักได้ Abstraction มาด้วยโดยอัตโนมัติ"
             ]
         }
 

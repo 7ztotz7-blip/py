@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <link href="pystart.css" rel="stylesheet" />
 <script src="pystart-theme.js"></script>
+<script src="pystart-icons.js"></script>
 <style>
   body{padding-bottom:70px;}
 
@@ -143,7 +144,7 @@
   <!-- SCORE BREAKDOWN -->
   <section class="section">
     <div class="stitle">
-      <div class="si">📊</div>
+      <div class="si"><i data-ui-icon="chart"></i></div>
       <h2>คะแนนแยกตามหน่วย</h2>
       <span class="ct" id="breakdownCt">0 หน่วย</span>
     </div>
@@ -240,10 +241,10 @@
   });
   const halfwayLessons = Math.round(totalLessons/2);
   const achievements = [
-    { icon:'🚀', name:'ก้าวแรก', desc:'เรียนจบบทแรก', unlocked: completed.length >= 1 },
-    { icon:'⚡', name:'ครึ่งทางแล้ว', desc:'เรียนจบ '+halfwayLessons+' จาก '+totalLessons+' บท', unlocked: completed.length >= halfwayLessons },
-    { icon:'📚', name:'เรียนจบทุกบท', desc:'ครบทั้ง '+totalLessons+' บทเรียน', unlocked: completed.length >= totalLessons },
-    { icon:'💯', name:'มือฉมัง', desc:'ทำแบบทดสอบได้เต็ม 100%', unlocked: perfectUnit }
+    { icon:window.pyIcon('spark'), name:'ก้าวแรก', desc:'เรียนจบบทแรก', unlocked: completed.length >= 1 },
+    { icon:window.pyIcon('chart'), name:'ครึ่งทางแล้ว', desc:'เรียนจบ '+halfwayLessons+' จาก '+totalLessons+' บท', unlocked: completed.length >= halfwayLessons },
+    { icon:window.pyIcon('book'), name:'เรียนจบทุกบท', desc:'ครบทั้ง '+totalLessons+' บทเรียน', unlocked: completed.length >= totalLessons },
+    { icon:window.pyIcon('check'), name:'มือฉมัง', desc:'ทำแบบทดสอบได้เต็ม 100%', unlocked: perfectUnit }
   ].concat(courseUnits.map(function(u){
     return { icon:String(u.id), name:'จบส่วนที่ '+u.id, desc:u.title, unlocked: pyIsUnitPostPassed(unitScores, u.id) };
   }));
@@ -254,7 +255,7 @@
     const tag = a.unlocked && a.href ? 'a' : 'div';
     const hrefAttr = a.unlocked && a.href ? ' href="'+a.href+'"' : '';
     return '<'+tag+hrefAttr+' class="ach '+(a.unlocked?'unlocked':'locked')+(a.gold?' gold':'')+'">'+
-      '<div class="ach-badge">'+(a.unlocked?a.icon:'🔒')+'</div>'+
+      '<div class="ach-badge">'+(a.unlocked?a.icon:window.pyIcon('lock'))+'</div>'+
       '<div class="ach-info"><div class="ach-name">'+a.name+'</div><div class="ach-desc">'+a.desc+'</div></div>'+
       '</'+tag+'>';
   }).join('');

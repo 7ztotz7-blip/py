@@ -10,6 +10,7 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <link href="pystart.css" rel="stylesheet" />
 <script src="pystart-theme.js"></script>
+<script src="pystart-icons.js"></script>
 <style>
   body{padding-bottom:70px;}
 
@@ -214,19 +215,19 @@
     kickerEl.textContent = completed.length===0 ? 'พร้อมเริ่มเรียนหรือยัง' : 'เรียนต่อจากที่ค้างไว้';
     titleEl.textContent = 'บทที่ '+nextLessonId+' · '+nextLesson.title;
     metaEl.textContent = 'ส่วนที่ '+frontier.unit.id+' · '+frontier.unit.title;
-    ctaEl.textContent = completed.length===0 ? '▶ เริ่มเรียนเลย' : '▶ เรียนต่อเลย';
+    ctaEl.innerHTML = window.pyIcon('play')+' '+(completed.length===0 ? 'เริ่มเรียนเลย' : 'เรียนต่อเลย');
     ctaEl.href = 'lesson.html?lesson='+nextLessonId;
   } else if(frontier.state==='need-post'){
     kickerEl.textContent = 'ถึงเวลาทดสอบหลังเรียนแล้ว';
     titleEl.textContent = 'แบบทดสอบหลังเรียน · หน่วยที่ '+frontier.unit.id+' '+frontier.unit.title;
     metaEl.textContent = 'ทำแบบทดสอบหลังเรียนให้ผ่าน 70% เพื่อปลดล็อกหน่วยถัดไป';
-    ctaEl.textContent = '📝 ทำแบบทดสอบหลังเรียน';
+    ctaEl.innerHTML = window.pyIcon('file')+' ทำแบบทดสอบหลังเรียน';
     ctaEl.href = 'quiz.html?unit='+frontier.unit.id+'&type=post&next='+encodeURIComponent('dashboard.html');
   } else if(frontier.state==='need-final'){
     kickerEl.textContent = 'เรียนครบทุกหน่วยแล้ว!';
     titleEl.textContent = 'แบบทดสอบรวมท้ายหลักสูตร';
     metaEl.textContent = 'ทำแบบทดสอบรวมให้ผ่าน 70% เพื่อเรียนจบหลักสูตร';
-    ctaEl.textContent = '📝 ทำแบบทดสอบรวมท้ายหลักสูตร';
+    ctaEl.innerHTML = window.pyIcon('file')+' ทำแบบทดสอบรวมท้ายหลักสูตร';
     ctaEl.href = 'quiz.html?type=final&next='+encodeURIComponent('dashboard.html');
   } else {
     kickerEl.textContent = 'เรียนจบหลักสูตรแล้ว 🎉';
@@ -260,7 +261,7 @@
       const isCur = l.id===nextLessonId && frontier.state==='lesson';
       if(isDone) return '<a href="lesson.html?lesson='+l.id+'" class="nx"><span class="ni">'+CHECK+'</span><span class="nt"><span class="e">บทที่ '+String(l.id).padStart(2,'0')+' · เรียนจบแล้ว</span><b>'+l.title+'</b></span><span class="go">'+ARROW+'</span></a>';
       if(isCur) return '<a href="lesson.html?lesson='+l.id+'" class="nx cur"><span class="ni">'+PLAY+'</span><span class="nt"><span class="e">บทที่ '+String(l.id).padStart(2,'0')+' · กำลังเรียน</span><b>'+l.title+'</b></span><span class="go">'+ARROW+'</span></a>';
-      return '<a href="#" class="nx" style="pointer-events:none;opacity:.6;"><span class="ni">🔒</span><span class="nt"><span class="e">บทที่ '+String(l.id).padStart(2,'0')+'</span><b>'+l.title+'</b></span></a>';
+      return '<a href="#" class="nx" style="pointer-events:none;opacity:.6;"><span class="ni">'+window.pyIcon('lock')+'</span><span class="nt"><span class="e">บทที่ '+String(l.id).padStart(2,'0')+'</span><b>'+l.title+'</b></span></a>';
     }).join('');
   }
 

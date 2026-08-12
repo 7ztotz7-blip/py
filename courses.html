@@ -6,6 +6,7 @@
 <title>py — หลักสูตร Python</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <script src="pystart-theme.js"></script>
+<script src="pystart-icons.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -283,9 +284,9 @@
     <h1>Python ตั้งแต่ศูนย์<br/>จนเขียนใช้งานได้จริง</h1>
     <p class="lead">เส้นทางเรียนแบบเป็นขั้นเป็นตอนสำหรับคนไม่เคยเขียนโค้ด — เริ่มจากบรรทัดแรก ไปจนถึงสร้างโปรเจกต์ของตัวเองได้</p>
     <div class="hero-meta" id="heroMeta">
-      <span class="meta">📦 <b id="metaUnits">6</b> ส่วน</span>
-      <span class="meta">📖 <b id="metaLessons">29</b> บทเรียน</span>
-      <span class="meta">⏱️ <b id="metaHours">~4</b> ชั่วโมง</span>
+      <span class="meta"><i data-ui-icon="box"></i> <b id="metaUnits">6</b> ส่วน</span>
+      <span class="meta"><i data-ui-icon="book"></i> <b id="metaLessons">29</b> บทเรียน</span>
+      <span class="meta"><i data-ui-icon="clock"></i> <b id="metaHours">~4</b> ชั่วโมง</span>
       <span class="meta">🐍 รันโค้ด Python ได้จริงในเบราว์เซอร์</span>
     </div>
     <div class="hero-prog">
@@ -300,7 +301,7 @@
   <!-- ============ LESSON CONTENT ============ -->
   <div class="panel on" id="panel-learn">
     <div class="panel-intro">
-      <span class="pi">💡</span>
+      <span class="pi"><i data-ui-icon="bulb"></i></span>
       <div>เรียน<b>ตามลำดับจากบนลงล่าง</b> แต่ละบทต่อยอดจากบทก่อนหน้า — เรียนจบบทจะปลดล็อกบทถัดไปให้อัตโนมัติ</div>
     </div>
 
@@ -378,8 +379,8 @@
     const pctUnit=Math.round((doneCount/unit.lessons.length)*100);
     let statusHtml;
     if(isDone) statusHtml='<span class="mod-status s-done">เรียนจบแล้ว</span>';
-    else if(needsPost) statusHtml='<a class="mod-status s-cur" href="quiz.html?unit='+unit.id+'&type=post&next='+encodeURIComponent('courses.html')+'">📝 ทำแบบทดสอบหลังเรียน →</a>';
-    else if(isLocked) statusHtml='<span class="mod-status s-lock">🔒 ล็อกอยู่</span>';
+    else if(needsPost) statusHtml='<a class="mod-status s-cur" href="quiz.html?unit='+unit.id+'&type=post&next='+encodeURIComponent('courses.html')+'">'+window.pyIcon('file')+' ทำแบบทดสอบหลังเรียน →</a>';
+    else if(isLocked) statusHtml='<span class="mod-status s-lock">'+window.pyIcon('lock')+' ล็อกอยู่</span>';
     else statusHtml='<span class="mod-status s-cur">'+doneCount+' / '+unit.lessons.length+' บท</span>';
     const badge=isDone?CHECK:(isLocked?String(unit.id):String(unit.id));
     let chaptersHtml='';
@@ -391,8 +392,8 @@
       let icHtml,rowCls='ch',goHtml='';
       if(isChDone){icHtml='<span class="ch-ic done">'+CHECK+'</span>';goHtml='<a href="lesson.html?lesson='+id+'" class="ch-go">ทบทวน →</a>';}
       else if(isChCur){icHtml='<span class="ch-ic cur">'+PLAY+'</span>';rowCls+=' is-cur';goHtml='<a href="lesson.html?lesson='+id+'" class="ch-go">เรียนต่อ →</a>';}
-      else if(isChLocked){icHtml='<span class="ch-ic lock">🔒</span>';rowCls+=' is-lock';}
-      else {icHtml='<span class="ch-ic lock">🔒</span>';rowCls+=' is-lock';}
+      else if(isChLocked){icHtml='<span class="ch-ic lock">'+window.pyIcon('lock',14)+'</span>';rowCls+=' is-lock';}
+      else {icHtml='<span class="ch-ic lock">'+window.pyIcon('lock',14)+'</span>';rowCls+=' is-lock';}
       chaptersHtml+='<div class="'+rowCls+'">'+icHtml+'<span class="ch-num">'+String(id).padStart(2,'0')+'</span><span class="ch-name">'+l.title+'</span>'+goHtml+'</div>';
     });
     modulesHtml+=

@@ -261,7 +261,7 @@
 </script>
 
 <header class="topbar">
-  <a class="tb-logo" href="index.html" style="text-decoration:none;color:inherit"><span class="tb-mk">py</span></a>
+  <a class="tb-logo" href="index.html" aria-label="py" style="text-decoration:none;color:inherit"><span class="tb-mk"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 6 6 6-6 6M15 18h4" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
   <button class="tb-menu-btn" id="tbMenuBtn" type="button" aria-label="เมนู" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
   <nav class="tb-nav">
     <a href="courses.html" class="cur">หลักสูตร</a>
@@ -270,7 +270,7 @@
     <a href="settings.html">ตั้งค่า</a>
   </nav>
   <div class="tb-right">
-    <span class="chiplet" style="color:var(--accent-deep)" id="xpChip">📊 0%</span>
+    <span class="chiplet" style="color:var(--accent-deep)" id="xpChip"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg> 0%</span>
     <div class="tb-av">ใ</div>
   </div>
 </header>
@@ -316,7 +316,7 @@
   const user = await requireUser();
   if(!user) throw new Error('redirecting to login'); // requireUser() already navigated away
   const { completed, unitScores, finalExam } = await loadProgress(user.uid);
-  document.getElementById('xpChip').textContent = '📊 '+Math.round((completed.length/courseData.lessons.length)*100)+'%';
+  document.getElementById('xpChip').innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg> '+Math.round((completed.length/courseData.lessons.length)*100)+'%';
 
   const TOTAL_LESSONS = courseData.lessons.length;
   const unlocked = pyComputeUnlockedLessonId(completed, unitScores);

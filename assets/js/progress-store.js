@@ -42,16 +42,8 @@ export async function saveUnitScores(uid, unitScores){
 
 // { score, total, pct } for the 60-question cumulative final exam —
 // separate from unitScores since it isn't tied to any single unit.
-// Stamps completedAt (ms since epoch) the first time it's called with a
-// passing score, so results.html can show a real completion date.
 export async function saveFinalExam(uid, finalExam){
-  const payload = { ...finalExam };
-  if(finalExam.pct >= 70){
-    const existing = await getDoc(doc(db, 'users', uid));
-    const prior = existing.exists() ? existing.data().finalExam : null;
-    payload.completedAt = (prior && prior.completedAt) ? prior.completedAt : Date.now();
-  }
-  await setDoc(doc(db, 'users', uid), { finalExam: payload }, { merge: true });
+  await setDoc(doc(db, 'users', uid), { finalExam }, { merge: true });
 }
 
 export async function loadProfile(uid){

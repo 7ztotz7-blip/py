@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <link href="pystart.css" rel="stylesheet" />
+<script src="pystart-theme.js"></script>
 <style>
   body{padding-bottom:70px;}
   .page-head{margin-top:30px;}
@@ -31,6 +32,15 @@
   .set-msg.set-error{background:oklch(0.97 0.03 25);border:1px solid oklch(0.85 0.08 25);color:oklch(0.45 0.14 25);}
   .set-msg.set-success{background:oklch(0.97 0.05 155);border:1px solid oklch(0.82 0.09 155);color:oklch(0.4 0.1 155);}
   .set-submit{align-self:flex-start;}
+  .theme-choice{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:520px;}
+  .theme-option{position:relative;display:flex;align-items:center;gap:12px;padding:15px;border:1.5px solid var(--line);border-radius:14px;
+    background:var(--soft);text-align:left;transition:.18s;}
+  .theme-option:hover{border-color:var(--accent-line);}
+  .theme-option[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent);box-shadow:0 0 0 3px color-mix(in oklch,var(--accent-soft) 70%,transparent);}
+  .theme-preview{width:38px;height:38px;border-radius:11px;border:1px solid var(--line);flex:none;}
+  .theme-preview.light{background:linear-gradient(135deg,#fff 52%,#dff0ff 52%);}
+  .theme-preview.dark{background:linear-gradient(135deg,#172338 52%,#315b9c 52%);border-color:#49688e;}
+  .theme-option b{display:block;font-size:14.5px;}.theme-option span{display:block;font-size:12.5px;color:var(--muted);margin-top:2px;}
 </style>
 </head>
 <body data-fx=".topbar, .page-head, .section">
@@ -81,6 +91,21 @@
 
   <!-- CHANGE PASSWORD -->
   <section class="section">
+    <div class="stitle"><div class="si">🌗</div><h2>ลักษณะเว็บไซต์</h2></div>
+    <div class="card">
+      <div class="theme-choice" role="group" aria-label="เลือกธีมสี">
+        <button class="theme-option" type="button" data-theme-choice="light" aria-pressed="true">
+          <i class="theme-preview light"></i><span><b>โหมดสว่าง</b><span>ธีมปัจจุบันของเว็บไซต์</span></span>
+        </button>
+        <button class="theme-option" type="button" data-theme-choice="dark" aria-pressed="false">
+          <i class="theme-preview dark"></i><span><b>โหมดมืด</b><span>สบายตาเมื่อใช้งานในที่แสงน้อย</span></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHANGE PASSWORD -->
+  <section class="section">
     <div class="stitle">
       <div class="si">🔐</div>
       <h2>เปลี่ยนรหัสผ่าน</h2>
@@ -114,6 +139,13 @@
     signOut, updateProfile, EmailAuthProvider, reauthenticateWithCredential, updatePassword
   } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
   import { requireUser, loadProgress, loadProfile, saveProfileName } from './assets/js/progress-store.js';
+
+  const themeChoices=[...document.querySelectorAll('[data-theme-choice]')];
+  function paintThemeChoice(theme){
+    themeChoices.forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.themeChoice===theme)));
+  }
+  paintThemeChoice(document.documentElement.dataset.theme || 'light');
+  themeChoices.forEach(button=>button.addEventListener('click',()=>paintThemeChoice(window.pySetTheme(button.dataset.themeChoice))));
 
   document.getElementById('signOutBtn').addEventListener('click', async ()=>{
     await signOut(auth);

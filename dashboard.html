@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <link href="pystart.css" rel="stylesheet" />
+<script src="pystart-theme.js"></script>
 <style>
   body{padding-bottom:70px;}
 
@@ -224,15 +225,15 @@
   } else if(frontier.state==='need-final'){
     kickerEl.textContent = 'เรียนครบทุกหน่วยแล้ว!';
     titleEl.textContent = 'แบบทดสอบรวมท้ายหลักสูตร';
-    metaEl.textContent = 'ทำแบบทดสอบรวมให้ผ่าน 70% เพื่อปลดล็อกใบประกาศนียบัตร';
+    metaEl.textContent = 'ทำแบบทดสอบรวมให้ผ่าน 70% เพื่อเรียนจบหลักสูตร';
     ctaEl.textContent = '📝 ทำแบบทดสอบรวมท้ายหลักสูตร';
     ctaEl.href = 'quiz.html?type=final&next='+encodeURIComponent('dashboard.html');
   } else {
     kickerEl.textContent = 'เรียนจบหลักสูตรแล้ว 🎉';
-    titleEl.textContent = 'ดูใบประกาศนียบัตรของคุณ';
+    titleEl.textContent = 'คุณทำครบทุกบทเรียนแล้ว';
     metaEl.textContent = 'เก่งมาก! คุณผ่านทุกหน่วยและแบบทดสอบรวมแล้ว';
-    ctaEl.textContent = '🎖️ ดูใบประกาศนียบัตร';
-    ctaEl.href = 'results.html';
+    ctaEl.textContent = '📚 ทบทวนบทเรียน';
+    ctaEl.href = 'courses.html';
   }
   progLabelEl.textContent = 'ความคืบหน้ารวม '+completed.length+'/'+TOTAL_LESSONS+' บท · '+pct+'%';
   window.addEventListener('load',()=>{

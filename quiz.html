@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <link href="pystart.css" rel="stylesheet" />
+<script src="pystart-theme.js"></script>
 <style>
   body{min-height:100vh;display:flex;flex-direction:column;}
 
@@ -156,7 +157,7 @@
       <button class="btn btn-ghost" id="retryBtn">ทำใหม่อีกครั้ง</button>
       <a href="courses.html" class="btn btn-ok" id="rctaMain">ไปต่อ →</a>
     </div>
-    <p style="margin-top:18px;font-size:13.5px;color:var(--faint);" id="resultsLinkRow">นี่คือแบบทดสอบท้ายส่วน · <a href="results.html" style="color:var(--accent-deep);font-weight:600;text-decoration:none;">ดูตัวอย่างผลแบบทดสอบหลังเรียนแบบเต็ม →</a></p>
+    <p style="margin-top:18px;font-size:13.5px;color:var(--faint);" id="resultsLinkRow">ทำแบบทดสอบให้ผ่าน 70% เพื่อปลดล็อกส่วนถัดไป</p>
   </div>
 </main>
 
@@ -305,13 +306,13 @@
       pass=pct>=70;
       document.getElementById('rtitle').textContent=pass?'ยินดีด้วย! เรียนจบหลักสูตรแล้ว 🎉':'ยังไม่ผ่าน ลองอีกครั้งนะ';
       document.getElementById('rsub').textContent=pass
-        ?'คุณผ่านแบบทดสอบรวมทุกหน่วยแล้ว — ไปดูใบประกาศนียบัตรของคุณได้เลย'
-        :'ต้องได้ 70% ขึ้นไปถึงจะปลดล็อกใบประกาศนียบัตรได้ ทบทวนเนื้อหาแล้วกลับมาทำใหม่';
+        ?'คุณผ่านแบบทดสอบรวมทุกหน่วยแล้ว — เรียนจบหลักสูตรเรียบร้อย!'
+        :'ต้องได้ 70% ขึ้นไปจึงจะเรียนจบหลักสูตรได้ ทบทวนเนื้อหาแล้วกลับมาทำใหม่';
       if(pass){
-        rctaMain.textContent='ดูใบประกาศนียบัตร →';
-        rctaMain.href=nextParam||'results.html';
+        rctaMain.textContent='กลับหน้าหลักสูตร →';
+        rctaMain.href=nextParam||'courses.html';
       } else {
-        rctaMain.style.display='none'; // must pass to unlock results.html — only "ทำใหม่อีกครั้ง" is available
+        rctaMain.style.display='none'; // must pass to complete the course — only "ทำใหม่อีกครั้ง" is available
       }
     } else {
       pass=pct>=70;

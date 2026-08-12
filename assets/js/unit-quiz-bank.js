@@ -3,7 +3,7 @@
    quiz.html (?unit=N&type=pre|post), plus a 60-question cumulative final
    exam (?type=final) drawn from lesson content across the 5 coding units
    (unit 1 is a no-code conceptual intro, not covered by the final exam) and
-   required to pass before results.html unlocks.
+   required to complete the course.
    Shape: { q: "...", options: ["...","...","...","..."], ans: 0-3, explanation: "..." }. */
 const unitTests = {
     1: {
@@ -166,7 +166,7 @@ const unitTests = {
 
 /* 60-question cumulative final exam — 12 questions per unit (6 drawn from that
    unit's original pre-test pool, 6 from its post-test pool), covering every unit
-   proportionally. Required to pass at >=70% before results.html unlocks. */
+   proportionally. Required to pass at >=70% to complete the course. */
 const finalExam = [
       { q: "เครื่องหมายใดใช้กำหนดค่าให้ตัวแปรใน Python?", options: ["==", "=", ":=", "->"], ans: 1, explanation: "เครื่องหมาย = ใช้กำหนดค่าให้ตัวแปร ส่วน == ใช้เปรียบเทียบว่าค่าเท่ากันหรือไม่" },
       { q: "ไฟล์ต้นฉบับของโปรแกรม Python ใช้นามสกุลใด?", options: [".py", ".python", ".pt", ".pyt"], ans: 0, explanation: "ไฟล์ต้นฉบับ Python ใช้นามสกุล .py เสมอ" },

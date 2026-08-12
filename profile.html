@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <link href="pystart.css" rel="stylesheet" />
+<script src="pystart-theme.js"></script>
 <style>
   body{padding-bottom:70px;}
 
@@ -207,10 +208,8 @@
   requestAnimationFrame(()=>{levelBar.style.transition='width 1s cubic-bezier(.2,.7,.2,1)';levelBar.style.width=overallPct+'%';});
 
   // ---------- score breakdown ----------
-  // Post-test result per unit, same source of truth as results.html's
-  // breakdown — but unlike that page (which only renders once every unit
-  // is done), a unit here can still be untouched or only pre-tested, so
-  // each row has to degrade gracefully instead of assuming .post exists.
+  // A unit can still be untouched or only pre-tested, so each row needs
+  // to degrade gracefully instead of assuming a post-test result exists.
   document.getElementById('breakdownCt').textContent = courseUnits.length+' หน่วย';
   document.getElementById('breakdown').innerHTML = courseUnits.map(function(u){
     const us = unitScores[u.id];
@@ -247,9 +246,7 @@
     { icon:'💯', name:'มือฉมัง', desc:'ทำแบบทดสอบได้เต็ม 100%', unlocked: perfectUnit }
   ].concat(courseUnits.map(function(u){
     return { icon:String(u.id), name:'จบส่วนที่ '+u.id, desc:u.title, unlocked: pyIsUnitPostPassed(unitScores, u.id) };
-  })).concat([
-    { icon:'🏅', name:'ใบประกาศ', desc:'สอบปลายทางผ่านเกณฑ์', unlocked: pyIsFinalExamPassed(finalExam), gold:true, href:'results.html' }
-  ]);
+  }));
 
   const unlockedCount = achievements.filter(function(a){ return a.unlocked; }).length;
   document.getElementById('achCount').textContent = unlockedCount+'/'+achievements.length+' ปลดล็อก';

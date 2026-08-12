@@ -1854,7 +1854,7 @@ function pyComputeUnlockedLessonId(completed, unitScores){
 // The 60-question cumulative final exam (?type=final in quiz.html) only
 // opens once every unit's lessons are done and its post-test passed, and
 // must itself score >=70% before the course counts as fully complete
-// (this is what gates results.html / the certificate).
+// (this is what marks the course as complete).
 function pyIsFinalExamPassed(finalScore){
     return !!(finalScore && finalScore.pct >= 70);
 }

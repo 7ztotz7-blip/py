@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>py — หลักสูตร Python</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<script src="pystart-theme.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -330,13 +331,13 @@
     continueBtnText.textContent = 'ทำแบบทดสอบหลังเรียน';
     continueBtn.href = 'quiz.html?unit='+frontier.unit.id+'&type=post&next='+encodeURIComponent('courses.html');
   } else if(frontier.state==='need-final'){
-    document.getElementById('progSub').textContent = 'เรียนครบทุกหน่วยแล้ว! ทำแบบทดสอบรวมท้ายหลักสูตรให้ผ่านเพื่อปลดล็อกใบประกาศนียบัตร';
+    document.getElementById('progSub').textContent = 'เรียนครบทุกหน่วยแล้ว! ทำแบบทดสอบรวมท้ายหลักสูตรให้ผ่านเพื่อเรียนจบ';
     continueBtnText.textContent = 'ทำแบบทดสอบรวมท้ายหลักสูตร';
     continueBtn.href = 'quiz.html?type=final&next='+encodeURIComponent('courses.html');
   } else {
     document.getElementById('progSub').textContent = 'เรียนจบหลักสูตรแล้ว 🎉';
-    continueBtnText.textContent = 'ดูใบประกาศนียบัตร';
-    continueBtn.href = 'results.html';
+    continueBtnText.textContent = 'ทบทวนบทเรียน';
+    continueBtn.href = 'lesson.html?lesson=1';
   }
 
   // module + chapter list

@@ -13,6 +13,8 @@
 <style>
   body{padding-bottom:70px;}
   .page-head{margin:34px 0 24px;}
+  .back-btn{display:inline-flex;align-items:center;gap:7px;border:0;background:transparent;color:var(--accent-deep);font:inherit;font-size:14px;font-weight:600;cursor:pointer;padding:0;margin-bottom:16px;}
+  .back-btn:hover{text-decoration:underline;}
   .page-head h1{font-size:clamp(26px,3.2vw,34px);font-weight:600;letter-spacing:-.02em;}
   .page-head p{font-size:15px;color:var(--muted);margin-top:7px;}
   .notice{background:var(--accent-soft);border:1px solid var(--accent-line);border-radius:15px;padding:16px 18px;color:var(--accent-deep);font-size:14px;line-height:1.65;margin-bottom:18px;}
@@ -57,7 +59,8 @@
   if(!canView){
     app.innerHTML='<section class="lockbox"><div style="font-size:32px">🔒</div><h1>เฉลยจะเปิดเมื่อทำแบบทดสอบครบ</h1><p>ทำแบบทดสอบก่อนเรียนและหลังเรียนให้ครบทุกหน่วย รวมถึงข้อสอบรวมท้ายหลักสูตรก่อน แล้วกลับมาทบทวนเฉลยได้ที่นี่</p><a class="btn btn-primary" href="dashboard.html">กลับหน้าภาพรวม</a></section>';
   }else{
-    app.innerHTML='<section class="page-head"><h1>เฉลยแบบทดสอบ</h1><p>ใช้ทบทวนคำตอบและเหตุผลหลังทำแบบทดสอบครบแล้ว</p></section><div class="notice">เฉลยหน้านี้เปิดให้เฉพาะผู้ที่ทำแบบทดสอบก่อนเรียนและหลังเรียนครบทุกหน่วย รวมถึงข้อสอบรวมท้ายหลักสูตรแล้ว</div><div class="solution-list" id="solutionList"></div>';
+    app.innerHTML='<section class="page-head"><button class="back-btn" type="button" id="backBtn">← กลับหน้าก่อนหน้า</button><h1>เฉลยแบบทดสอบ</h1><p>ใช้ทบทวนคำตอบและเหตุผลหลังทำแบบทดสอบครบแล้ว</p></section><div class="notice">เฉลยหน้านี้เปิดให้เฉพาะผู้ที่ทำแบบทดสอบก่อนเรียนและหลังเรียนครบทุกหน่วย รวมถึงข้อสอบรวมท้ายหลักสูตรแล้ว</div><div class="solution-list" id="solutionList"></div>';
+    document.getElementById('backBtn').addEventListener('click',()=>history.length>1?history.back():location.href='dashboard.html');
     const list=document.getElementById('solutionList');
     const groups=[];
     courseUnits.forEach(unit=>{

@@ -152,21 +152,26 @@
         </div>
       </div>
 
-      <div class="stitle"><h3>คะแนนก่อนเรียน vs หลังเรียน</h3></div>
+      <div class="stitle"><h3>คะแนนหลังเรียน</h3></div>
       <div class="chartcard">
         <div class="chead">
           <h3>คะแนนแต่ละหน่วย</h3>
           <div class="clegend">
-            <span class="lk"><span class="sw" style="background:var(--warm)"></span>ก่อนเรียน</span>
             <span class="lk"><span class="sw" style="background:var(--ok)"></span>หลังเรียน</span>
           </div>
         </div>
         <div class="chart-svg-wrap" id="scoreChartWrap"></div>
         <span class="chart-table-toggle" id="chartTableToggle" style="display:none;">ดูแบบตาราง</span>
         <table class="chart-table" id="chartTable">
-          <thead><tr><th>หน่วย</th><th>ก่อนเรียน</th><th>หลังเรียน</th><th>เปลี่ยนแปลง</th></tr></thead>
+          <thead><tr><th>หน่วย</th><th>หลังเรียน</th></tr></thead>
           <tbody id="chartTableBody"></tbody>
         </table>
+      </div>
+      <div class="chartcard" id="solutionsCard" style="margin-top:16px;display:none;">
+        <div class="chead">
+          <div><h3>เฉลยแบบทดสอบ</h3><p style="font-size:13.5px;color:var(--muted);margin-top:5px;">คุณทำแบบทดสอบครบแล้ว ดูคำตอบและคำอธิบายเพื่อทบทวนได้</p></div>
+          <a class="btn btn-primary" href="solutions.html">ดูเฉลยทั้งหมด</a>
+        </div>
       </div>
 
       <div class="stitle"><h3>เรียนต่อไปนี้</h3><a href="courses.html">ดูทั้งหมด →</a></div>
@@ -265,13 +270,17 @@
     }).join('');
   }
 
-  /* ---- pre vs post score chart (per unit) — already real data ---- */
+  // Show solutions only after every pre/post test and the final exam have been completed.
+  const canViewSolutions = courseUnits.every(u=>unitScores[u.id]?.pre && unitScores[u.id]?.post) && !!finalExam;
+  if(canViewSolutions) document.getElementById('solutionsCard').style.display='block';
+
+  /* ---- post-test score chart (per unit) ---- */
   (function(){
     const wrap=document.getElementById('scoreChartWrap');
-    const hasAnyScore=courseUnits.some(u=>unitScores[u.id]&&(unitScores[u.id].pre||unitScores[u.id].post));
+    const hasAnyScore=courseUnits.some(u=>unitScores[u.id]?.post);
 
     if(!hasAnyScore){
-      wrap.innerHTML='<div class="chart-empty">ยังไม่มีข้อมูลคะแนน — ไปทำแบบทดสอบก่อนเรียน/หลังเรียนของแต่ละหน่วยที่หน้า'+
+      wrap.innerHTML='<div class="chart-empty">ยังไม่มีข้อมูลคะแนนหลังเรียน — ไปทำแบบทดสอบหลังเรียนของแต่ละหน่วยที่หน้า'+
         '<a href="courses.html">หลักสูตร</a> ก่อน แล้วกราฟจะขึ้นที่นี่</div>';
       return;
     }
@@ -280,8 +289,7 @@
     const plotW=W-padL-padR,plotH=H-padT-padB;
     const n=courseUnits.length;
     const groupW=plotW/n;
-    const barW=Math.min(26,groupW*0.3);
-    const gap=6;
+    const barW=Math.min(34,groupW*0.42);
     const yScale=v=>padT+plotH-(v/100*plotH);
     const y0=yScale(0);
     const tips=[]; // {x,y,w,h,text}
@@ -294,13 +302,13 @@
       if(h>16) s+='<text x="'+(x+barW/2)+'" y="'+(y-6)+'" text-anchor="middle" font-size="10.5" font-weight="600" fill="var(--ink)" font-family=\'IBM Plex Mono,monospace\'>'+pct+'%</text>';
       return s;
     }
-    function missingMark(x,unit,label){
-      const text=unit.title+' · '+label+': ยังไม่ได้ทำ';
+    function missingMark(x,unit){
+      const text=unit.title+' · หลังเรียน: ยังไม่ได้ทำ';
       tips.push({x:x,y:y0-10,w:barW,h:10,text:text});
       return '<rect x="'+x+'" y="'+(y0-3)+'" width="'+barW+'" height="3" rx="1.5" fill="var(--line)" data-tip-idx="'+(tips.length-1)+'"></rect>';
     }
 
-    let svg='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="'+H+'" role="img" aria-label="กราฟเปรียบเทียบคะแนนก่อนเรียนและหลังเรียนของแต่ละหน่วย">';
+    let svg='<svg viewBox="0 0 '+W+' '+H+'" width="100%" height="'+H+'" role="img" aria-label="กราฟคะแนนหลังเรียนของแต่ละหน่วย">';
     [0,25,50,75,100].forEach(v=>{
       const y=yScale(v);
       svg+='<line x1="'+padL+'" y1="'+y+'" x2="'+(W-padR)+'" y2="'+y+'" stroke="var(--line)" stroke-width="1"></line>';
@@ -311,16 +319,12 @@
     courseUnits.forEach((unit,i)=>{
       const gx=padL+i*groupW+groupW/2;
       const us=unitScores[unit.id]||{};
-      const preX=gx-gap/2-barW,postX=gx+gap/2;
-      svg+= us.pre ? bar(preX,us.pre.pct,'var(--warm)',unit,us.pre,'ก่อนเรียน') : missingMark(preX,unit,'ก่อนเรียน');
-      svg+= us.post ? bar(postX,us.post.pct,'var(--ok)',unit,us.post,'หลังเรียน') : missingMark(postX,unit,'หลังเรียน');
+      const postX=gx-barW/2;
+      svg+= us.post ? bar(postX,us.post.pct,'var(--ok)',unit,us.post,'หลังเรียน') : missingMark(postX,unit);
       svg+='<text x="'+gx+'" y="'+(H-10)+'" text-anchor="middle" font-size="11" fill="var(--muted)">หน่วย '+unit.id+'</text>';
 
-      const change = (us.pre&&us.post) ? (us.post.pct-us.pre.pct) : null;
       tableRows.push('<tr><td>'+unit.id+'. '+unit.title+'</td>'+
-        '<td>'+(us.pre?us.pre.pct+'% ('+us.pre.score+'/'+us.pre.total+')':'—')+'</td>'+
-        '<td>'+(us.post?us.post.pct+'% ('+us.post.score+'/'+us.post.total+')':'—')+'</td>'+
-        '<td>'+(change===null?'—':(change>=0?'+':'')+change+' คะแนน')+'</td></tr>');
+        '<td>'+(us.post?us.post.pct+'% ('+us.post.score+'/'+us.post.total+')':'—')+'</td></tr>');
     });
     svg+='</svg>';
     wrap.innerHTML=svg;

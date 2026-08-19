@@ -224,6 +224,8 @@
   }
 
   let idx=0,correctCount=0,answered=false;
+  // Keep the learner's choice so it can be reviewed later on the solutions page.
+  let selectedAnswers=[];
   const optsEl=document.getElementById('opts'),nextBtn=document.getElementById('nextBtn');
   const KEYS=['A','B','C','D'];
 
@@ -252,6 +254,7 @@
   function choose(i,btn){
     if(answered)return;answered=true;document.body.classList.add('answered');
     const Q=QUESTIONS[idx];const opts=[...optsEl.children];
+    selectedAnswers[idx]=i;
     opts[Q.correct].classList.add('correct');
     const ok=i===Q.correct;
     if(ok)correctCount++;else opts[i].classList.add('wrong');
@@ -276,10 +279,10 @@
 
     if(isUnitTest){
       if(!unitScores[unitId]) unitScores[unitId]={};
-      unitScores[unitId][testType]={score:correctCount,total:QUESTIONS.length,pct:pct};
+      unitScores[unitId][testType]={score:correctCount,total:QUESTIONS.length,pct:pct,answers:selectedAnswers};
       saveUnitScores(user.uid,unitScores); // best-effort, doesn't block the result screen
     } else if(isFinalExam){
-      saveFinalExam(user.uid,{score:correctCount,total:QUESTIONS.length,pct:pct}); // best-effort
+      saveFinalExam(user.uid,{score:correctCount,total:QUESTIONS.length,pct:pct,answers:selectedAnswers}); // best-effort
     }
 
     const rctaMain=document.getElementById('rctaMain');
@@ -333,7 +336,7 @@
     function s(t){if(t0===null)t0=t;const p=Math.min(1,(t-t0)/dur);const e=1-Math.pow(1-p,3);ring.style.setProperty('--p',(target*e).toFixed(1));label.textContent=Math.round(target*e)+'%';if(p<1)requestAnimationFrame(s);}
     requestAnimationFrame(s);
   }
-  document.getElementById('retryBtn').addEventListener('click',()=>{idx=0;correctCount=0;document.body.classList.remove('done');render();});
+  document.getElementById('retryBtn').addEventListener('click',()=>{idx=0;correctCount=0;selectedAnswers=[];document.body.classList.remove('done');render();});
 
   // timer (counts down for flavor)
   let t=272;const tEl=document.getElementById('timer');

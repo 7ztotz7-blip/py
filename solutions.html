@@ -28,6 +28,8 @@
   .q-title{font-size:15px;font-weight:600;line-height:1.65;color:var(--ink);}.q-title code{font-family:'IBM Plex Mono',monospace;font-size:.92em;}
   .answer{margin-top:10px;padding:10px 12px;background:var(--ok-soft);border-left:3px solid var(--ok);border-radius:0 9px 9px 0;font-size:14px;line-height:1.6;}
   .answer b{color:var(--ok-deep);}.explain{font-size:13.5px;color:var(--muted);line-height:1.65;margin-top:9px;}
+  .your-answer{margin-top:8px;padding:10px 12px;background:var(--accent-soft);border-left:3px solid var(--accent);border-radius:0 9px 9px 0;font-size:14px;line-height:1.6;}
+  .your-answer.wrong{background:var(--warm-soft);border-left-color:var(--warm-deep);}.your-answer b{color:var(--accent-deep);}.your-answer.wrong b{color:var(--warm-deep);}
 </style>
 </head>
 <body>
@@ -59,10 +61,10 @@
     const list=document.getElementById('solutionList');
     const groups=[];
     courseUnits.forEach(unit=>{
-      groups.push({ title:'หน่วยที่ '+unit.id+' · '+unit.title+' — ก่อนเรียน', questions:unitTests[unit.id].pre });
-      groups.push({ title:'หน่วยที่ '+unit.id+' · '+unit.title+' — หลังเรียน', questions:unitTests[unit.id].post });
+      groups.push({ title:'หน่วยที่ '+unit.id+' · '+unit.title+' — ก่อนเรียน', questions:unitTests[unit.id].pre, attempt:unitScores[unit.id].pre });
+      groups.push({ title:'หน่วยที่ '+unit.id+' · '+unit.title+' — หลังเรียน', questions:unitTests[unit.id].post, attempt:unitScores[unit.id].post });
     });
-    groups.push({ title:'ข้อสอบรวมท้ายหลักสูตร', questions:finalQuestions });
+    groups.push({ title:'ข้อสอบรวมท้ายหลักสูตร', questions:finalQuestions, attempt:finalExamProgress });
     groups.forEach((group,index)=>{
       const details=document.createElement('details');
       if(index===0) details.open=true;
@@ -74,9 +76,15 @@
       group.questions.forEach((question,number)=>{
         const item=document.createElement('article'); item.className='question';
         const heading=document.createElement('div'); heading.className='q-title'; heading.innerHTML='ข้อ '+(number+1)+'. '+question.q;
-        const answer=document.createElement('div'); answer.className='answer'; answer.innerHTML='<b>คำตอบ:</b> '+question.options[question.ans];
+        const answer=document.createElement('div'); answer.className='answer'; answer.innerHTML='<b>คำตอบที่ถูก:</b> '+question.options[question.ans];
+        const chosen=group.attempt?.answers?.[number];
+        const hasChosen=Number.isInteger(chosen) && question.options[chosen];
+        const yourAnswer=document.createElement('div'); yourAnswer.className='your-answer'+(hasChosen && chosen!==question.ans?' wrong':'');
+        yourAnswer.innerHTML=hasChosen
+          ?'<b>คำตอบที่คุณเลือก:</b> '+question.options[chosen]+' '+(chosen===question.ans?'✓ ถูกต้อง':'✕ ยังไม่ถูก')
+          :'<b>คำตอบที่คุณเลือก:</b> ไม่มีข้อมูลคำตอบ (ทำแบบทดสอบก่อนเพิ่มระบบบันทึกคำตอบ)';
         const explain=document.createElement('div'); explain.className='explain'; explain.textContent=question.explanation;
-        item.append(heading,answer,explain); questions.appendChild(item);
+        item.append(heading,answer,yourAnswer,explain); questions.appendChild(item);
       });
       details.appendChild(questions); list.appendChild(details);
     });

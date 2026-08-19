@@ -306,7 +306,7 @@ function highlight(code){
 function renderCodeBlock(code,idx){
   const bar='<div class="ic-bar"><span class="ic-dot" style="background:oklch(0.72 0.16 25)"></span><span class="ic-dot" style="background:oklch(0.84 0.13 90)"></span><span class="ic-dot" style="background:oklch(0.76 0.14 150)"></span>'+
     (code.filename?'<span class="ic-fname">'+esc(code.filename)+'</span>':'')+
-    '<button class="ic-run" data-run data-idx="'+idx+'">▸ รัน</button>'+
+    '<button class="ic-run" data-run data-idx="'+idx+'" aria-label="รันโค้ด" title="รันโค้ด">▶</button>'+
     '<button class="ic-copy" data-copy data-idx="'+idx+'">คัดลอก</button></div>';
   const editor='<div class="ic-editor-wrap">'+
     '<div class="ic-gut" id="codeGut-'+idx+'"></div>'+

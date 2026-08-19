@@ -226,6 +226,15 @@
   let idx=0,correctCount=0,answered=false;
   // Keep the learner's choice so it can be reviewed later on the solutions page.
   let selectedAnswers=[];
+  const answerStoreKey='pystart-quiz-answers-'+user.uid;
+  const attemptKey=isUnitTest ? 'unit-'+unitId+'-'+testType : (isFinalExam ? 'final' : 'practice');
+
+  function saveSelectedAnswers(){
+    let history={};
+    try{ history=JSON.parse(localStorage.getItem(answerStoreKey)||'{}'); }catch(error){ history={}; }
+    history[attemptKey]=selectedAnswers;
+    localStorage.setItem(answerStoreKey,JSON.stringify(history));
+  }
   const optsEl=document.getElementById('opts'),nextBtn=document.getElementById('nextBtn');
   const KEYS=['A','B','C','D'];
 
@@ -272,6 +281,7 @@
   });
   async function finish(){
     const pct=Math.round(correctCount/QUESTIONS.length*100);
+    saveSelectedAnswers();
     document.getElementById('ptrack').style.width='100%';document.getElementById('ppc').textContent='100%';
     const rs=document.getElementById('rscore');const rbig=document.getElementById('rbig');
     document.getElementById('rcorrect').textContent=correctCount;
@@ -279,7 +289,7 @@
 
     if(isUnitTest){
       if(!unitScores[unitId]) unitScores[unitId]={};
-      unitScores[unitId][testType]={score:correctCount,total:QUESTIONS.length,pct:pct,answers:selectedAnswers};
+      unitScores[unitId][testType]={score:correctCount,total:QUESTIONS.length,pct:pct};
       try{
         await saveUnitScores(user.uid,unitScores);
       }catch(error){
@@ -288,7 +298,7 @@
       }
     } else if(isFinalExam){
       try{
-        await saveFinalExam(user.uid,{score:correctCount,total:QUESTIONS.length,pct:pct,answers:selectedAnswers});
+        await saveFinalExam(user.uid,{score:correctCount,total:QUESTIONS.length,pct:pct});
       }catch(error){
         alert('บันทึกคำตอบไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองอีกครั้ง');
         return;

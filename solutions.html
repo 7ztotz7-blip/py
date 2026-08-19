@@ -55,6 +55,8 @@
   if(!user) throw new Error('redirecting to login');
   const { unitScores, finalExam: finalExamProgress }=await loadProgress(user.uid);
   const canView=courseUnits.every(unit=>unitScores[unit.id]?.pre && unitScores[unit.id]?.post) && !!finalExamProgress;
+  let savedAnswers={};
+  try{ savedAnswers=JSON.parse(localStorage.getItem('pystart-quiz-answers-'+user.uid)||'{}'); }catch(error){ savedAnswers={}; }
 
   if(!canView){
     app.innerHTML='<section class="lockbox"><div style="font-size:32px">🔒</div><h1>เฉลยจะเปิดเมื่อทำแบบทดสอบครบ</h1><p>ทำแบบทดสอบก่อนเรียนและหลังเรียนให้ครบทุกหน่วย รวมถึงข้อสอบรวมท้ายหลักสูตรก่อน แล้วกลับมาทบทวนเฉลยได้ที่นี่</p><a class="btn btn-primary" href="dashboard.html">กลับหน้าภาพรวม</a></section>';
@@ -64,10 +66,10 @@
     const list=document.getElementById('solutionList');
     const groups=[];
     courseUnits.forEach(unit=>{
-      groups.push({ title:'หน่วยที่ '+unit.id+' · '+unit.title+' — ก่อนเรียน', questions:unitTests[unit.id].pre, attempt:unitScores[unit.id].pre });
-      groups.push({ title:'หน่วยที่ '+unit.id+' · '+unit.title+' — หลังเรียน', questions:unitTests[unit.id].post, attempt:unitScores[unit.id].post });
+      groups.push({ title:'หน่วยที่ '+unit.id+' · '+unit.title+' — ก่อนเรียน', questions:unitTests[unit.id].pre, attempt:unitScores[unit.id].pre, key:'unit-'+unit.id+'-pre' });
+      groups.push({ title:'หน่วยที่ '+unit.id+' · '+unit.title+' — หลังเรียน', questions:unitTests[unit.id].post, attempt:unitScores[unit.id].post, key:'unit-'+unit.id+'-post' });
     });
-    groups.push({ title:'ข้อสอบรวมท้ายหลักสูตร', questions:finalQuestions, attempt:finalExamProgress });
+    groups.push({ title:'ข้อสอบรวมท้ายหลักสูตร', questions:finalQuestions, attempt:finalExamProgress, key:'final' });
     groups.forEach((group,index)=>{
       const details=document.createElement('details');
       if(index===0) details.open=true;
@@ -80,7 +82,7 @@
         const item=document.createElement('article'); item.className='question';
         const heading=document.createElement('div'); heading.className='q-title'; heading.innerHTML='ข้อ '+(number+1)+'. '+question.q;
         const answer=document.createElement('div'); answer.className='answer'; answer.innerHTML='<b>คำตอบที่ถูก:</b> '+question.options[question.ans];
-        const chosen=group.attempt?.answers?.[number];
+        const chosen=group.attempt?.answers?.[number] ?? savedAnswers[group.key]?.[number];
         const hasChosen=Number.isInteger(chosen) && question.options[chosen];
         const yourAnswer=document.createElement('div'); yourAnswer.className='your-answer'+(hasChosen && chosen!==question.ans?' wrong':'');
         yourAnswer.innerHTML=hasChosen

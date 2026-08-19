@@ -207,6 +207,8 @@ code{font-family:'IBM Plex Mono',monospace;}
 .btn-primary:hover{transform:translateY(-1px);}
 .btn-ghost{color:var(--warm);border:1px solid var(--warm-l);background:var(--card);}
 .btn-ghost:hover{background:oklch(0.99 0.01 70);}
+.lesson-next{display:flex;justify-content:flex-end;margin-top:32px;padding-top:24px;border-top:1px solid var(--line);}
+.lesson-next .btn-primary{margin-left:0;}
 
 /* lesson transition: shown while progress is saved before opening the next page */
 .lesson-loading{position:fixed;inset:0;z-index:100;display:none;place-items:center;background:oklch(0.982 0.005 250/.96);backdrop-filter:blur(5px);}
@@ -259,17 +261,7 @@ code{font-family:'IBM Plex Mono',monospace;}
 
   <div id="sectionsContainer"></div>
 
-  <hr class="sdiv" />
-
-  <!-- KEY TAKEAWAYS -->
-  <div class="ey"><span class="sn" style="background:linear-gradient(140deg,oklch(0.72 0.13 62),oklch(0.56 0.14 48));">✓</span><span class="st" style="color:var(--warm);">สรุปท้ายบท</span></div>
-  <h2 class="sec-h">ประเด็นสำคัญที่ควรจำ</h2>
-  <p class="bt" style="margin-bottom:22px;">อ่านทบทวนก่อนไปบทถัดไป</p>
-  <ul class="tk-list" id="takeaways"></ul>
-
-  <div class="lesson-nav" id="lessonNav">
-    <div class="ln-ic">✓</div>
-    <div class="ln-tx"><b>พร้อมไปต่อ</b><span id="lnSub"></span></div>
+  <div class="lesson-next">
     <button class="btn btn-primary" id="nextLessonBtn">บทถัดไป
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </button>
@@ -492,18 +484,6 @@ function renderContent(){
   });
 }
 
-/* ---------- key takeaways (replaces the old end-of-lesson quiz gate) ---------- */
-function renderTakeaways(){
-  const items=lesson.takeaways||[];
-  document.getElementById('takeaways').innerHTML=items.map(t=>
-    '<li class="tk-item"><span class="tk-ic"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>'+esc(t)+'</li>'
-  ).join('');
-  const isLastOfUnit=unit.lessons[unit.lessons.length-1]===lessonId;
-  document.getElementById('lnSub').textContent=isLastOfUnit
-    ? 'ทำแบบทดสอบหลังเรียนเพื่อไปต่อ'
-    : (lessonId<TOTAL?'ปลดล็อกบทที่ '+(lessonId+1)+' แล้ว':'เรียนจบหลักสูตรแล้ว! 🎓');
-}
-
 async function completeLesson(){
   const isLastOfUnit=unit.lessons[unit.lessons.length-1]===lessonId;
   const loading=document.getElementById('lessonLoading');
@@ -557,7 +537,6 @@ document.getElementById('sbBackdrop').addEventListener('click',()=>{
 renderHeader();
 renderSidebar();
 renderContent();
-renderTakeaways();
 </script>
 </body>
 </html>

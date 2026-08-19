@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>py — เฉลยแบบทดสอบ</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="pystart.css" rel="stylesheet" />
+<script src="pystart-theme.js"></script>
+<style>
+  body{padding-bottom:70px;}
+  .page-head{margin:34px 0 24px;}
+  .page-head h1{font-size:clamp(26px,3.2vw,34px);font-weight:600;letter-spacing:-.02em;}
+  .page-head p{font-size:15px;color:var(--muted);margin-top:7px;}
+  .notice{background:var(--accent-soft);border:1px solid var(--accent-line);border-radius:15px;padding:16px 18px;color:var(--accent-deep);font-size:14px;line-height:1.65;margin-bottom:18px;}
+  .lockbox{max-width:720px;margin:72px auto;background:linear-gradient(180deg,#fff,var(--soft));border:1px solid var(--line);border-radius:20px;padding:34px;text-align:center;box-shadow:var(--shadow-md);}
+  .lockbox h1{font-size:23px;font-weight:600;margin:12px 0 8px;}.lockbox p{color:var(--muted);line-height:1.65;}.lockbox a{margin-top:20px;}
+  .solution-list{display:flex;flex-direction:column;gap:12px;}
+  details{background:linear-gradient(180deg,#fff,var(--soft));border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow-sm);overflow:hidden;}
+  summary{cursor:pointer;list-style:none;padding:17px 19px;font-size:16px;font-weight:600;display:flex;align-items:center;justify-content:space-between;gap:14px;}
+  summary::-webkit-details-marker{display:none;} summary::after{content:'+';color:var(--accent-deep);font-size:22px;font-weight:400;}details[open] summary::after{content:'−';}
+  .summary-meta{font-size:12px;font-family:'IBM Plex Mono',monospace;color:var(--faint);font-weight:500;}
+  .questions{border-top:1px solid var(--line);padding:0 19px 10px;}
+  .question{padding:18px 0;border-bottom:1px solid var(--line);}.question:last-child{border-bottom:0;}
+  .q-title{font-size:15px;font-weight:600;line-height:1.65;color:var(--ink);}.q-title code{font-family:'IBM Plex Mono',monospace;font-size:.92em;}
+  .answer{margin-top:10px;padding:10px 12px;background:var(--ok-soft);border-left:3px solid var(--ok);border-radius:0 9px 9px 0;font-size:14px;line-height:1.6;}
+  .answer b{color:var(--ok-deep);}.explain{font-size:13.5px;color:var(--muted);line-height:1.65;margin-top:9px;}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <a class="tb-logo" href="index.html" aria-label="py"><span class="tb-mk"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 6 6 6-6 6M15 18h4" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+  <button class="tb-menu-btn" id="tbMenuBtn" type="button" aria-label="เมนู" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
+  <nav class="tb-nav"><a href="courses.html">หลักสูตร</a><a href="dashboard.html" class="cur">ภาพรวมการเรียน</a><a href="profile.html">โปรไฟล์</a></nav>
+  <div class="tb-right"><a class="tb-settings-icon" href="settings.html" aria-label="ตั้งค่า" title="ตั้งค่า">⚙</a><a class="tb-av" href="profile.html">ใ</a></div>
+</header>
+
+<main class="wrap" id="app"></main>
+
+<script src="pystart-data.js"></script>
+<script src="assets/js/unit-quiz-bank.js"></script>
+<script type="module">
+  import { requireUser, loadProgress } from './assets/js/progress-store.js';
+
+  const app=document.getElementById('app');
+  const finalQuestions=finalExam;
+  const user=await requireUser();
+  if(!user) throw new Error('redirecting to login');
+  const { unitScores, finalExam: finalExamProgress }=await loadProgress(user.uid);
+  const canView=courseUnits.every(unit=>unitScores[unit.id]?.pre && unitScores[unit.id]?.post) && !!finalExamProgress;
+
+  if(!canView){
+    app.innerHTML='<section class="lockbox"><div style="font-size:32px">🔒</div><h1>เฉลยจะเปิดเมื่อทำแบบทดสอบครบ</h1><p>ทำแบบทดสอบก่อนเรียนและหลังเรียนให้ครบทุกหน่วย รวมถึงข้อสอบรวมท้ายหลักสูตรก่อน แล้วกลับมาทบทวนเฉลยได้ที่นี่</p><a class="btn btn-primary" href="dashboard.html">กลับหน้าภาพรวม</a></section>';
+  }else{
+    app.innerHTML='<section class="page-head"><h1>เฉลยแบบทดสอบ</h1><p>ใช้ทบทวนคำตอบและเหตุผลหลังทำแบบทดสอบครบแล้ว</p></section><div class="notice">เฉลยหน้านี้เปิดให้เฉพาะผู้ที่ทำแบบทดสอบก่อนเรียนและหลังเรียนครบทุกหน่วย รวมถึงข้อสอบรวมท้ายหลักสูตรแล้ว</div><div class="solution-list" id="solutionList"></div>';
+    const list=document.getElementById('solutionList');
+    const groups=[];
+    courseUnits.forEach(unit=>{
+      groups.push({ title:'หน่วยที่ '+unit.id+' · '+unit.title+' — ก่อนเรียน', questions:unitTests[unit.id].pre });
+      groups.push({ title:'หน่วยที่ '+unit.id+' · '+unit.title+' — หลังเรียน', questions:unitTests[unit.id].post });
+    });
+    groups.push({ title:'ข้อสอบรวมท้ายหลักสูตร', questions:finalQuestions });
+    groups.forEach((group,index)=>{
+      const details=document.createElement('details');
+      if(index===0) details.open=true;
+      const summary=document.createElement('summary');
+      const title=document.createElement('span'); title.textContent=group.title;
+      const meta=document.createElement('span'); meta.className='summary-meta'; meta.textContent=group.questions.length+' ข้อ';
+      summary.append(title,meta); details.appendChild(summary);
+      const questions=document.createElement('div'); questions.className='questions';
+      group.questions.forEach((question,number)=>{
+        const item=document.createElement('article'); item.className='question';
+        const heading=document.createElement('div'); heading.className='q-title'; heading.innerHTML='ข้อ '+(number+1)+'. '+question.q;
+        const answer=document.createElement('div'); answer.className='answer'; answer.innerHTML='<b>คำตอบ:</b> '+question.options[question.ans];
+        const explain=document.createElement('div'); explain.className='explain'; explain.textContent=question.explanation;
+        item.append(heading,answer,explain); questions.appendChild(item);
+      });
+      details.appendChild(questions); list.appendChild(details);
+    });
+  }
+</script>
+<script src="pystart-fx.js"></script>
+</body>
+</html>

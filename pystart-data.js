@@ -1753,7 +1753,17 @@ for shape in shapes:
                         { type: "section", num: "03", label: "ใช้งานจริง", title: "ตรวจสอบค่าก่อนแก้ไขข้อมูลภายใน" },
                         { type: "text", text: "นี่คือเหตุผลที่แท้จริงของ Encapsulation: ถ้าใครแก้ __balance ตรง ๆ ได้ตามใจชอบ ก็อาจตั้งยอดเงินติดลบหรือใส่ค่าผิดปกติได้โดยไม่มีการตรวจสอบ — method deposit/withdraw จึงเป็นทางเดียวที่ควบคุมการเข้าถึง __balance โดยตรวจสอบความถูกต้องก่อนแก้ไขทุกครั้ง (เช่น ห้ามฝาก/ถอนติดลบ ห้ามถอนเกินยอดคงเหลือ) แทนที่จะปล่อยให้ใครก็แก้ __balance ตรง ๆ ได้ตามใจชอบ:" },
                         { type: "code", filename: "bank_account_methods.py", source:
-`    def deposit(self, amount):
+`class BankAccount:
+    def __init__(self, owner, initial_balance=0):
+        self.owner = owner
+        self.__balance = initial_balance
+        self.__transactions = []
+
+    @property
+    def balance(self):
+        return self.__balance
+
+    def deposit(self, amount):
         if amount <= 0:
             raise ValueError("ฝากเงินต้องมากกว่า 0")
         self.__balance += amount
@@ -1767,7 +1777,12 @@ for shape in shapes:
             raise ValueError("ยอดเงินไม่พอ")
         self.__balance -= amount
         self.__transactions.append(f"-{amount}")
-        print(f"ถอน {amount:,} บาท ยอดคงเหลือ: {self.__balance:,} บาท")` },
+        print(f"ถอน {amount:,} บาท ยอดคงเหลือ: {self.__balance:,} บาท")
+
+acc = BankAccount("Somchai", 1000)
+acc.deposit(500)
+acc.withdraw(200)
+print(f"ยอดเงิน: {acc.balance:,} บาท")` },
                         { type: "text", text: "ไล่ deposit(500) ทีละขั้น: เช็คก่อนว่า amount <= 0 หรือไม่ (500 ไม่ใช่ จึงผ่าน) แล้วค่อยบวกเข้า self.__balance จริง ๆ ถ้าลองเรียก deposit(-100) แทน เงื่อนไข amount <= 0 จะเป็น True ทันที เกิด raise ValueError ขึ้นมาก่อนที่จะทันได้แก้ __balance เลยด้วยซ้ำ — เห็นได้ชัดว่าการบังคับให้ผ่าน method เหล่านี้เท่านั้น ทำให้ยอดเงินไม่มีทางติดลบหรือผิดปกติได้เลย ตราบใดที่ไม่มีใครหาทางเข้าถึง __balance ตรง ๆ ได้" },
 
                         { type: "section", num: "04", label: "เรียกใช้งาน", title: "เข้าถึงยอดเงินผ่าน property เท่านั้น" },

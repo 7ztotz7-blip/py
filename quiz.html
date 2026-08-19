@@ -270,7 +270,7 @@
     if(idx<QUESTIONS.length-1){idx++;render();window.scrollTo(0,0);}
     else finish();
   });
-  function finish(){
+  async function finish(){
     const pct=Math.round(correctCount/QUESTIONS.length*100);
     document.getElementById('ptrack').style.width='100%';document.getElementById('ppc').textContent='100%';
     const rs=document.getElementById('rscore');const rbig=document.getElementById('rbig');
@@ -280,9 +280,19 @@
     if(isUnitTest){
       if(!unitScores[unitId]) unitScores[unitId]={};
       unitScores[unitId][testType]={score:correctCount,total:QUESTIONS.length,pct:pct,answers:selectedAnswers};
-      saveUnitScores(user.uid,unitScores); // best-effort, doesn't block the result screen
+      try{
+        await saveUnitScores(user.uid,unitScores);
+      }catch(error){
+        alert('บันทึกคำตอบไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองอีกครั้ง');
+        return;
+      }
     } else if(isFinalExam){
-      saveFinalExam(user.uid,{score:correctCount,total:QUESTIONS.length,pct:pct,answers:selectedAnswers}); // best-effort
+      try{
+        await saveFinalExam(user.uid,{score:correctCount,total:QUESTIONS.length,pct:pct,answers:selectedAnswers});
+      }catch(error){
+        alert('บันทึกคำตอบไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองอีกครั้ง');
+        return;
+      }
     }
 
     const rctaMain=document.getElementById('rctaMain');

@@ -85,7 +85,7 @@
         const yourAnswer=document.createElement('div'); yourAnswer.className='your-answer'+(hasChosen && chosen!==question.ans?' wrong':'');
         yourAnswer.innerHTML=hasChosen
           ?'<b>คำตอบที่คุณเลือก:</b> '+question.options[chosen]+' '+(chosen===question.ans?'✓ ถูกต้อง':'✕ ยังไม่ถูก')
-          :'<b>คำตอบที่คุณเลือก:</b> ไม่มีข้อมูลคำตอบ (ทำแบบทดสอบก่อนเพิ่มระบบบันทึกคำตอบ)';
+          :'<b>คำตอบที่คุณเลือก:</b> ไม่มีข้อมูลคำตอบสำหรับการทำครั้งนี้ — ทำแบบทดสอบใหม่เพื่อบันทึกคำตอบ';
         const explain=document.createElement('div'); explain.className='explain'; explain.textContent=question.explanation;
         item.append(heading,answer,yourAnswer,explain); questions.appendChild(item);
       });

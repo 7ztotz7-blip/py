@@ -22,28 +22,67 @@ export async function requireUser(){
   return user;
 }
 
-export async function loadProgress(uid){
-  const snap = await getDoc(doc(db, 'users', uid));
-  const data = snap.exists() ? snap.data() : {};
+// Keep a device-local copy as a safety net. Firebase remains the shared
+// source of truth, but a temporary rejected/slow write must not stop a
+// learner from completing a quiz or reviewing the answers they just chose.
+function progressKey(uid){ return 'pystart-progress-'+uid; }
+function normaliseProgress(data={}){
   return {
     completed: Array.isArray(data.completed) ? data.completed : [],
     unitScores: (data.unitScores && typeof data.unitScores === 'object') ? data.unitScores : {},
     finalExam: (data.finalExam && typeof data.finalExam === 'object') ? data.finalExam : null
   };
 }
+function readCachedProgress(uid){
+  try{ return normaliseProgress(JSON.parse(localStorage.getItem(progressKey(uid))||'{}')); }
+  catch(error){ return normaliseProgress(); }
+}
+function cacheProgress(uid, progress){
+  try{ localStorage.setItem(progressKey(uid),JSON.stringify(normaliseProgress(progress))); }
+  catch(error){ /* Storage can be unavailable in private browsing; Firebase still works. */ }
+}
+function mergeProgress(remote, cached){
+  return {
+    completed: [...new Set([...remote.completed,...cached.completed])],
+    unitScores: {...remote.unitScores,...cached.unitScores},
+    finalExam: cached.finalExam||remote.finalExam
+  };
+}
+
+export async function loadProgress(uid){
+  const cached=readCachedProgress(uid);
+  try{
+    const snap = await getDoc(doc(db, 'users', uid));
+    const remote=normaliseProgress(snap.exists() ? snap.data() : {});
+    const progress=mergeProgress(remote,cached);
+    cacheProgress(uid,progress);
+    return progress;
+  }catch(error){
+    return cached;
+  }
+}
 
 export async function saveCompleted(uid, completed){
-  await setDoc(doc(db, 'users', uid), { completed }, { merge: true });
+  const cached=readCachedProgress(uid);
+  cacheProgress(uid,{...cached,completed});
+  try{ await setDoc(doc(db, 'users', uid), { completed }, { merge: true }); return true; }
+  catch(error){ return false; }
 }
 
 export async function saveUnitScores(uid, unitScores){
-  await setDoc(doc(db, 'users', uid), { unitScores }, { merge: true });
+  const cached=readCachedProgress(uid);
+  cacheProgress(uid,{...cached,unitScores});
+  try{ await setDoc(doc(db, 'users', uid), { unitScores }, { merge: true }); return true; }
+  catch(error){ return false; }
 }
 
 // { score, total, pct } for the 60-question cumulative final exam —
 // separate from unitScores since it isn't tied to any single unit.
 export async function saveFinalExam(uid, finalExam){
-  await setDoc(doc(db, 'users', uid), { finalExam }, { merge: true });
+  const cached=readCachedProgress(uid);
+  cacheProgress(uid,{...cached,finalExam});
+  try{ await setDoc(doc(db, 'users', uid), { finalExam }, { merge: true }); return true; }
+  catch(error){ return false; }
 }
 
 export async function loadProfile(uid){

@@ -289,7 +289,7 @@
 
     if(isUnitTest){
       if(!unitScores[unitId]) unitScores[unitId]={};
-      unitScores[unitId][testType]={score:correctCount,total:QUESTIONS.length,pct:pct};
+      unitScores[unitId][testType]={score:correctCount,total:QUESTIONS.length,pct:pct,answers:selectedAnswers};
       try{
         await saveUnitScores(user.uid,unitScores);
       }catch(error){
@@ -298,7 +298,7 @@
       }
     } else if(isFinalExam){
       try{
-        await saveFinalExam(user.uid,{score:correctCount,total:QUESTIONS.length,pct:pct});
+        await saveFinalExam(user.uid,{score:correctCount,total:QUESTIONS.length,pct:pct,answers:selectedAnswers});
       }catch(error){
         alert('บันทึกคำตอบไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ตแล้วลองอีกครั้ง');
         return;

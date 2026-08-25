@@ -51,11 +51,10 @@
     <a href="dashboard.html">ภาพรวมการเรียน</a>
     <a href="profile.html">โปรไฟล์</a>
   </nav>
-  <div class="tb-right" id="tbRight">
-    <a class="btn btn-text" href="login.html" id="tbLoginBtn" style="display:none; font-size: 14px; font-weight: 500;">เข้าสู่ระบบ</a>
-    <a class="tb-settings-icon" href="settings.html" aria-label="ตั้งค่า" title="ตั้งค่า" id="tbSettings" style="display:none;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.12 2.12-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.04 1.56v.08h-3v-.08a1.7 1.7 0 0 0-1.04-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-2.12-2.12.06-.06A1.7 1.7 0 0 0 7 15a1.7 1.7 0 0 0-1.56-1.04h-.08v-3h.08A1.7 1.7 0 0 0 7 9.92a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.12-2.12.06.06a1.7 1.7 0 0 0 1.88.34 1.7 1.7 0 0 0 1.04-1.56V4.6h3v.1a1.7 1.7 0 0 0 1.04 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.12 2.12-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.56 1.04h.08v3h-.08A1.7 1.7 0 0 0 19.4 15Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></a>
-    <span class="chiplet" style="color:var(--accent-deep); display:none;" id="xpChip"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg> <span id="navProg">0%</span></span>
-    <a class="tb-av" href="profile.html" id="tbAvatar" style="display:none;">ใ</a>
+  <div class="tb-right">
+    <a class="tb-settings-icon" href="settings.html" aria-label="ตั้งค่า" title="ตั้งค่า"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.12 2.12-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.04 1.56v.08h-3v-.08a1.7 1.7 0 0 0-1.04-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-2.12-2.12.06-.06A1.7 1.7 0 0 0 7 15a1.7 1.7 0 0 0-1.56-1.04h-.08v-3h.08A1.7 1.7 0 0 0 7 9.92a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.12-2.12.06.06a1.7 1.7 0 0 0 1.88.34 1.7 1.7 0 0 0 1.04-1.56V4.6h3v.1a1.7 1.7 0 0 0 1.04 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.12 2.12-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.56 1.04h.08v3h-.08A1.7 1.7 0 0 0 19.4 15Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></a>
+    <span class="chiplet" style="color:var(--accent-deep)" id="xpChip"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg> <span id="navProg">0%</span></span>
+    <a class="tb-av" href="profile.html">ใ</a>
   </div>
 </header>
 
@@ -234,28 +233,21 @@ total = add(5, 10)</div>
 </div>
 
 <script type="module">
-  import { getCurrentUser, loadProgress } from './assets/js/progress-store.js';
+  import { requireUser, loadProgress } from './assets/js/progress-store.js';
   
-  getCurrentUser().then(user => {
-    if (user) {
-      document.getElementById('tbSettings').style.display = '';
-      document.getElementById('xpChip').style.display = '';
-      document.getElementById('tbAvatar').style.display = '';
-      
-      loadProgress(user.uid).then(prog => {
-        let completed = 0;
-        const total = 29;
-        if(prog.unitScores) {
-          Object.values(prog.unitScores).forEach(u => {
-            if(u && u.passed) completed += 1;
-          });
-        }
-        const percent = Math.min(100, Math.round((completed / total) * 100));
-        document.getElementById('navProg').textContent = percent + '%';
-      }).catch(()=>{});
-    } else {
-      document.getElementById('tbLoginBtn').style.display = '';
-    }
+  requireUser().then(user => {
+    if(!user) return;
+    loadProgress(user.uid).then(prog => {
+      let completed = 0;
+      const total = 29;
+      if(prog.unitScores) {
+        Object.values(prog.unitScores).forEach(u => {
+          if(u && u.passed) completed += 1;
+        });
+      }
+      const percent = Math.min(100, Math.round((completed / total) * 100));
+      document.getElementById('navProg').textContent = percent + '%';
+    }).catch(()=>{});
   });
 
   // Search functionality
@@ -291,6 +283,7 @@ total = add(5, 10)</div>
 </script>
 </body>
 </html>
+
 
 
 

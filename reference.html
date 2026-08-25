@@ -1,0 +1,283 @@
+﻿<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>py — คู่มือ Python</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg" />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link href="pystart.css" rel="stylesheet" />
+<script src="pystart-theme.js"></script>
+<script src="pystart-icons.js"></script>
+<style>
+  body { padding-bottom: 70px; }
+  .page-header { margin-top: 40px; margin-bottom: 30px; }
+  .page-header h1 { font-size: 32px; font-weight: 700; letter-spacing: -0.02em; }
+  .page-header p { color: var(--muted); font-size: 16px; margin-top: 8px; }
+  
+  .search-box { position: relative; max-width: 600px; margin-bottom: 40px; }
+  .search-box input { width: 100%; padding: 16px 20px 16px 48px; border-radius: 12px; border: 1px solid var(--line); background: var(--card); font: inherit; font-size: 16px; color: var(--ink); box-shadow: var(--shadow-sm); transition: border-color 0.2s, box-shadow 0.2s; }
+  .search-box input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+  .search-box svg { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--faint); pointer-events: none; }
+  
+  .ref-section { margin-bottom: 50px; }
+  .ref-section h2 { font-size: 20px; font-weight: 600; color: var(--ink); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--line-soft); }
+  
+  .ref-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 20px; }
+  .ref-card { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 24px; box-shadow: var(--shadow-sm); transition: transform 0.2s, box-shadow 0.2s; }
+  .ref-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); border-color: var(--accent-line); }
+  
+  .ref-term { font-family: 'IBM Plex Mono', monospace; font-size: 16px; font-weight: 600; color: var(--accent-deep); margin-bottom: 12px; display: inline-block; background: var(--accent-soft); padding: 4px 10px; border-radius: 6px; border: 1px solid var(--accent-line); }
+  .ref-desc { color: var(--muted); font-size: 14.5px; line-height: 1.6; margin-bottom: 16px; }
+  
+  .ref-code { background: var(--bg); border: 1px solid var(--line-soft); border-radius: 8px; padding: 12px; font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--ink); white-space: pre; overflow-x: auto; line-height: 1.5; }
+  .ref-code .kw { color: var(--accent); }
+  .ref-code .str { color: var(--ok-deep); }
+  .ref-code .cmt { color: var(--faint); }
+  .ref-code .fn { color: var(--warm-deep); }
+  
+  .empty-state { display: none; text-align: center; padding: 60px 20px; color: var(--muted); }
+  .empty-state svg { width: 48px; height: 48px; color: var(--line); margin-bottom: 16px; }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="tb-logo" href="index.html" aria-label="py"><span class="tb-mk"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 6 6 6-6 6M15 18h4" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
+  <button class="tb-menu-btn" id="tbMenuBtn" type="button" aria-label="เมนู" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+  <nav class="tb-nav">
+    <a href="courses.html">หลักสูตร</a>
+    <a href="reference.html" class="cur">คู่มือ Python</a>
+    <a href="dashboard.html">ภาพรวมการเรียน</a>
+    <a href="profile.html">โปรไฟล์</a>
+  </nav>
+  <div class="tb-right">
+    <a class="tb-settings-icon" href="settings.html" aria-label="ตั้งค่า" title="ตั้งค่า"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.12 2.12-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.04 1.56v.08h-3v-.08a1.7 1.7 0 0 0-1.04-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-2.12-2.12.06-.06A1.7 1.7 0 0 0 7 15a1.7 1.7 0 0 0-1.56-1.04h-.08v-3h.08A1.7 1.7 0 0 0 7 9.92a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.12-2.12.06.06a1.7 1.7 0 0 0 1.88.34 1.7 1.7 0 0 0 1.04-1.56V4.6h3v.1a1.7 1.7 0 0 0 1.04 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.12 2.12-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.56 1.04h.08v3h-.08A1.7 1.7 0 0 0 19.4 15Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></a>
+    <span class="chiplet" style="color:var(--accent-deep)" id="xpChip"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg> <span id="navProg">0%</span></span>
+    <a class="tb-av" href="profile.html">ใ</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="page-header">
+    <h1>คู่มือคำสั่ง Python</h1>
+    <p>รวบรวมคำศัพท์ ฟังก์ชัน และโครงสร้างภาษา Python ที่ใช้ในหลักสูตร เพื่อการทบทวน</p>
+  </div>
+
+  <div class="search-box">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    <input type="text" id="searchInput" placeholder="ค้นหาคำสั่ง เช่น print, for, list..." autocomplete="off">
+  </div>
+
+  <div id="refContainer">
+    <!-- Section 1: พื้นฐาน -->
+    <div class="ref-section">
+      <h2>1. คำสั่งพื้นฐาน (Basics)</h2>
+      <div class="ref-grid">
+        <div class="ref-card">
+          <span class="ref-term">print()</span>
+          <p class="ref-desc">ใช้สำหรับแสดงผลข้อความหรือค่าของตัวแปรออกทางหน้าจอ</p>
+          <div class="ref-code"><span class="fn">print</span>(<span class="str">"Hello, World!"</span>)
+<span class="fn">print</span>(<span class="str">"คะแนน:"</span>, 100)</div>
+        </div>
+        <div class="ref-card">
+          <span class="ref-term">input()</span>
+          <p class="ref-desc">ใช้รับข้อมูลจากผู้ใช้งานผ่านคีย์บอร์ด โดยค่าที่รับมาจะเป็นข้อความ (String) เสมอ</p>
+          <div class="ref-code">name = <span class="fn">input</span>(<span class="str">"กรอกชื่อ: "</span>)
+<span class="fn">print</span>(name)</div>
+        </div>
+        <div class="ref-card">
+          <span class="ref-term"># (คอมเมนต์)</span>
+          <p class="ref-desc">ใช้เขียนคำอธิบายโค้ด โปรแกรมจะข้ามบรรทัดที่ขึ้นต้นด้วย # ไปโดยไม่ประมวลผล</p>
+          <div class="ref-code"><span class="cmt"># นี่คือคอมเมนต์</span>
+x = 10  <span class="cmt"># กำหนดค่า 10 ให้ x</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: ชนิดข้อมูล -->
+    <div class="ref-section">
+      <h2>2. ชนิดข้อมูลและการแปลงค่า (Data Types & Casting)</h2>
+      <div class="ref-grid">
+        <div class="ref-card">
+          <span class="ref-term">int()</span>
+          <p class="ref-desc">แปลงข้อมูลให้เป็นจำนวนเต็ม (Integer) เช่น แปลงข้อความ "10" เป็นตัวเลข 10</p>
+          <div class="ref-code">age = <span class="fn">int</span>(<span class="str">"25"</span>)
+total = age + 5</div>
+        </div>
+        <div class="ref-card">
+          <span class="ref-term">float()</span>
+          <p class="ref-desc">แปลงข้อมูลให้เป็นเลขทศนิยม (Float)</p>
+          <div class="ref-code">price = <span class="fn">float</span>(<span class="str">"99.50"</span>)</div>
+        </div>
+        <div class="ref-card">
+          <span class="ref-term">str()</span>
+          <p class="ref-desc">แปลงข้อมูลให้เป็นข้อความ (String) เพื่อนำไปต่อกับข้อความอื่น</p>
+          <div class="ref-code">score = 95
+msg = <span class="str">"ได้คะแนน "</span> + <span class="fn">str</span>(score)</div>
+        </div>
+        <div class="ref-card">
+          <span class="ref-term">type()</span>
+          <p class="ref-desc">ตรวจสอบชนิดของข้อมูลในตัวแปร</p>
+          <div class="ref-code"><span class="fn">print</span>(<span class="fn">type</span>(10))  <span class="cmt"># &lt;class 'int'&gt;</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: เงื่อนไข -->
+    <div class="ref-section">
+      <h2>3. เงื่อนไข (Conditionals)</h2>
+      <div class="ref-grid">
+        <div class="ref-card">
+          <span class="ref-term">if, elif, else</span>
+          <p class="ref-desc">ใช้ตรวจสอบเงื่อนไข หากเงื่อนไขเป็นจริง (True) จะทำคำสั่งในบล็อกนั้น</p>
+          <div class="ref-code"><span class="kw">if</span> score >= 80:
+    <span class="fn">print</span>(<span class="str">"Grade A"</span>)
+<span class="kw">elif</span> score >= 50:
+    <span class="fn">print</span>(<span class="str">"Pass"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"Fail"</span>)</div>
+        </div>
+        <div class="ref-card">
+          <span class="ref-term">and, or, not</span>
+          <p class="ref-desc">ตัวดำเนินการทางตรรกศาสตร์ ใช้เชื่อมเงื่อนไขหลายอันเข้าด้วยกัน</p>
+          <div class="ref-code"><span class="kw">if</span> age >= 18 <span class="kw">and</span> has_ticket:
+    <span class="fn">print</span>(<span class="str">"เข้าได้"</span>)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: วนซ้ำ -->
+    <div class="ref-section">
+      <h2>4. การวนซ้ำ (Loops)</h2>
+      <div class="ref-grid">
+        <div class="ref-card">
+          <span class="ref-term">for loop</span>
+          <p class="ref-desc">ใช้ทำซ้ำตามจำนวนรอบที่แน่นอน หรือวนลูปผ่านข้อมูลในลิสต์</p>
+          <div class="ref-code"><span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(3):
+    <span class="fn">print</span>(<span class="str">"รอบที่"</span>, i)</div>
+        </div>
+        <div class="ref-card">
+          <span class="ref-term">while loop</span>
+          <p class="ref-desc">ใช้ทำซ้ำไปเรื่อยๆ ตราบใดที่เงื่อนไขยังคงเป็นจริง (True)</p>
+          <div class="ref-code">hp = 3
+<span class="kw">while</span> hp > 0:
+    <span class="fn">print</span>(<span class="str">"ยังไม่ตาย"</span>)
+    hp = hp - 1</div>
+        </div>
+        <div class="ref-card">
+          <span class="ref-term">range()</span>
+          <p class="ref-desc">สร้างลำดับตัวเลข มักใช้คู่กับ for loop (เริ่มจาก 0 และไม่รวมตัวสุดท้าย)</p>
+          <div class="ref-code"><span class="cmt"># ได้ 1, 2, 3, 4</span>
+<span class="kw">for</span> n <span class="kw">in</span> <span class="fn">range</span>(1, 5):
+    <span class="fn">print</span>(n)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 5: โครงสร้างข้อมูล -->
+    <div class="ref-section">
+      <h2>5. โครงสร้างข้อมูล (Data Structures)</h2>
+      <div class="ref-grid">
+        <div class="ref-card">
+          <span class="ref-term">List [...]</span>
+          <p class="ref-desc">ตัวแปรชุดที่เก็บข้อมูลได้หลายค่า เรียงลำดับ และแก้ไขค่าได้</p>
+          <div class="ref-code">fruits = [<span class="str">"apple"</span>, <span class="str">"banana"</span>]
+fruits.append(<span class="str">"mango"</span>)
+<span class="fn">print</span>(fruits[0]) <span class="cmt"># apple</span></div>
+        </div>
+        <div class="ref-card">
+          <span class="ref-term">len()</span>
+          <p class="ref-desc">ใช้นับจำนวนสมาชิกในลิสต์ หรือความยาวของข้อความ</p>
+          <div class="ref-code">count = <span class="fn">len</span>([10, 20, 30])
+<span class="fn">print</span>(count) <span class="cmt"># 3</span></div>
+        </div>
+        <div class="ref-card">
+          <span class="ref-term">Dictionary {...}</span>
+          <p class="ref-desc">เก็บข้อมูลเป็นคู่คีย์และค่า (Key-Value) ค้นหาข้อมูลด้วยคีย์แทนตัวเลข</p>
+          <div class="ref-code">user = {<span class="str">"name"</span>: <span class="str">"John"</span>, <span class="str">"age"</span>: 20}
+<span class="fn">print</span>(user[<span class="str">"name"</span>])</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 6: ฟังก์ชัน -->
+    <div class="ref-section">
+      <h2>6. ฟังก์ชัน (Functions)</h2>
+      <div class="ref-grid">
+        <div class="ref-card">
+          <span class="ref-term">def</span>
+          <p class="ref-desc">ใช้สร้างฟังก์ชันของตัวเอง เพื่อจัดกลุ่มโค้ดและนำกลับมาใช้ซ้ำ</p>
+          <div class="ref-code"><span class="kw">def</span> <span class="fn">greet</span>(name):
+    <span class="fn">print</span>(<span class="str">f"Hi, {name}!"</span>)
+    
+greet(<span class="str">"Alice"</span>)</div>
+        </div>
+        <div class="ref-card">
+          <span class="ref-term">return</span>
+          <p class="ref-desc">ส่งค่าผลลัพธ์ออกจากฟังก์ชันกลับไปให้ผู้ที่เรียกใช้</p>
+          <div class="ref-code"><span class="kw">def</span> <span class="fn">add</span>(a, b):
+    <span class="kw">return</span> a + b
+    
+total = add(5, 10)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-state" id="emptyState">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+    <h3>ไม่พบคำสั่งที่ค้นหา</h3>
+    <p>ลองค้นหาด้วยคำอื่น เช่น 'print', 'loop', 'list'</p>
+  </div>
+</div>
+
+<script type="module">
+  import { loadProgress } from './assets/js/progress-store.js';
+  
+  // Update progress in topbar
+  loadProgress().then(prog => {
+    let completed = 0;
+    const total = 29; // Hardcoded course total for simplicity
+    if(prog.unitScores) {
+      Object.values(prog.unitScores).forEach(u => {
+        if(u && u.passed) completed += 1;
+      });
+    }
+    const percent = Math.min(100, Math.round((completed / total) * 100));
+    document.getElementById('navProg').textContent = percent + '%';
+  }).catch(()=>{});
+
+  // Search functionality
+  const searchInput = document.getElementById('searchInput');
+  const sections = document.querySelectorAll('.ref-section');
+  const emptyState = document.getElementById('emptyState');
+
+  searchInput.addEventListener('input', (e) => {
+    const query = e.target.value.toLowerCase().trim();
+    let hasVisibleCard = false;
+
+    sections.forEach(section => {
+      const cards = section.querySelectorAll('.ref-card');
+      let sectionHasMatch = false;
+
+      cards.forEach(card => {
+        const text = card.textContent.toLowerCase();
+        if (text.includes(query)) {
+          card.style.display = '';
+          sectionHasMatch = true;
+          hasVisibleCard = true;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // Hide section completely if no cards match
+      section.style.display = sectionHasMatch ? '' : 'none';
+    });
+
+    emptyState.style.display = hasVisibleCard ? 'none' : 'block';
+  });
+</script>
+</body>
+</html>

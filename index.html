@@ -311,48 +311,75 @@
   .lp-glow{position:absolute;inset:-7% 2% -12% 2%;z-index:0;border-radius:40px;filter:blur(50px);
     background:radial-gradient(ellipse at 28% 26%,oklch(0.6 0.17 287/.34),transparent 66%),
       radial-gradient(ellipse at 76% 70%,oklch(0.7 0.13 195/.28),transparent 70%);}
-  .lp{position:relative;z-index:1;display:grid;grid-template-columns:282px 1fr;border:1px solid var(--line);
-    border-radius:22px;overflow:hidden;background:var(--card);
-    box-shadow:0 1px 0 oklch(1 0 0/.6) inset,0 30px 60px -30px oklch(0.42 0.1 288/.35),
+  .lp-shell{position:relative;z-index:1;border:1px solid var(--line);border-radius:16px;overflow:hidden;
+    background:var(--card);box-shadow:0 1px 0 oklch(1 0 0/.6) inset,0 30px 60px -30px oklch(0.42 0.1 288/.35),
       0 64px 112px -52px oklch(0.42 0.12 288/.42);}
-  .lp-side{background:var(--soft);border-right:1px solid var(--line);padding:24px;}
-  .lp-course{display:flex;align-items:center;gap:12px;padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:16px;}
-  .lp-cico{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;color:#fff;
-    font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:16px;
-    background:linear-gradient(140deg,var(--accent),var(--accent-deep));}
-  .lp-cinfo{display:flex;flex-direction:column;justify-content:center;gap:2px;min-width:0;}
-  .lp-course b{display:block;font-size:15.5px;font-weight:600;line-height:1.3;white-space:nowrap;}
-  .lp-cinfo span{display:block;font-size:13px;color:var(--muted);font-weight:400;}
-  .lp-list{list-style:none;display:flex;flex-direction:column;gap:3px;}
-  .lp-list li{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:14.5px;color:var(--muted);}
-  .lp-list li i{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;font-size:12px;font-style:normal;flex-shrink:0;}
-  .lp-list li.done{color:var(--ink);}
-  .lp-list li.done i{background:var(--accent-soft);color:var(--accent-deep);}
-  .lp-list li.cur{color:var(--ink);font-weight:600;background:var(--card);box-shadow:var(--shadow-sm);}
-  .lp-list li.cur i{background:linear-gradient(140deg,var(--accent),var(--accent-deep));color:#fff;}
-  .lp-list li.lock i{background:var(--line-soft);color:var(--faint);}
-  .lp-prog{margin-top:18px;padding-top:18px;border-top:1px solid var(--line);}
-  .lp-prow{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:9px;white-space:nowrap;}
-  .lp-prow b{color:var(--ink);}
-  .lp-main{display:flex;flex-direction:column;min-width:0;}
-  .lp-tabs{display:flex;align-items:center;gap:6px;padding:13px 16px;border-bottom:1px solid var(--line);}
-  .lp-tabs .t{font-size:13.5px;color:var(--muted);padding:7px 13px;border-radius:8px;}
-  .lp-tabs .t.active{background:var(--accent-soft);color:var(--accent-deep);font-weight:500;}
-  .lp-run{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-family:'IBM Plex Mono',monospace;
-    font-size:13px;color:#fff;padding:8px 16px;border-radius:9px;
-    background:linear-gradient(135deg,var(--accent),var(--accent-deep));box-shadow:var(--shadow-sm);}
-  .lp-task{padding:24px 26px;border-bottom:1px solid var(--line-soft);}
-  .lp-task h4{font-size:18px;font-weight:600;margin-bottom:8px;}
-  .lp-task p{color:var(--muted);font-size:15px;line-height:1.62;}
-  .lp-task code{font-family:'IBM Plex Mono',monospace;font-size:13.5px;background:var(--soft);
-    padding:2px 7px;border-radius:6px;color:var(--accent-deep);}
-  .lp-editor{display:flex;flex-direction:column;flex:1;}
-  .lp-editor .code-body{flex:1;}
-  .lp-console{border-top:1px solid var(--line);background:oklch(0.17 0.02 255);padding:16px 22px;
-    font-family:'IBM Plex Mono',monospace;font-size:13.5px;line-height:1.85;color:oklch(0.86 0.07 150);}
-  .lp-console .lh{display:block;color:oklch(0.62 0.02 255);text-transform:uppercase;letter-spacing:.14em;
-    font-size:10.5px;margin-bottom:8px;}
-  @media (max-width:820px){.lp{grid-template-columns:1fr;}.lp-side{border-right:none;border-bottom:1px solid var(--line);}}
+  .lp-topbar{display:flex;align-items:center;justify-content:space-between;height:42px;padding:0 14px;
+    background:#fff;border-bottom:1px solid var(--line);}
+  .lp-tb-left{display:flex;align-items:center;gap:10px;min-width:0;}
+  .lp-tb-logo{width:22px;height:22px;border-radius:5px;display:grid;place-items:center;color:#fff;
+    background:linear-gradient(140deg,oklch(0.68 0.14 232),oklch(0.44 0.17 258));flex-shrink:0;}
+  .lp-tb-crumb{font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lp-tb-crumb b{color:var(--ink);font-weight:600;}
+  .lp-sep{opacity:.35;margin:0 3px;}
+  .lp-tb-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+  .lp-chiplet{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;
+    color:oklch(0.44 0.17 258);padding:3px 8px;border-radius:5px;border:1px solid var(--line);background:#fff;}
+  .lp-av{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;color:#fff;
+    font-weight:700;font-size:9px;background:linear-gradient(140deg,oklch(0.7 0.12 30),oklch(0.58 0.14 12));}
+  .lp-progstrip{height:2px;background:oklch(0.94 0.006 255);}
+  .lp-progstrip > div{height:100%;background:linear-gradient(90deg,oklch(0.56 0.16 255),oklch(0.68 0.14 232));}
+  .lp-body{display:grid;grid-template-columns:220px 1fr;min-height:360px;}
+  .lp-sidebar{background:oklch(0.128 0.015 262);border-right:1px solid oklch(0.21 0.015 262);display:flex;flex-direction:column;overflow:hidden;}
+  .lp-sb-head{padding:14px 14px 12px;border-bottom:1px solid oklch(0.21 0.015 262);}
+  .lp-sb-label{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:oklch(0.48 0.02 264);margin-bottom:3px;}
+  .lp-sb-course{font-size:12px;font-weight:600;color:oklch(0.88 0.01 260);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lp-sb-list{list-style:none;padding:8px 0;flex:1;}
+  .lp-sb-item{display:flex;align-items:center;gap:9px;padding:7px 14px;position:relative;}
+  .lp-sb-active{background:oklch(0.56 0.165 284/.15);}
+  .lp-sb-active::before{content:'';position:absolute;left:0;top:4px;bottom:4px;width:3px;border-radius:0 2px 2px 0;background:oklch(0.56 0.16 255);}
+  .lp-sb-locked{opacity:.4;}
+  .lp-sb-ic{width:20px;height:20px;border-radius:5px;display:grid;place-items:center;font-size:9px;flex-shrink:0;font-family:'IBM Plex Mono',monospace;font-weight:700;border:1.5px solid;}
+  .lp-sb-ic.done{background:oklch(0.95 0.05 155);border-color:oklch(0.84 0.07 155);color:oklch(0.44 0.12 158);}
+  .lp-sb-ic.active{background:oklch(0.56 0.16 255);border-color:oklch(0.56 0.16 255);color:#fff;}
+  .lp-sb-ic.lock{background:oklch(0.19 0.015 262);border-color:oklch(0.21 0.015 262);color:oklch(0.48 0.02 264);font-size:8px;}
+  .lp-sb-tx{min-width:0;}
+  .lp-sb-num{font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:oklch(0.48 0.02 264);}
+  .lp-sb-name{font-size:11.5px;color:oklch(0.88 0.01 260);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .lp-sb-active .lp-sb-name{color:#fff;font-weight:600;}
+  .lp-sb-foot{border-top:1px solid oklch(0.21 0.015 262);padding:12px 14px;}
+  .lp-sb-prow{display:flex;justify-content:space-between;font-size:10px;color:oklch(0.48 0.02 264);margin-bottom:5px;}
+  .lp-sb-prow b{color:oklch(0.88 0.01 260);}
+  .lp-sb-track{height:3px;border-radius:100px;background:oklch(0.19 0.015 262);overflow:hidden;}
+  .lp-sb-track > div{height:100%;border-radius:100px;background:linear-gradient(90deg,oklch(0.56 0.16 255),oklch(0.68 0.14 232));}
+  .lp-content{padding:28px 30px;overflow:hidden;}
+  .lp-step-pill{display:inline-flex;align-items:center;gap:7px;padding:3px 10px;border-radius:100px;
+    background:oklch(0.955 0.03 250);border:1px solid oklch(0.87 0.05 250);
+    font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:oklch(0.44 0.17 258);margin-bottom:12px;}
+  .lp-step-dot{width:5px;height:5px;border-radius:50%;background:oklch(0.56 0.16 255);}
+  .lp-l-title{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-bottom:8px;color:var(--ink);}
+  .lp-l-desc{font-size:14px;line-height:1.7;color:var(--muted);margin-bottom:22px;}
+  .lp-l-desc code{font-size:12.5px;background:oklch(0.955 0.03 250);color:oklch(0.44 0.17 258);padding:1px 5px;border-radius:4px;}
+  .lp-codeblock{border-radius:10px;overflow:hidden;border:1px solid oklch(0.235 0.018 260);box-shadow:0 8px 28px -8px oklch(0.4 0.08 287/.18);}
+  .lp-ic-bar{display:flex;align-items:center;gap:5px;padding:8px 12px;background:oklch(0.128 0.015 262);border-bottom:1px solid oklch(0.235 0.018 260);}
+  .lp-ic-dot{width:8px;height:8px;border-radius:50%;}
+  .lp-ic-fname{margin-left:7px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:oklch(0.46 0.025 264);}
+  .lp-ic-run{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;
+    color:oklch(0.44 0.12 158);background:oklch(0.95 0.05 155);border:1px solid oklch(0.84 0.07 155);padding:3px 10px;border-radius:5px;}
+  .lp-ic-editor{display:flex;background:oklch(0.152 0.018 260);}
+  .lp-ic-gut{padding:12px 0 12px 10px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:12px;
+    line-height:1.82;color:oklch(0.46 0.025 264);border-right:1px solid oklch(0.235 0.018 260);min-width:36px;}
+  .lp-ic-gut span{display:block;padding-right:10px;}
+  .lp-ic-code{padding:12px 16px;font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.82;color:oklch(0.91 0.01 260);}
+  .lp-cline{white-space:pre;}
+  .lp-kw{color:oklch(0.75 0.13 318);}
+  .lp-fn{color:oklch(0.78 0.12 216);}
+  .lp-num{color:oklch(0.80 0.12 56);}
+  .lp-ic-out{padding:12px 16px;background:oklch(0.128 0.015 262);border-top:1px solid oklch(0.235 0.018 260);
+    font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1.8;color:oklch(0.86 0.07 150);display:flex;flex-direction:column;}
+  .lp-out-label{font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:oklch(0.46 0.025 264);margin-bottom:4px;}
+  @media (max-width:820px){.lp-body{grid-template-columns:1fr;}.lp-sidebar{display:none;}}
+
 
   /* ===== motion ===== */
   @media (prefers-reduced-motion: no-preference){
@@ -585,45 +612,82 @@
       <p class="lead reveal">ผู้เรียนศึกษาเนื้อหา เขียนรหัสคำสั่ง และตรวจสอบผลลัพธ์ผ่านโปรแกรมแปลภาษา (Interpreter) ที่ฝังอยู่ในระบบ</p>
       <div class="lp-stage reveal">
         <div class="lp-glow"></div>
-        <div class="lp">
-        <aside class="lp-side">
-          <div class="lp-course">
-            <span class="lp-cico">Py</span>
-            <div class="lp-cinfo"><b>หลักสูตรพื้นฐาน Python</b><span>หน่วยที่ 3 · บทที่ 12 จาก 29</span></div>
-          </div>
-          <ul class="lp-list">
-            <li class="done"><i>✓</i> ตัวแปรและชนิดข้อมูล</li>
-            <li class="done"><i>✓</i> นิพจน์และตัวดำเนินการ</li>
-            <li class="cur"><i>▸</i> โครงสร้างการวนซ้ำ</li>
-            <li class="lock"><i data-ui-icon="lock"></i> ฟังก์ชันและโมดูล</li>
-            <li class="lock"><i data-ui-icon="lock"></i> โครงสร้างข้อมูล</li>
-          </ul>
-          <div class="lp-prog">
-            <div class="lp-prow"><span>ความคืบหน้ารวม</span><b>41%</b></div>
-            <div class="chip-bar"><i style="width:41%"></i></div>
-          </div>
-        </aside>
-        <div class="lp-main">
-          <div class="lp-tabs">
-            <span class="t active">เนื้อหา</span>
-            <span class="t">แก้ไขโค้ด</span>
-            <span class="t">ผลลัพธ์</span>
-            <span class="lp-run">▸ รัน</span>
-          </div>
-          <div class="lp-task">
-            <h4>โครงสร้างคำสั่งวนซ้ำ (Iteration)</h4>
-            <p>ศึกษาการใช้คำสั่ง <code>for</code> ร่วมกับฟังก์ชัน <code>range()</code> เพื่อควบคุมการประมวลผลแบบวนซ้ำ แล้วกดรันเพื่อตรวจสอบผลลัพธ์</p>
-          </div>
-          <div class="lp-editor">
-            <div class="code-body">
-              <div class="gutter"><span>1</span><span>2</span></div>
-<div class="code-main"><div class="cline"><span class="c-kw">for</span> i <span class="c-kw">in</span> <span class="c-fn">range</span>(<span class="c-num">1</span>, <span class="c-num">6</span>):</div><div class="cline">    <span class="c-fn">print</span>(i)</div></div>
+        <!-- Real lesson layout replica -->
+        <div class="lp-shell">
+
+          <!-- Topbar -->
+          <div class="lp-topbar">
+            <div class="lp-tb-left">
+              <div class="lp-tb-logo"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="m7 6 6 6-6 6M15 18h4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+              <span class="lp-tb-crumb">หลักสูตรพื้นฐาน Python <span class="lp-sep">/</span> <b>โครงสร้างการวนซ้ำ</b></span>
             </div>
-            <div class="lp-console">
-              <span class="lh">Output</span>1<br>2<br>3<br>4<br>5
+            <div class="lp-tb-right">
+              <span class="lp-chiplet"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg> 41%</span>
+              <div class="lp-av">ใ</div>
             </div>
           </div>
-        </div>
+
+          <!-- Progress strip -->
+          <div class="lp-progstrip"><div style="width:41%"></div></div>
+
+          <!-- Body: sidebar + content -->
+          <div class="lp-body">
+
+            <!-- Dark sidebar -->
+            <aside class="lp-sidebar">
+              <div class="lp-sb-head">
+                <div class="lp-sb-label">หน่วยที่ 3 — ควบคุมทิศทาง</div>
+                <div class="lp-sb-course">หลักสูตรพื้นฐาน Python</div>
+              </div>
+              <ul class="lp-sb-list">
+                <li class="lp-sb-item lp-sb-done">
+                  <div class="lp-sb-ic done">✓</div>
+                  <div class="lp-sb-tx"><div class="lp-sb-num">บทที่ 12</div><div class="lp-sb-name">โครงสร้างเงื่อนไข if</div></div>
+                </li>
+                <li class="lp-sb-item lp-sb-active">
+                  <div class="lp-sb-ic active">▶</div>
+                  <div class="lp-sb-tx"><div class="lp-sb-num">บทที่ 13</div><div class="lp-sb-name">โครงสร้างการวนซ้ำ</div></div>
+                </li>
+                <li class="lp-sb-item lp-sb-locked">
+                  <div class="lp-sb-ic lock">🔒</div>
+                  <div class="lp-sb-tx"><div class="lp-sb-num">บทที่ 14</div><div class="lp-sb-name">คำสั่ง break และ continue</div></div>
+                </li>
+              </ul>
+              <div class="lp-sb-foot">
+                <div class="lp-sb-prow"><span>ความคืบหน้า</span><b>41%</b></div>
+                <div class="lp-sb-track"><div style="width:41%"></div></div>
+              </div>
+            </aside>
+
+            <!-- Main content area -->
+            <div class="lp-content">
+              <!-- Lesson title area -->
+              <div class="lp-lesson-head">
+                <div class="lp-step-pill"><span class="lp-step-dot"></span>หน่วยที่ 3 · บทที่ 13</div>
+                <h3 class="lp-l-title">โครงสร้างการวนซ้ำ (Loop)</h3>
+                <p class="lp-l-desc">ศึกษาการใช้คำสั่ง <code>for</code> และ <code>while</code> เพื่อสั่งให้โปรแกรมทำงานซ้ำๆ ตามเงื่อนไขที่กำหนด</p>
+              </div>
+
+              <!-- Code block (dark editor style) -->
+              <div class="lp-codeblock">
+                <div class="lp-ic-bar">
+                  <span class="lp-ic-dot" style="background:#ff5f56"></span>
+                  <span class="lp-ic-dot" style="background:#ffbd2e"></span>
+                  <span class="lp-ic-dot" style="background:#27c93f"></span>
+                  <span class="lp-ic-fname">main.py</span>
+                  <span class="lp-ic-run">▶ รัน</span>
+                </div>
+                <div class="lp-ic-editor">
+                  <div class="lp-ic-gut"><span>1</span><span>2</span></div>
+                  <div class="lp-ic-code"><div class="lp-cline"><span class="lp-kw">for</span> i <span class="lp-kw">in</span> <span class="lp-fn">range</span>(<span class="lp-num">1</span>, <span class="lp-num">6</span>):</div><div class="lp-cline">    <span class="lp-fn">print</span>(i)</div></div>
+                </div>
+                <div class="lp-ic-out">
+                  <span class="lp-out-label">OUTPUT</span>
+                  <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

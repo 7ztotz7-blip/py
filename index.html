@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
 <meta charset="UTF-8" />
@@ -167,6 +167,23 @@
     color:var(--accent);margin-bottom:9px;}
   .fcard h3{font-size:20.5px;font-weight:600;letter-spacing:-.01em;margin-bottom:10px;}
   .fcard p{color:var(--muted);font-size:15.5px;line-height:1.62;}
+
+  /* curriculum cards */
+  .curr-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:48px;}
+  .curr-card{position:relative;background:linear-gradient(180deg,#ffffff,oklch(0.984 0.005 250));
+    border:1px solid var(--line);border-radius:18px;padding:28px 26px;
+    box-shadow:0 1px 0 oklch(1 0 0/.9) inset,0 10px 26px -18px oklch(0.42 0.08 288/.22);
+    transition:transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .25s ease,border-color .25s ease;}
+  .curr-card:hover{transform:translateY(-4px);border-color:var(--accent-line);
+    box-shadow:0 1px 0 oklch(1 0 0/.9) inset,0 20px 40px -20px oklch(0.42 0.1 288/.36);}
+  .curr-num{font-family:'IBM Plex Mono',monospace;font-size:11.5px;font-weight:600;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--accent);
+    background:var(--accent-soft);border:1px solid var(--accent-line);
+    display:inline-block;padding:4px 10px;border-radius:6px;margin-bottom:14px;}
+  .curr-title{font-size:17px;font-weight:600;letter-spacing:-.01em;margin-bottom:10px;color:var(--ink);}
+  .curr-desc{color:var(--muted);font-size:14.5px;line-height:1.65;margin-bottom:16px;}
+  .curr-meta{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--faint);
+    font-family:'IBM Plex Mono',monospace;border-top:1px solid var(--line-soft);padding-top:14px;}
 
   /* steps */
   .steps{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:64px;}
@@ -393,7 +410,7 @@
       background:var(--card);border-bottom:1px solid var(--line);padding:10px 22px 16px;box-shadow:var(--shadow-md);z-index:49;}
     .nav-links.open{display:flex;}
     .nav-links .lnk{padding:12px 14px;text-align:left;}
-    .features,.steps{grid-template-columns:1fr;}
+    .features,.steps,.curr-grid{grid-template-columns:1fr;}
     .steps::before{display:none;}
     .stats{grid-template-columns:1fr;}
     .stat + .stat{border-left:none;border-top:1px solid var(--line);}
@@ -418,14 +435,15 @@
     <a class="logo" href="index.html" aria-label="py"><span class="mark"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 6 6 6-6 6M15 18h4" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
     <button class="nav-menu-btn" id="navMenuBtn" type="button" aria-label="เมนู" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
     <nav class="nav-links" id="navLinks">
-      <a class="lnk" href="courses.html">หลักสูตร</a>
-      <a class="lnk" href="#how">วิธีเริ่ม</a>
+      <a class="lnk" href="#how">ขั้นตอนการเรียน</a>
+      <a class="lnk" href="#curriculum">โครงสร้างหลักสูตร</a>
       <a class="lnk" href="#faq">คำถามที่พบบ่อย</a>
+      <a class="lnk" href="#about">เกี่ยวกับโครงงาน</a>
       <a class="lnk nav-login-mobile" href="login.html">เข้าสู่ระบบ</a>
     </nav>
     <div class="nav-actions">
       <a class="btn btn-text" href="login.html">เข้าสู่ระบบ</a>
-      <a class="btn btn-primary" href="login.html">เริ่มเรียนฟรี</a>
+      <a class="btn btn-primary" href="login.html">เข้าสู่ระบบ / ลงทะเบียน</a>
     </div>
   </div>
 </header>
@@ -502,6 +520,60 @@
           <h3>ประมวลผลทันทีผ่านเบราว์เซอร์</h3>
           <p>ทดสอบและตรวจสอบความถูกต้องของรหัสคำสั่งได้ทันที โดยไม่ต้องติดตั้งซอฟต์แวร์เพิ่มเติม</p>
         </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- CURRICULUM -->
+  <section class="block alt" id="curriculum">
+    <div class="wrap">
+      <div class="eyebrow reveal">เนื้อหาหลักสูตร</div>
+      <h2 class="h2 reveal">โครงสร้างหน่วยการเรียนรู้ทั้ง 6 หน่วย</h2>
+      <p class="lead reveal">หลักสูตรแบ่งออกเป็น 6 หน่วยการเรียนรู้ เรียงตามลำดับความยากจากพื้นฐานไปจนถึงขั้นประยุกต์ใช้ รวม 29 บทเรียน</p>
+      <div class="curr-grid" data-stagger>
+
+        <div class="curr-card">
+          <div class="curr-num">หน่วย 1</div>
+          <h3 class="curr-title">ก่อนเริ่มเขียนโค้ด</h3>
+          <p class="curr-desc">ทำความรู้จักการเขียนโปรแกรมสำหรับผู้ที่ไม่มีพื้นฐานมาก่อน ทำความเข้าใจว่าภาษา Python คืออะไรและเหมาะกับงานประเภทใด</p>
+          <div class="curr-meta"><span>5 บทเรียน</span></div>
+        </div>
+
+        <div class="curr-card">
+          <div class="curr-num">หน่วย 2</div>
+          <h3 class="curr-title">พื้นฐาน Python</h3>
+          <p class="curr-desc">ศึกษาตัวแปร ชนิดข้อมูล (int, float, str, bool) การรับและแสดงผลข้อมูล รวมถึงนิพจน์และตัวดำเนินการพื้นฐาน</p>
+          <div class="curr-meta"><span>6 บทเรียน</span></div>
+        </div>
+
+        <div class="curr-card">
+          <div class="curr-num">หน่วย 3</div>
+          <h3 class="curr-title">ควบคุมทิศทาง</h3>
+          <p class="curr-desc">ประยุกต์ใช้โครงสร้างเงื่อนไข (if/elif/else) และโครงสร้างการวนซ้ำ (for/while) เพื่อให้โปรแกรมตัดสินใจและทำงานซ้ำได้</p>
+          <div class="curr-meta"><span>5 บทเรียน</span></div>
+        </div>
+
+        <div class="curr-card">
+          <div class="curr-num">หน่วย 4</div>
+          <h3 class="curr-title">โครงสร้างข้อมูล</h3>
+          <p class="curr-desc">ศึกษา List, Tuple, Set และ Dictionary สำหรับจัดเก็บและประมวลผลข้อมูลหลายรายการ รวมถึง String Methods ที่ใช้บ่อย</p>
+          <div class="curr-meta"><span>5 บทเรียน</span></div>
+        </div>
+
+        <div class="curr-card">
+          <div class="curr-num">หน่วย 5</div>
+          <h3 class="curr-title">ฟังก์ชัน</h3>
+          <p class="curr-desc">สร้างฟังก์ชันเพื่อจัดระเบียบโค้ด ศึกษาการส่งอาร์กิวเมนต์ การคืนค่า ขอบเขตตัวแปร และการจัดการข้อผิดพลาด (Exception Handling)</p>
+          <div class="curr-meta"><span>4 บทเรียน</span></div>
+        </div>
+
+        <div class="curr-card">
+          <div class="curr-num">หน่วย 6</div>
+          <h3 class="curr-title">การเขียนโปรแกรมเชิงวัตถุ</h3>
+          <p class="curr-desc">เรียนรู้หลักการ OOP (Object-Oriented Programming) ครอบคลุม Class, Object, การสืบทอด (Inheritance) และ Encapsulation</p>
+          <div class="curr-meta"><span>4 บทเรียน</span></div>
+        </div>
+
       </div>
     </div>
   </section>

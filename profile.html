@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>py — รายงานผลการเรียน</title>
+<title>py — รายงานผลการเรียน & โปรไฟล์</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,54 +14,348 @@
 <style>
   body { padding-bottom: 70px; background: var(--bg); }
   
-  /* Report Header */
-  .r-head { display: flex; align-items: flex-start; justify-content: space-between; margin-top: 32px; margin-bottom: 30px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 30px; box-shadow: var(--shadow-sm); }
-  .rh-left { display: flex; gap: 24px; align-items: center; }
-  .rh-av { width: 86px; height: 86px; border-radius: 16px; display: grid; place-items: center; font-size: 38px; font-weight: 600; color: #fff; background: linear-gradient(140deg, var(--accent-deep), var(--accent)); box-shadow: 0 1px 0 oklch(1 0 0/.3) inset; }
-  .rh-info h1 { font-size: 28px; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; margin-bottom: 6px; color: var(--ink); }
-  .rh-info p { font-size: 14.5px; color: var(--muted); margin-bottom: 3px; display:flex; align-items:center; gap:8px; }
-  .rh-info .mono { font-family: 'IBM Plex Mono', monospace; }
-  .rh-info svg { color: var(--faint); }
-
-  /* Stat Summary */
-  .r-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 30px; }
-  .r-stat { background: var(--card); border: 1px solid var(--line); padding: 22px 26px; border-radius: 14px; box-shadow: var(--shadow-sm); }
-  .r-stat .sl { font-size: 12.5px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; display:flex; align-items:center; gap:8px;}
-  .r-stat .sl svg { color: var(--accent); }
-  .r-stat .sn { font-size: 32px; font-weight: 700; font-family: 'IBM Plex Mono', monospace; letter-spacing: -.02em; color: var(--ink); }
-  .r-stat .sn span { font-size: 15px; color: var(--faint); font-weight: 500; font-family: 'IBM Plex Sans Thai', sans-serif; letter-spacing: 0; }
-
-  /* Report Table */
-  .stitle { display: flex; align-items: center; gap: 11px; margin-bottom: 16px; margin-top:40px; }
-  .stitle h2 { font-size: 20px; font-weight: 600; letter-spacing: -.01em; color: var(--ink); }
-  .stitle .ct { margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; color: var(--faint); }
+  /* Hero Banner */
+  .ph-hero {
+    position: relative;
+    overflow: hidden;
+    margin-top: 28px;
+    border-radius: 22px;
+    padding: 34px 38px;
+    color: #fff;
+    background:
+      radial-gradient(600px 300px at 88% -20%, oklch(0.62 0.16 278/.55), transparent 64%),
+      radial-gradient(500px 360px at 6% 120%, oklch(0.56 0.15 200/.45), transparent 60%),
+      linear-gradient(150deg, oklch(0.38 0.13 290), oklch(0.28 0.1 294));
+    box-shadow: var(--shadow-lg), 0 30px 60px -30px oklch(0.4 0.14 288/.4);
+  }
+  .ph-hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: .35;
+    pointer-events: none;
+    background-image: radial-gradient(circle at 1px 1px, oklch(1 0 0/.12) 1px, transparent 0);
+    background-size: 24px 24px;
+  }
   
-  .r-table-wrap { background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-sm); }
-  .r-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14.5px; }
-  .r-table th { background: var(--soft); padding: 14px 20px; font-weight: 600; font-size: 13.5px; color: var(--muted); border-bottom: 1px solid var(--line); }
-  .r-table td { padding: 16px 20px; border-bottom: 1px solid var(--line-soft); vertical-align: middle; }
-  .r-table tr:last-child td { border-bottom: none; }
-  .r-table tbody tr:hover { background: oklch(0.99 0.003 250); }
+  .ph-row {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
   
-  .rt-num { font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--faint); font-weight: 600; width: 50px; }
-  .rt-name { font-weight: 600; color: var(--ink); }
-  .rt-name small { display: block; font-weight: 400; color: var(--muted); font-size: 13px; margin-top: 2px; }
-  .rt-score { font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 14.5px; }
-  .rt-null { color: var(--faint); font-weight: 400; font-family: inherit; }
+  .ph-user-info {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    min-width: 260px;
+  }
   
-  .badge { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 6px; font-size: 12.5px; font-weight: 600; border: 1px solid transparent; }
-  .b-pass { background: var(--ok-soft); color: var(--ok-deep); border-color: var(--ok-line); }
-  .b-wait { background: var(--warm-soft); color: var(--warm-deep); border-color: var(--warm-line); }
-  .b-lock { background: var(--soft); color: var(--muted); border-color: var(--line); }
+  .ph-av {
+    width: 84px;
+    height: 84px;
+    border-radius: 24px;
+    flex-shrink: 0;
+    display: grid;
+    place-items: center;
+    font-size: 36px;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(140deg, oklch(0.72 0.13 30), oklch(0.55 0.16 12));
+    box-shadow: 0 1px 0 oklch(1 0 0/.4) inset, 0 12px 24px -8px oklch(0 0 0/.4);
+    border: 2px solid oklch(1 0 0/.2);
+  }
+  
+  .ph-details h1 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1.25;
+  }
+  
+  .ph-meta-p {
+    color: oklch(0.88 0.03 250);
+    font-size: 14px;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  
+  .ph-badge-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 9px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    background: oklch(1 0 0/.15);
+    border: 1px solid oklch(1 0 0/.2);
+    color: #fff;
+  }
+  
+  .ph-joined {
+    color: oklch(0.8 0.03 250);
+    font-size: 13px;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
 
-  @media (max-width: 768px) {
-    .r-head { flex-direction: column; align-items: stretch; gap: 20px; }
-    .r-summary { grid-template-columns: 1fr; }
-    .rt-pre { display: none; }
+  /* Glass Card in Hero */
+  .ph-glass {
+    position: relative;
+    z-index: 2;
+    background: oklch(1 0 0/.12);
+    border: 1px solid oklch(1 0 0/.22);
+    border-radius: 18px;
+    padding: 20px 26px;
+    backdrop-filter: blur(12px);
+    min-width: 220px;
+    text-align: center;
+  }
+  
+  .ph-glass .lv {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  
+  .ph-glass .ll {
+    font-size: 12px;
+    color: oklch(0.88 0.03 250);
+    margin-top: 6px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  
+  .ph-glass .lbar {
+    width: 100%;
+    height: 7px;
+    border-radius: 100px;
+    background: oklch(1 0 0/.2);
+    overflow: hidden;
+    margin-top: 12px;
+  }
+  
+  .ph-glass .lbar i {
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, oklch(0.85 0.1 200), #fff);
+    border-radius: 100px;
+    transition: width 1s cubic-bezier(.2,.7,.2,1);
+  }
+  
+  .ph-glass .lx {
+    font-size: 12px;
+    color: oklch(0.85 0.03 250);
+    margin-top: 8px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  /* Stat Cards Strip */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+  }
+  
+  .stat {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(180deg, #fff, var(--soft));
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 22px 24px;
+    box-shadow: var(--shadow-sm);
+    transition: transform .18s, box-shadow .18s, border-color .18s;
+  }
+  
+  .stat:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--accent-line);
+  }
+  
+  .stat .si {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 14px;
+    color: #fff;
+    box-shadow: 0 1px 0 oklch(1 0 0/.4) inset, var(--shadow-sm);
+  }
+  
+  .stat .sn {
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    line-height: 1;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--ink);
+  }
+  
+  .stat .sl {
+    font-size: 13.5px;
+    color: var(--muted);
+    margin-top: 6px;
+    font-weight: 500;
+  }
+
+  /* Report Table Card */
+  .ph-section {
+    margin-top: 32px;
+  }
+  
+  .stitle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  
+  .stitle h2 {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -.01em;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .stitle .ct {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--faint);
+    background: var(--soft);
+    padding: 4px 10px;
+    border-radius: 100px;
+    border: 1px solid var(--line);
+  }
+  
+  .r-table-card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+  }
+  
+  .r-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 14.5px;
+  }
+  
+  .r-table th {
+    background: var(--soft);
+    padding: 16px 20px;
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--muted);
+    border-bottom: 1px solid var(--line);
+    text-transform: uppercase;
+    letter-spacing: .04em;
+  }
+  
+  .r-table td {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--line-soft);
+    vertical-align: middle;
+  }
+  
+  .r-table tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .r-table tbody tr {
+    transition: background .15s;
+  }
+  
+  .r-table tbody tr:hover {
+    background: oklch(0.99 0.003 250);
+  }
+  
+  .rt-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: var(--faint);
+    font-weight: 600;
+    width: 60px;
+  }
+  
+  .rt-name {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  
+  .rt-score {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    font-size: 14.5px;
+  }
+  
+  .rt-null {
+    color: var(--faint);
+    font-weight: 400;
+  }
+  
+  .delta-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  
+  .delta-plus { background: var(--ok-soft); color: var(--ok-deep); }
+  .delta-flat { background: var(--soft); color: var(--muted); }
+  
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 8px;
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+  
+  .b-pass { background: var(--ok-soft); color: var(--ok-deep); border: 1px solid var(--ok-line); }
+  .b-wait { background: var(--warm-soft); color: var(--warm-deep); border: 1px solid var(--warm-line); }
+  .b-lock { background: var(--soft); color: var(--faint); border: 1px solid var(--line); }
+
+  @media (max-width: 820px) {
+    .ph-row { flex-direction: column; align-items: stretch; }
+    .ph-glass { width: 100%; }
+    .stats { grid-template-columns: 1fr; }
+    .rt-pre, .rt-delta { display: none; }
   }
 </style>
 </head>
-<body>
+<body data-fx=".topbar, .ph-hero, .stats > .stat, .ph-section" data-fx-count=".stat .sn, .ph-glass .lv">
+<script>
+(function(){var b=document.body,s=b.getAttribute('data-fx');if(!s)return;document.documentElement.classList.add('js-fx');if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var st=document.createElement('style');st.textContent='.js-fx :is('+s+'){transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}.js-fx :is('+s+'):not(.fx-shown){opacity:0;transform:translateY(22px)}';document.head.appendChild(st);})();
+</script>
 
 <header class="topbar">
   <a class="tb-logo" href="index.html" aria-label="py"><span class="tb-mk"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 6 6 6-6 6M15 18h4" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
@@ -85,55 +379,89 @@
 
 <div class="wrap">
   
-  <!-- HEADER -->
-  <section class="r-head">
-    <div class="rh-left">
-      <div class="rh-av" id="profAvatar">?</div>
-      <div class="rh-info">
-        <h1 id="profName">กำลังโหลด...</h1>
-        <p><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> <span class="mono" id="profEmail">กำลังโหลด...</span></p>
-        <p><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> <span id="profJoined">—</span></p>
+  <!-- HERO BANNER -->
+  <section class="ph-hero">
+    <div class="ph-row">
+      <div class="ph-user-info">
+        <div class="ph-av" id="profAvatar">?</div>
+        <div class="ph-details">
+          <h1 id="profName">กำลังโหลด...</h1>
+          <div class="ph-meta-p">
+            <span id="profEmail">loading...</span>
+            <span class="ph-badge-tag"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg> บัญชีผู้เรียน</span>
+          </div>
+          <div class="ph-joined">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            <span id="profJoined">—</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ph-glass">
+        <div class="lv" id="profPct">0%</div>
+        <div class="ll">ความคืบหน้ารวม</div>
+        <div class="lbar"><i id="profProgressBar"></i></div>
+        <div class="lx" id="profLessonCount">0 / 29 บท</div>
       </div>
     </div>
   </section>
 
-  <!-- STAT STRIP -->
-  <div class="r-summary">
-    <div class="r-stat">
-      <div class="sl"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3"></path></svg> ความคืบหน้าหลักสูตร</div>
-      <div class="sn" id="statPct">0<span>%</span></div>
+  <!-- STAT CARDS -->
+  <div class="stats">
+    <div class="stat">
+      <div class="si" style="background:linear-gradient(140deg, var(--accent-2), var(--accent-deep));">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3"/></svg>
+      </div>
+      <div class="sn" id="statLessons">0</div>
+      <div class="sl">บทเรียนที่เรียนสำเร็จ</div>
     </div>
-    <div class="r-stat">
-      <div class="sl"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg> บทเรียนที่สำเร็จ</div>
-      <div class="sn" id="statLessons">0<span> / 29</span></div>
+    
+    <div class="stat">
+      <div class="si" style="background:linear-gradient(140deg, var(--ok), var(--ok-deep));">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <div class="sn" id="statUnitsPassed">0</div>
+      <div class="sl">หน่วยการเรียนที่ผ่านเกณฑ์</div>
     </div>
-    <div class="r-stat">
-      <div class="sl"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-6M6 20V10M18 20V4"></path></svg> คะแนนเฉลี่ย (Post-test)</div>
-      <div class="sn" id="statAvg">0<span>%</span></div>
+
+    <div class="stat">
+      <div class="si" style="background:linear-gradient(140deg, oklch(0.68 0.15 45), oklch(0.55 0.16 25));">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      </div>
+      <div class="sn" id="statAvg">0%</div>
+      <div class="sl">คะแนนเฉลี่ยหลังเรียน (Post-test)</div>
     </div>
   </div>
 
-  <!-- SCORE BREAKDOWN TABLE -->
-  <div class="stitle">
-    <h2>รายงานผลการทดสอบแยกตามหน่วย (Score Breakdown)</h2>
-    <span class="ct" id="breakdownCt">0 หน่วย</span>
-  </div>
-  <div class="r-table-wrap">
-    <table class="r-table">
-      <thead>
-        <tr>
-          <th width="80">หน่วยที่</th>
-          <th>ชื่อหน่วยการเรียนรู้</th>
-          <th class="rt-pre" width="140">คะแนนก่อนเรียน</th>
-          <th width="140">คะแนนหลังเรียน</th>
-          <th width="120">สถานะ</th>
-        </tr>
-      </thead>
-      <tbody id="breakdownTable">
-        <!-- JS generates rows here -->
-      </tbody>
-    </table>
-  </div>
+  <!-- ACADEMIC REPORT TABLE -->
+  <section class="ph-section">
+    <div class="stitle">
+      <h2>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent-deep)" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        รายงานผลสัมฤทธิ์ทางการเรียนแยกตามหน่วย
+      </h2>
+      <span class="ct" id="breakdownCt">0 หน่วย</span>
+    </div>
+    
+    <div class="r-table-card">
+      <table class="r-table">
+        <thead>
+          <tr>
+            <th class="rt-num">หน่วย</th>
+            <th>ชื่อหน่วยการเรียนรู้</th>
+            <th class="rt-pre" width="130">ก่อนเรียน</th>
+            <th width="130">หลังเรียน</th>
+            <th class="rt-delta" width="120">พัฒนาการ</th>
+            <th width="140">สถานะ</th>
+          </tr>
+        </thead>
+        <tbody id="breakdownTable">
+          <!-- Rendered via JS -->
+        </tbody>
+      </table>
+    </div>
+  </section>
+
 </div>
 
 <script src="pystart-data.js"></script>
@@ -153,61 +481,87 @@
   const profileDoc = await loadProfile(user.uid);
   const displayName = profileDoc.name || user.displayName || user.email.split('@')[0];
   const initial = displayName.trim().charAt(0).toUpperCase() || '?';
+  
   document.getElementById('profAvatar').textContent = initial;
   document.getElementById('tbAvatar').textContent = initial;
   document.getElementById('profName').textContent = displayName;
   document.getElementById('profEmail').textContent = user.email;
+  
   const joined = user.metadata && user.metadata.creationTime ? new Date(user.metadata.creationTime) : null;
   document.getElementById('profJoined').textContent = joined
-    ? ('เริ่มต้นเรียนเมื่อ '+joined.toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'}))
+    ? ('เข้าร่วมเมื่อ '+joined.toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'}))
     : 'เริ่มต้นเรียนแล้ว';
 
   const { completed, unitScores } = await loadProgress(user.uid);
   const totalLessons = courseData.lessons.length;
-  
-  const overallPct = Math.round((completed.length/totalLessons)*100);
-  document.getElementById('statPct').innerHTML = overallPct+'<span>%</span>';
-  document.getElementById('statLessons').innerHTML = completed.length+'<span> / '+totalLessons+' บท</span>';
-  document.getElementById('xpChiplet').innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg> '+overallPct+'%';
+  const overallPct = Math.round((completed.length / totalLessons) * 100);
 
+  // Top header stats
+  document.getElementById('profPct').textContent = overallPct + '%';
+  document.getElementById('profLessonCount').textContent = completed.length + ' / ' + totalLessons + ' บท';
+  document.getElementById('xpChiplet').innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg> ' + overallPct + '%';
+
+  // Animate progress bar
+  const pBar = document.getElementById('profProgressBar');
+  requestAnimationFrame(() => { pBar.style.width = overallPct + '%'; });
+
+  // Stat cards
+  document.getElementById('statLessons').textContent = completed.length + ' / ' + totalLessons;
+
+  let passedUnits = 0;
   let sumPostPct = 0;
   let countPost = 0;
 
-  // Build the table rows
-  document.getElementById('breakdownCt').textContent = courseUnits.length+' หน่วย';
+  // Build report table
+  document.getElementById('breakdownCt').textContent = courseUnits.length + ' หน่วยการเรียน';
   document.getElementById('breakdownTable').innerHTML = courseUnits.map(function(u){
     const us = unitScores[u.id];
     const pre = us && us.pre;
     const post = us && us.post;
     
-    let preHtml = pre ? '<span class="rt-score">'+pre.score+'/'+pre.total+'</span>' : '<span class="rt-null">—</span>';
-    let postHtml = post ? '<span class="rt-score">'+post.score+'/'+post.total+'</span>' : '<span class="rt-null">—</span>';
+    let preHtml = pre ? '<span class="rt-score">' + pre.score + '/' + pre.total + ' <small style="color:var(--faint);">(' + pre.pct + '%)</small></span>' : '<span class="rt-null">—</span>';
+    let postHtml = post ? '<span class="rt-score">' + post.score + '/' + post.total + ' <small style="color:var(--faint);">(' + post.pct + '%)</small></span>' : '<span class="rt-null">—</span>';
     
-    let statusHtml = '<span class="badge b-lock">ยังไม่เริ่มเรียน</span>';
+    // Calculate Delta (Post % - Pre %)
+    let deltaHtml = '<span class="rt-null">—</span>';
+    if(pre && post) {
+      const diff = post.pct - pre.pct;
+      if(diff > 0) {
+        deltaHtml = '<span class="delta-badge delta-plus">+' + diff + '%</span>';
+      } else {
+        deltaHtml = '<span class="delta-badge delta-flat">' + diff + '%</span>';
+      }
+    }
+
+    let statusHtml = '<span class="badge b-lock">ยังไม่เริ่ม</span>';
     if(post && post.pct >= 70) {
-      statusHtml = '<span class="badge b-pass">ผ่านเกณฑ์ ('+post.pct+'%)</span>';
+      statusHtml = '<span class="badge b-pass">✓ ผ่านเกณฑ์</span>';
+      passedUnits++;
       sumPostPct += post.pct;
       countPost++;
     } else if(post) {
-      statusHtml = '<span class="badge b-wait">ยังไม่ผ่าน ('+post.pct+'%)</span>';
+      statusHtml = '<span class="badge b-wait">ยังไม่ผ่าน (ต้องซ่อม)</span>';
       sumPostPct += post.pct;
       countPost++;
     } else if(pre) {
       statusHtml = '<span class="badge b-wait">รอสอบหลังเรียน</span>';
     }
 
-    return '<tr>'+
-      '<td class="rt-num">'+String(u.id).padStart(2,'0')+'</td>'+
-      '<td class="rt-name">'+u.title+'</td>'+
-      '<td class="rt-pre">'+preHtml+'</td>'+
-      '<td>'+postHtml+'</td>'+
-      '<td>'+statusHtml+'</td>'+
+    return '<tr>' +
+      '<td class="rt-num">' + String(u.id).padStart(2,'0') + '</td>' +
+      '<td class="rt-name">' + u.title + '</td>' +
+      '<td class="rt-pre">' + preHtml + '</td>' +
+      '<td>' + postHtml + '</td>' +
+      '<td class="rt-delta">' + deltaHtml + '</td>' +
+      '<td>' + statusHtml + '</td>' +
     '</tr>';
   }).join('');
 
-  const avgScore = countPost > 0 ? Math.round(sumPostPct / countPost) : 0;
-  document.getElementById('statAvg').innerHTML = avgScore+'<span>%</span>';
+  document.getElementById('statUnitsPassed').textContent = passedUnits + ' / ' + courseUnits.length;
+  const avgPct = countPost > 0 ? Math.round(sumPostPct / countPost) : 0;
+  document.getElementById('statAvg').textContent = avgPct + '%';
 
 </script>
+<script src="pystart-fx.js"></script>
 </body>
 </html>

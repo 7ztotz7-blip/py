@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>py — โปรไฟล์ & ความสำเร็จ</title>
+<title>py — รายงานผลการเรียน</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -12,98 +12,83 @@
 <script src="pystart-theme.js"></script>
 <script src="pystart-icons.js"></script>
 <style>
-  body{padding-bottom:70px;}
+  body { padding-bottom: 70px; background: var(--bg); }
+  
+  /* Wrapper for print compatibility */
+  .wrap-print { max-width: 860px; margin: 0 auto; padding: 40px 20px; }
 
-  /* profile header */
-  .phead{position:relative;overflow:hidden;margin-top:30px;border-radius:24px;padding:38px 40px;color:#fff;
-    background:
-      radial-gradient(600px 300px at 88% -20%,oklch(0.64 0.16 278/.55),transparent 64%),
-      radial-gradient(500px 360px at 6% 120%,oklch(0.58 0.15 200/.45),transparent 60%),
-      linear-gradient(150deg,oklch(0.4 0.13 290),oklch(0.3 0.1 294));
-    box-shadow:var(--shadow-lg);}
-  .phead::after{content:"";position:absolute;inset:0;opacity:.4;pointer-events:none;
-    background-image:radial-gradient(circle at 1px 1px,oklch(1 0 0/.1) 1px,transparent 0);background-size:24px 24px;}
-  .ph-row{position:relative;z-index:2;display:flex;align-items:center;gap:24px;flex-wrap:wrap;}
-  .ph-av{width:96px;height:96px;border-radius:28px;flex-shrink:0;display:grid;place-items:center;font-size:40px;font-weight:600;color:#fff;
-    background:linear-gradient(140deg,oklch(0.72 0.13 30),oklch(0.55 0.16 12));box-shadow:0 1px 0 oklch(1 0 0/.4) inset,0 16px 30px -10px oklch(0 0 0/.5);border:2px solid oklch(1 0 0/.2);}
-  .ph-id{flex:1;min-width:200px;}
-  .ph-id h1{font-size:30px;font-weight:600;letter-spacing:-.02em;}
-  .ph-id .handle{color:oklch(0.88 0.03 250);font-size:15px;margin-top:4px;font-family:'IBM Plex Mono',monospace;}
-  .ph-id .joined{color:oklch(0.82 0.03 250);font-size:13.5px;margin-top:10px;display:inline-flex;align-items:center;gap:7px;}
-  .ph-level{position:relative;z-index:2;text-align:center;background:oklch(1 0 0/.1);border:1px solid oklch(1 0 0/.2);border-radius:18px;padding:18px 26px;backdrop-filter:blur(8px);}
-  .ph-level .lv{font-size:34px;font-weight:600;letter-spacing:-.02em;line-height:1;}
-  .ph-level .ll{font-size:12.5px;color:oklch(0.88 0.03 250);margin-top:5px;letter-spacing:.05em;text-transform:uppercase;}
-  .ph-level .lbar{width:120px;height:6px;border-radius:100px;background:oklch(1 0 0/.2);overflow:hidden;margin-top:11px;}
-  .ph-level .lbar i{display:block;height:100%;width:62%;background:linear-gradient(90deg,oklch(0.85 0.1 200),#fff);border-radius:100px;}
-  .ph-level .lx{font-size:11px;color:oklch(0.85 0.03 250);margin-top:7px;font-family:'IBM Plex Mono',monospace;}
+  /* Report Header */
+  .r-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 30px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 30px; box-shadow: var(--shadow-sm); }
+  .rh-left { display: flex; gap: 24px; align-items: center; }
+  .rh-av { width: 86px; height: 86px; border-radius: 16px; display: grid; place-items: center; font-size: 38px; font-weight: 600; color: #fff; background: linear-gradient(140deg, var(--accent-deep), var(--accent)); box-shadow: 0 1px 0 oklch(1 0 0/.3) inset; }
+  .rh-info h1 { font-size: 28px; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; margin-bottom: 6px; color: var(--ink); }
+  .rh-info p { font-size: 14.5px; color: var(--muted); margin-bottom: 3px; display:flex; align-items:center; gap:8px; }
+  .rh-info .mono { font-family: 'IBM Plex Mono', monospace; }
+  .rh-info svg { color: var(--faint); }
+  
+  .rh-actions { display: flex; gap: 10px; }
+  .btn-print { display: inline-flex; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--line); padding: 9px 18px; border-radius: 9px; font-size: 14px; font-weight: 600; color: var(--ink); cursor: pointer; transition: .15s; box-shadow: var(--shadow-sm); }
+  .btn-print:hover { background: var(--soft); border-color: var(--line-deep); }
 
-  /* stat strip */
-  .strip{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:22px;}
-  .sc{background:linear-gradient(180deg,#fff,var(--soft));border:1px solid var(--line);border-radius:17px;padding:20px;box-shadow:var(--shadow-sm);
-    transition:transform .18s,box-shadow .18s,border-color .18s;}
-  .sc:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--accent-line);}
-  .sc .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-size:19px;margin-bottom:13px;
-    box-shadow:0 1px 0 oklch(1 0 0/.4) inset,var(--shadow-sm);}
-  .sc .n{font-size:26px;font-weight:600;letter-spacing:-.02em;line-height:1;}
-  .sc .l{font-size:13px;color:var(--muted);margin-top:6px;}
+  /* Stat Summary */
+  .r-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 30px; }
+  .r-stat { background: var(--card); border: 1px solid var(--line); padding: 22px 26px; border-radius: 14px; box-shadow: var(--shadow-sm); }
+  .r-stat .sl { font-size: 12.5px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; display:flex; align-items:center; gap:8px;}
+  .r-stat .sl svg { color: var(--accent); }
+  .r-stat .sn { font-size: 32px; font-weight: 700; font-family: 'IBM Plex Mono', monospace; letter-spacing: -.02em; color: var(--ink); }
+  .r-stat .sn span { font-size: 15px; color: var(--faint); font-weight: 500; font-family: 'IBM Plex Sans Thai', sans-serif; letter-spacing: 0; }
 
-  @media (max-width:900px){.strip{grid-template-columns:1fr 1fr;}}
+  /* Report Table */
+  .stitle { display: flex; align-items: center; gap: 11px; margin-bottom: 16px; margin-top:40px; }
+  .stitle h2 { font-size: 20px; font-weight: 600; letter-spacing: -.01em; color: var(--ink); }
+  .stitle .ct { margin-left: auto; font-family: 'IBM Plex Mono', monospace; font-size: 13.5px; color: var(--faint); }
+  
+  .r-table-wrap { background: var(--card); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-sm); }
+  .r-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 14.5px; }
+  .r-table th { background: var(--soft); padding: 14px 20px; font-weight: 600; font-size: 13.5px; color: var(--muted); border-bottom: 1px solid var(--line); }
+  .r-table td { padding: 16px 20px; border-bottom: 1px solid var(--line-soft); vertical-align: middle; }
+  .r-table tr:last-child td { border-bottom: none; }
+  .r-table tbody tr:hover { background: oklch(0.99 0.003 250); }
+  
+  .rt-num { font-family: 'IBM Plex Mono', monospace; font-size: 12.5px; color: var(--faint); font-weight: 600; width: 50px; }
+  .rt-name { font-weight: 600; color: var(--ink); }
+  .rt-name small { display: block; font-weight: 400; color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .rt-score { font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 14.5px; }
+  .rt-null { color: var(--faint); font-weight: 400; font-family: inherit; }
+  
+  .badge { display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px; border-radius: 6px; font-size: 12.5px; font-weight: 600; border: 1px solid transparent; }
+  .b-pass { background: var(--ok-soft); color: var(--ok-deep); border-color: var(--ok-line); }
+  .b-wait { background: var(--warm-soft); color: var(--warm-deep); border-color: var(--warm-line); }
+  .b-lock { background: var(--soft); color: var(--muted); border-color: var(--line); }
 
-  /* score breakdown */
-  .card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:22px 26px;box-shadow:var(--shadow-md);}
-  .mrow{display:flex;align-items:center;gap:16px;padding:13px 0;}
-  .mrow + .mrow{border-top:1px solid var(--line-soft);}
-  .mrow .mi{width:38px;height:38px;border-radius:11px;flex-shrink:0;display:grid;place-items:center;font-family:'IBM Plex Mono',monospace;
-    font-weight:600;font-size:15px;background:var(--accent-soft);color:var(--accent-deep);}
-  .mrow .mi.mi-lock{background:var(--soft);color:var(--faint);}
-  .mrow .mname{width:190px;flex-shrink:0;font-size:14.5px;font-weight:500;}
-  .mrow .mname small{display:block;color:var(--faint);font-weight:400;font-size:12.5px;margin-top:1px;}
-  .mrow .mbar{flex:1;height:11px;border-radius:100px;background:var(--soft);border:1px solid var(--line);overflow:hidden;}
-  .mrow .mbar i{display:block;height:100%;border-radius:100px;transition:width 1s cubic-bezier(.2,.7,.2,1);}
-  .mrow .mscore{width:60px;text-align:right;flex-shrink:0;font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;}
-  .lv-hi{background:linear-gradient(90deg,var(--ok),var(--ok-deep));} .c-hi{color:var(--ok-deep);}
-  .lv-md{background:linear-gradient(90deg,var(--accent),var(--accent-2));} .c-md{color:var(--accent-deep);}
-  .lv-lo{background:linear-gradient(90deg,var(--warm),var(--warm-deep));} .c-lo{color:var(--warm-deep);}
-  .lv-empty{background:none;} .c-empty{color:var(--faint);}
-  .mrow-empty .mname{color:var(--faint);}
-  @media (max-width:640px){.mrow .mname{width:120px;}}
+  @media (max-width: 768px) {
+    .r-head { flex-direction: column; align-items: stretch; gap: 20px; }
+    .rh-actions { justify-content: flex-start; }
+    .r-summary { grid-template-columns: 1fr; }
+    .rt-pre { display: none; } /* Hide pre-test on mobile to save space */
+  }
 
-  /* achievements */
-  .section{margin-top:34px;}
-  .stitle{display:flex;align-items:center;gap:11px;margin-bottom:16px;}
-  .stitle h2{font-size:20px;font-weight:600;letter-spacing:-.01em;}
-  .stitle .si{width:30px;height:30px;border-radius:9px;display:grid;place-items:center;color:#fff;font-size:15px;
-    background:linear-gradient(140deg,var(--gold),var(--gold-deep));}
-  .stitle .ct{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--faint);}
-  .ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;}
-  .ach{display:flex;align-items:center;gap:14px;background:linear-gradient(180deg,#fff,var(--soft));border:1px solid var(--line);
-    border-radius:16px;padding:16px 18px;box-shadow:var(--shadow-sm);text-decoration:none;color:inherit;transition:transform .18s,box-shadow .18s,border-color .18s;}
-  .ach.unlocked:hover{transform:translateY(-2px);box-shadow:var(--shadow-md);border-color:var(--accent-line);}
-  .ach.locked{background:var(--soft);opacity:.55;}
-  .ach-badge{width:44px;height:44px;border-radius:13px;flex-shrink:0;display:grid;place-items:center;font-size:20px;
-    background:linear-gradient(140deg,var(--accent-2),var(--accent-deep));
-    box-shadow:0 1px 0 oklch(1 0 0/.4) inset,0 0 0 3px var(--accent-soft),0 8px 16px -6px oklch(0.45 0.13 288/.5);}
-  .ach.locked .ach-badge{background:linear-gradient(140deg,oklch(0.82 0.01 255),oklch(0.72 0.012 255));box-shadow:var(--shadow-sm);filter:grayscale(1);}
-  .ach.gold .ach-badge{background:linear-gradient(140deg,var(--gold),var(--gold-deep));
-    box-shadow:0 1px 0 oklch(1 0 0/.4) inset,0 0 0 3px oklch(0.9 0.06 85/.5),0 8px 16px -6px oklch(0.6 0.12 80/.55);}
-  .ach-info{min-width:0;}
-  .ach-name{font-size:14.5px;font-weight:600;letter-spacing:-.005em;}
-  .ach-desc{font-size:12.5px;color:var(--muted);margin-top:2px;}
-  .ach.locked .ach-desc{color:var(--faint);}
+  /* Print Styles */
+  @media print {
+    body { background: #fff; padding: 0; }
+    .topbar, .btn-print, .tb-menu-btn { display: none !important; }
+    .wrap-print { padding: 0; max-width: 100%; margin: 0; }
+    .r-head, .r-stat, .r-table-wrap { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+    .r-table th { background: #f9f9f9; color: #333; }
+    .b-pass, .b-wait, .b-lock { border: 1px solid #999; background: transparent !important; color: #000 !important; }
+  }
 </style>
 </head>
-<body data-fx=".topbar, .phead, .strip > .sc" data-fx-count=".strip .sc .n, .ph-level .lv">
-<script>
-(function(){var b=document.body,s=b.getAttribute('data-fx');if(!s)return;document.documentElement.classList.add('js-fx');if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;var st=document.createElement('style');st.textContent='.js-fx :is('+s+'){transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}.js-fx :is('+s+'):not(.fx-shown){opacity:0;transform:translateY(22px)}';document.head.appendChild(st);})();
-</script>
+<body>
 
 <header class="topbar">
   <a class="tb-logo" href="index.html" aria-label="py"><span class="tb-mk"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m7 6 6 6-6 6M15 18h4" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a>
   <button class="tb-menu-btn" id="tbMenuBtn" type="button" aria-label="เมนู" aria-expanded="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
   <nav class="tb-nav">
-    <a href="courses.html">หลักสูตร</a>`n    <a href="reference.html">คู่มือ Python</a>
+    <a href="courses.html">หลักสูตร</a>
+    <a href="reference.html">คู่มือ Python</a>
     <a href="dashboard.html">ภาพรวมการเรียน</a>
-    <a href="profile.html" class="cur">โปรไฟล์</a>
+    <a href="profile.html" class="cur">รายงานผล</a>
   </nav>
   <div class="tb-right">
     <a class="tb-settings-icon" href="settings.html" aria-label="ตั้งค่า" title="ตั้งค่า"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7ZM19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.12 2.12-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.04 1.56v.08h-3v-.08a1.7 1.7 0 0 0-1.04-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-2.12-2.12.06-.06A1.7 1.7 0 0 0 7 15a1.7 1.7 0 0 0-1.56-1.04h-.08v-3h.08A1.7 1.7 0 0 0 7 9.92a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.12-2.12.06.06a1.7 1.7 0 0 0 1.88.34 1.7 1.7 0 0 0 1.04-1.56V4.6h3v.1a1.7 1.7 0 0 0 1.04 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.12 2.12-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.56 1.04h.08v3h-.08A1.7 1.7 0 0 0 19.4 15Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></a>
@@ -116,50 +101,63 @@
   </div>
 </header>
 
-<div class="wrap">
+<div class="wrap-print">
+  
   <!-- HEADER -->
-  <section class="phead">
-    <div class="ph-row">
-      <div class="ph-av" id="profAvatar">?</div>
-      <div class="ph-id">
+  <section class="r-head">
+    <div class="rh-left">
+      <div class="rh-av" id="profAvatar">?</div>
+      <div class="rh-info">
         <h1 id="profName">กำลังโหลด...</h1>
-        <div class="handle" id="profHandle"></div>
-        <div class="joined"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg><span id="profJoined">—</span></div>
+        <p><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> <span class="mono" id="profEmail">กำลังโหลด...</span></p>
+        <p><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> <span id="profJoined">—</span></p>
       </div>
-      <div class="ph-level">
-        <div class="lv" id="profLevel">0%</div>
-        <div class="ll">ความคืบหน้ารวม</div>
-        <div class="lbar"><i id="profLevelBar"></i></div>
-        <div class="lx" id="profXpLabel">0 / 29 บท</div>
-      </div>
+    </div>
+    <div class="rh-actions">
+      <button class="btn-print" onclick="window.print()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+        พิมพ์รายงาน
+      </button>
     </div>
   </section>
 
   <!-- STAT STRIP -->
-  <div class="strip">
-    <div class="sc"><div class="ic" style="background:var(--accent-soft);color:var(--accent-deep)">📖</div><div class="n" id="statLessons">0</div><div class="l">บทที่เรียนจบ</div></div>
-    <div class="sc"><div class="ic" style="background:var(--ok-soft);color:var(--ok-deep)">✅</div><div class="n" id="statTests">0</div><div class="l">แบบฝึกหัดที่ทำผ่าน</div></div>
+  <div class="r-summary">
+    <div class="r-stat">
+      <div class="sl"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3"></path></svg> ความคืบหน้าหลักสูตร</div>
+      <div class="sn" id="statPct">0<span>%</span></div>
+    </div>
+    <div class="r-stat">
+      <div class="sl"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg> บทเรียนที่สำเร็จ</div>
+      <div class="sn" id="statLessons">0<span> / 29</span></div>
+    </div>
+    <div class="r-stat">
+      <div class="sl"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20v-6M6 20V10M18 20V4"></path></svg> คะแนนเฉลี่ย (Post-test)</div>
+      <div class="sn" id="statAvg">0<span>%</span></div>
+    </div>
   </div>
 
-  <!-- SCORE BREAKDOWN -->
-  <section class="section">
-    <div class="stitle">
-      <div class="si"><i data-ui-icon="chart"></i></div>
-      <h2>คะแนนแยกตามหน่วย</h2>
-      <span class="ct" id="breakdownCt">0 หน่วย</span>
-    </div>
-    <div class="card" id="breakdown"></div>
-  </section>
-
-  <!-- ACHIEVEMENTS -->
-  <section class="section">
-    <div class="stitle">
-      <div class="si">🏆</div>
-      <h2>ความสำเร็จ</h2>
-      <span class="ct" id="achCount">0/0 ปลดล็อก</span>
-    </div>
-    <div class="ach-grid" id="achGrid"></div>
-  </section>
+  <!-- SCORE BREAKDOWN TABLE -->
+  <div class="stitle">
+    <h2>รายงานผลการทดสอบแยกตามหน่วย (Score Breakdown)</h2>
+    <span class="ct" id="breakdownCt">0 หน่วย</span>
+  </div>
+  <div class="r-table-wrap">
+    <table class="r-table">
+      <thead>
+        <tr>
+          <th width="80">หน่วยที่</th>
+          <th>ชื่อหน่วยการเรียนรู้</th>
+          <th class="rt-pre" width="140">คะแนนก่อนเรียน</th>
+          <th width="140">คะแนนหลังเรียน</th>
+          <th width="120">สถานะ</th>
+        </tr>
+      </thead>
+      <tbody id="breakdownTable">
+        <!-- JS generates rows here -->
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <script src="pystart-data.js"></script>
@@ -176,91 +174,64 @@
   const user = await requireUser();
   if(!user) throw new Error('redirecting to login'); // requireUser() already navigated away
 
-  // the signup form saves the chosen name to Firestore directly — read it
-  // from there rather than the Auth profile field, which can lag behind
-  // right after signup.
   const profileDoc = await loadProfile(user.uid);
   const displayName = profileDoc.name || user.displayName || user.email.split('@')[0];
   const initial = displayName.trim().charAt(0).toUpperCase() || '?';
   document.getElementById('profAvatar').textContent = initial;
   document.getElementById('tbAvatar').textContent = initial;
   document.getElementById('profName').textContent = displayName;
-  document.getElementById('profHandle').textContent = '@'+user.email.split('@')[0]+' · ผู้เรียนมือใหม่';
+  document.getElementById('profEmail').textContent = user.email;
   const joined = user.metadata && user.metadata.creationTime ? new Date(user.metadata.creationTime) : null;
   document.getElementById('profJoined').textContent = joined
-    ? ('เข้าร่วมเมื่อ '+joined.toLocaleDateString('th-TH',{year:'numeric',month:'long'}))
-    : 'เข้าร่วมแล้ว';
+    ? ('เริ่มต้นเรียนเมื่อ '+joined.toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'}))
+    : 'เริ่มต้นเรียนแล้ว';
 
   const { completed, unitScores, finalExam } = await loadProgress(user.uid);
   const totalLessons = courseData.lessons.length;
-  // "passed" means the post-test cleared the 70% bar, same rule that
-  // unlocks the next unit (see pyIsUnitPostPassed) — pre-tests are just a
-  // diagnostic baseline and have no pass/fail of their own, so they don't
-  // count here even though they're stored in unitScores too.
-  const testsPassed = Object.values(unitScores).reduce((n,u)=>n+((u.post && u.post.pct>=70)?1:0),0);
-  document.getElementById('statLessons').textContent = completed.length;
-  document.getElementById('statTests').textContent = testsPassed;
+  
   const overallPct = Math.round((completed.length/totalLessons)*100);
+  document.getElementById('statPct').innerHTML = overallPct+'<span>%</span>';
+  document.getElementById('statLessons').innerHTML = completed.length+'<span> / '+totalLessons+' บท</span>';
   document.getElementById('xpChiplet').innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"/></svg> '+overallPct+'%';
-  document.getElementById('profLevel').textContent = overallPct+'%';
-  document.getElementById('profXpLabel').textContent = completed.length+' / '+totalLessons+' บท';
-  const levelBar=document.getElementById('profLevelBar');
-  levelBar.style.width='0';
-  requestAnimationFrame(()=>{levelBar.style.transition='width 1s cubic-bezier(.2,.7,.2,1)';levelBar.style.width=overallPct+'%';});
 
-  // ---------- score breakdown ----------
-  // A unit can still be untouched or only pre-tested, so each row needs
-  // to degrade gracefully instead of assuming a post-test result exists.
+  let sumPostPct = 0;
+  let countPost = 0;
+
+  // Build the table rows
   document.getElementById('breakdownCt').textContent = courseUnits.length+' หน่วย';
-  document.getElementById('breakdown').innerHTML = courseUnits.map(function(u){
+  document.getElementById('breakdownTable').innerHTML = courseUnits.map(function(u){
     const us = unitScores[u.id];
+    const pre = us && us.pre;
     const post = us && us.post;
-    if(post){
-      const lv = post.pct>=90?'lv-hi':(post.pct>=70?'lv-md':'lv-lo');
-      const c = post.pct>=90?'c-hi':(post.pct>=70?'c-md':'c-lo');
-      return '<div class="mrow"><span class="mi">'+u.id+'</span><span class="mname">'+u.title+'<small>'+post.total+' ข้อ</small></span>'+
-        '<span class="mbar"><i class="'+lv+'" data-w="'+post.pct+'"></i></span><span class="mscore '+c+'">'+post.score+'/'+post.total+'</span></div>';
+    
+    let preHtml = pre ? '<span class="rt-score">'+pre.score+'/'+pre.total+'</span>' : '<span class="rt-null">—</span>';
+    let postHtml = post ? '<span class="rt-score">'+post.score+'/'+post.total+'</span>' : '<span class="rt-null">—</span>';
+    
+    let statusHtml = '<span class="badge b-lock">ยังไม่เริ่มเรียน</span>';
+    if(post && post.pct >= 70) {
+      statusHtml = '<span class="badge b-pass">ผ่านเกณฑ์ ('+post.pct+'%)</span>';
+      sumPostPct += post.pct;
+      countPost++;
+    } else if(post) {
+      statusHtml = '<span class="badge b-wait">ยังไม่ผ่าน ('+post.pct+'%)</span>';
+      sumPostPct += post.pct;
+      countPost++;
+    } else if(pre) {
+      statusHtml = '<span class="badge b-wait">รอสอบหลังเรียน</span>';
     }
-    const label = us && us.pre ? 'รอทำแบบทดสอบหลังเรียน' : 'ยังไม่เริ่มเรียน';
-    return '<div class="mrow mrow-empty"><span class="mi mi-lock">'+u.id+'</span><span class="mname">'+u.title+'<small>'+label+'</small></span>'+
-      '<span class="mbar"><i class="lv-empty" data-w="0"></i></span><span class="mscore c-empty">—</span></div>';
-  }).join('');
-  requestAnimationFrame(()=>{
-    document.querySelectorAll('#breakdown .mbar i').forEach(function(el){
-      el.style.width='0';
-      requestAnimationFrame(()=>{ el.style.width=el.dataset.w+'%'; });
-    });
-  });
 
-  // ---------- achievements ----------
-  // Every badge below is derived from data already tracked in Firestore
-  // (completed lessons, per-unit pre/post scores, final exam) — nothing
-  // fabricated like a login streak, since that isn't tracked anywhere yet.
-  const perfectUnit = Object.values(unitScores).some(function(u){
-    return (u.pre && u.pre.pct === 100) || (u.post && u.post.pct === 100);
-  });
-  const halfwayLessons = Math.round(totalLessons/2);
-  const achievements = [
-    { icon:window.pyIcon('spark'), name:'ก้าวแรก', desc:'เรียนจบบทแรก', unlocked: completed.length >= 1 },
-    { icon:window.pyIcon('chart'), name:'ครึ่งทางแล้ว', desc:'เรียนจบ '+halfwayLessons+' จาก '+totalLessons+' บท', unlocked: completed.length >= halfwayLessons },
-    { icon:window.pyIcon('book'), name:'เรียนจบทุกบท', desc:'ครบทั้ง '+totalLessons+' บทเรียน', unlocked: completed.length >= totalLessons },
-    { icon:window.pyIcon('check'), name:'มือฉมัง', desc:'ทำแบบทดสอบได้เต็ม 100%', unlocked: perfectUnit }
-  ].concat(courseUnits.map(function(u){
-    return { icon:String(u.id), name:'จบส่วนที่ '+u.id, desc:u.title, unlocked: pyIsUnitPostPassed(unitScores, u.id) };
-  }));
-
-  const unlockedCount = achievements.filter(function(a){ return a.unlocked; }).length;
-  document.getElementById('achCount').textContent = unlockedCount+'/'+achievements.length+' ปลดล็อก';
-  document.getElementById('achGrid').innerHTML = achievements.map(function(a){
-    const tag = a.unlocked && a.href ? 'a' : 'div';
-    const hrefAttr = a.unlocked && a.href ? ' href="'+a.href+'"' : '';
-    return '<'+tag+hrefAttr+' class="ach '+(a.unlocked?'unlocked':'locked')+(a.gold?' gold':'')+'">'+
-      '<div class="ach-badge">'+(a.unlocked?a.icon:window.pyIcon('lock'))+'</div>'+
-      '<div class="ach-info"><div class="ach-name">'+a.name+'</div><div class="ach-desc">'+a.desc+'</div></div>'+
-      '</'+tag+'>';
+    return '<tr>'+
+      '<td class="rt-num">'+String(u.id).padStart(2,'0')+'</td>'+
+      '<td class="rt-name">'+u.title+'</td>'+
+      '<td class="rt-pre">'+preHtml+'</td>'+
+      '<td>'+postHtml+'</td>'+
+      '<td>'+statusHtml+'</td>'+
+    '</tr>';
   }).join('');
+
+  const avgScore = countPost > 0 ? Math.round(sumPostPct / countPost) : 0;
+  document.getElementById('statAvg').innerHTML = avgScore+'<span>%</span>';
+
 </script>
-<script src="pystart-fx.js"></script>
 </body>
 </html>
-

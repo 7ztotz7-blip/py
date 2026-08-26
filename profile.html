@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
 <meta charset="UTF-8" />
@@ -329,6 +329,7 @@
   
   .delta-plus { background: var(--ok-soft); color: var(--ok-deep); }
   .delta-flat { background: var(--soft); color: var(--muted); }
+  .delta-minus { background: var(--warm-soft); color: var(--warm-deep); }
   
   .badge {
     display: inline-flex;
@@ -348,7 +349,6 @@
     .ph-row { flex-direction: column; align-items: stretch; }
     .ph-glass { width: 100%; }
     .stats { grid-template-columns: 1fr; }
-    .rt-pre, .rt-delta { display: none; }
   }
 </style>
 </head>
@@ -528,8 +528,10 @@
       const diff = post.pct - pre.pct;
       if(diff > 0) {
         deltaHtml = '<span class="delta-badge delta-plus">+' + diff + '%</span>';
+      } else if(diff < 0) {
+        deltaHtml = '<span class="delta-badge delta-minus">' + diff + '%</span>';
       } else {
-        deltaHtml = '<span class="delta-badge delta-flat">' + diff + '%</span>';
+        deltaHtml = '<span class="delta-badge delta-flat">0%</span>';
       }
     }
 

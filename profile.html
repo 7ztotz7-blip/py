@@ -14,21 +14,14 @@
 <style>
   body { padding-bottom: 70px; background: var(--bg); }
   
-  /* Wrapper for print compatibility */
-  .wrap-print { max-width: 860px; margin: 0 auto; padding: 40px 20px; }
-
   /* Report Header */
-  .r-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 30px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 30px; box-shadow: var(--shadow-sm); }
+  .r-head { display: flex; align-items: flex-start; justify-content: space-between; margin-top: 32px; margin-bottom: 30px; background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 30px; box-shadow: var(--shadow-sm); }
   .rh-left { display: flex; gap: 24px; align-items: center; }
   .rh-av { width: 86px; height: 86px; border-radius: 16px; display: grid; place-items: center; font-size: 38px; font-weight: 600; color: #fff; background: linear-gradient(140deg, var(--accent-deep), var(--accent)); box-shadow: 0 1px 0 oklch(1 0 0/.3) inset; }
   .rh-info h1 { font-size: 28px; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; margin-bottom: 6px; color: var(--ink); }
   .rh-info p { font-size: 14.5px; color: var(--muted); margin-bottom: 3px; display:flex; align-items:center; gap:8px; }
   .rh-info .mono { font-family: 'IBM Plex Mono', monospace; }
   .rh-info svg { color: var(--faint); }
-  
-  .rh-actions { display: flex; gap: 10px; }
-  .btn-print { display: inline-flex; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--line); padding: 9px 18px; border-radius: 9px; font-size: 14px; font-weight: 600; color: var(--ink); cursor: pointer; transition: .15s; box-shadow: var(--shadow-sm); }
-  .btn-print:hover { background: var(--soft); border-color: var(--line-deep); }
 
   /* Stat Summary */
   .r-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 30px; }
@@ -63,19 +56,8 @@
 
   @media (max-width: 768px) {
     .r-head { flex-direction: column; align-items: stretch; gap: 20px; }
-    .rh-actions { justify-content: flex-start; }
     .r-summary { grid-template-columns: 1fr; }
-    .rt-pre { display: none; } /* Hide pre-test on mobile to save space */
-  }
-
-  /* Print Styles */
-  @media print {
-    body { background: #fff; padding: 0; }
-    .topbar, .btn-print, .tb-menu-btn { display: none !important; }
-    .wrap-print { padding: 0; max-width: 100%; margin: 0; }
-    .r-head, .r-stat, .r-table-wrap { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
-    .r-table th { background: #f9f9f9; color: #333; }
-    .b-pass, .b-wait, .b-lock { border: 1px solid #999; background: transparent !important; color: #000 !important; }
+    .rt-pre { display: none; }
   }
 </style>
 </head>
@@ -101,7 +83,7 @@
   </div>
 </header>
 
-<div class="wrap-print">
+<div class="wrap">
   
   <!-- HEADER -->
   <section class="r-head">
@@ -112,12 +94,6 @@
         <p><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg> <span class="mono" id="profEmail">กำลังโหลด...</span></p>
         <p><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> <span id="profJoined">—</span></p>
       </div>
-    </div>
-    <div class="rh-actions">
-      <button class="btn-print" onclick="window.print()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-        พิมพ์รายงาน
-      </button>
     </div>
   </section>
 
@@ -172,7 +148,7 @@
   });
 
   const user = await requireUser();
-  if(!user) throw new Error('redirecting to login'); // requireUser() already navigated away
+  if(!user) throw new Error('redirecting to login');
 
   const profileDoc = await loadProfile(user.uid);
   const displayName = profileDoc.name || user.displayName || user.email.split('@')[0];
@@ -186,7 +162,7 @@
     ? ('เริ่มต้นเรียนเมื่อ '+joined.toLocaleDateString('th-TH',{year:'numeric',month:'long',day:'numeric'}))
     : 'เริ่มต้นเรียนแล้ว';
 
-  const { completed, unitScores, finalExam } = await loadProgress(user.uid);
+  const { completed, unitScores } = await loadProgress(user.uid);
   const totalLessons = courseData.lessons.length;
   
   const overallPct = Math.round((completed.length/totalLessons)*100);

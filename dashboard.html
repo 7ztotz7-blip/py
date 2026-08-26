@@ -44,6 +44,55 @@
     background-image: radial-gradient(circle at 1px 1px, oklch(1 0 0/.12) 1px, transparent 0);
     background-size: 24px 24px;
   }
+  .resume-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 310px;
+    gap: 32px;
+    align-items: center;
+  }
+  @media (max-width: 960px) {
+    .resume-grid { grid-template-columns: 1fr; }
+    .resume-right { display: none; }
+  }
+
+  .code-terminal {
+    background: rgba(15, 23, 42, 0.68);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    border-radius: 16px;
+    padding: 18px 20px;
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    color: #e2e8f0;
+  }
+  .ct-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .ct-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .ct-dot.r { background: #ff5f56; }
+  .ct-dot.y { background: #ffbd2e; }
+  .ct-dot.g { background: #27c93f; }
+  .ct-title { font-size: 11px; color: rgba(255, 255, 255, 0.5); margin-left: auto; letter-spacing: 0.05em; }
+
+  .ct-body { display: flex; flex-direction: column; gap: 5px; line-height: 1.6; }
+  .c-kw { color: #f472b6; font-weight: 600; }
+  .c-fn { color: #38bdf8; }
+  .c-val { color: #fbbf24; }
+  .c-str { color: #4ade80; }
+
+  .ct-divider { height: 1px; background: rgba(255, 255, 255, 0.12); margin: 10px 0 8px; }
+  .ct-output { display: flex; align-items: center; gap: 8px; color: #38bdf8; font-weight: 600; font-size: 12px; }
+  .ct-prompt { color: #f472b6; }
+
   .resume .rk {
     position: relative;
     z-index: 2;
@@ -256,15 +305,40 @@
     
     <!-- 1. HERO RESUME CARD -->
     <section class="resume">
-      <span class="rk" id="resumeKicker">เรียนต่อจากที่ค้างไว้</span>
-      <h2 id="resumeTitle">กำลังโหลด...</h2>
-      <p class="meta" id="resumeMeta"></p>
-      <div class="pbar"><i></i></div>
-      <p class="plab" id="resumeProgLabel">ความคืบหน้ารวม 0/29 บท · 0%</p>
-      <div class="ra">
-        <a href="lesson.html" id="resumeCta" class="btn btn-white lg">▶ เรียนต่อเลย</a>
-        <a href="courses.html" class="btn btn-glass lg">ดูโครงสร้างหลักสูตร</a>
-        <a href="reference.html" class="btn btn-glass lg">📖 คู่มือ Python</a>
+      <div class="resume-grid">
+        <div>
+          <span class="rk" id="resumeKicker">เรียนต่อจากที่ค้างไว้</span>
+          <h2 id="resumeTitle">กำลังโหลด...</h2>
+          <p class="meta" id="resumeMeta"></p>
+          <div class="pbar"><i></i></div>
+          <p class="plab" id="resumeProgLabel">ความคืบหน้ารวม 0/29 บท · 0%</p>
+          <div class="ra">
+            <a href="lesson.html" id="resumeCta" class="btn btn-white lg">▶ เรียนต่อเลย</a>
+            <a href="courses.html" class="btn btn-glass lg">ดูโครงสร้างหลักสูตร</a>
+            <a href="reference.html" class="btn btn-glass lg">📖 คู่มือ Python</a>
+          </div>
+        </div>
+
+        <div class="resume-right">
+          <div class="code-terminal">
+            <div class="ct-header">
+              <span class="ct-dot r"></span>
+              <span class="ct-dot y"></span>
+              <span class="ct-dot g"></span>
+              <span class="ct-title">pystart.py</span>
+            </div>
+            <div class="ct-body">
+              <div><span class="c-kw">def</span> <span class="c-fn">check_status</span>():</div>
+              <div>&nbsp;&nbsp;lessons = <span class="c-val" id="ctLessons">0</span> / <span class="c-val">29</span></div>
+              <div>&nbsp;&nbsp;progress = <span class="c-str">"<span id="ctPct">0</span>%"</span></div>
+              <div>&nbsp;&nbsp;<span class="c-kw">return</span> progress</div>
+              <div class="ct-divider"></div>
+              <div class="ct-output">
+                <span class="ct-prompt">>>></span> <span id="ctStatusMsg">READY TO STUDY</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -412,6 +486,13 @@
     barEl.style.width='0';
     requestAnimationFrame(()=>{barEl.style.width=pct+'%';});
   }
+
+  const ctL = document.getElementById('ctLessons');
+  const ctP = document.getElementById('ctPct');
+  const ctS = document.getElementById('ctStatusMsg');
+  if(ctL) ctL.textContent = completed.length;
+  if(ctP) ctP.textContent = pct;
+  if(ctS) ctS.textContent = frontier.state==='complete' ? 'PASSED ALL UNITS 🎉' : (completed.length===0 ? 'READY TO START' : 'IN PROGRESS 🚀');
 
   // Stat Row
   document.getElementById('statLessons').textContent = completed.length + ' / ' + TOTAL_LESSONS;

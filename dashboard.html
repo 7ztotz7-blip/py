@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="th">
 <head>
 <meta charset="UTF-8" />
@@ -127,21 +127,92 @@
   .nx .go { width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0; display: grid; place-items: center; color: var(--accent-deep); background: var(--soft); transition: .15s; }
   .nx:hover .go { background: var(--accent); color: #fff; }
 
-  /* Python Reference Card */
-  .ref-box {
-    background: linear-gradient(140deg, oklch(0.965 0.02 250), oklch(0.94 0.04 250));
-    border: 1px solid var(--accent-line);
+  /* Embedded Reference Card Container */
+  .ref-card-wrap {
+    background: #fff;
+    border: 1px solid var(--line);
     border-radius: 18px;
-    padding: 24px;
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    box-shadow: var(--shadow-sm);
+    gap: 14px;
   }
-  .ref-box h4 { font-size: 17px; font-weight: 700; color: var(--accent-deep); display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-  .ref-box p { font-size: 14px; color: var(--muted); line-height: 1.6; margin-bottom: 20px; }
-  .ref-box a { display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: var(--accent-deep); color: #fff; font-size: 14px; font-weight: 600; padding: 10px 20px; border-radius: 10px; text-decoration: none; transition: background .15s; align-self: flex-start; }
-  .ref-box a:hover { background: var(--accent); }
+  .ref-search-sm {
+    position: relative;
+  }
+  .ref-search-sm input {
+    width: 100%;
+    padding: 10px 14px 10px 38px;
+    border-radius: 10px;
+    border: 1px solid var(--line);
+    background: var(--bg);
+    font: inherit;
+    font-size: 13.5px;
+    color: var(--ink);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .ref-search-sm input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .ref-search-sm svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--faint);
+    pointer-events: none;
+  }
+  .ref-scroll-area {
+    max-height: 320px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-right: 4px;
+  }
+  .ref-item-card {
+    background: var(--bg);
+    border: 1px solid var(--line-soft);
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .ref-item-term {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--accent-deep);
+    background: var(--accent-soft);
+    padding: 2px 8px;
+    border-radius: 5px;
+    border: 1px solid var(--accent-line);
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+  .ref-item-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+  .ref-item-code {
+    background: #fff;
+    border: 1px solid var(--line-soft);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--ink);
+    white-space: pre;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  .ref-item-code .kw { color: var(--accent); }
+  .ref-item-code .str { color: var(--ok-deep); }
+  .ref-item-code .cmt { color: var(--faint); }
+  .ref-item-code .fn { color: var(--warm-deep); }
 
   @media (max-width: 860px) {
     .stats { grid-template-columns: 1fr; }
@@ -276,15 +347,19 @@
         <div class="stitle">
           <h3>
             <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="var(--accent-deep)" stroke-width="2.2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-            คู่มือ Python
+            คลังคำสั่งและคู่มือ Python
           </h3>
+          <a href="reference.html">ดูฉบับเต็ม →</a>
         </div>
-        <div class="ref-box">
-          <div>
-            <h4>คู่มือและคลังคำสั่ง Python</h4>
-            <p>ค้นหาไวยากรณ์ คำสั่งพื้นฐาน ตัวอย่างการใช้งาน และชนิดข้อมูลในภาษา Python ได้สะดวกรวดเร็วตลอดการเรียน</p>
+        
+        <div class="ref-card-wrap">
+          <div class="ref-search-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="dashSearchInput" placeholder="ค้นหาคำสั่ง เช่น print, for, list, int..." autocomplete="off">
           </div>
-          <a href="reference.html">เปิดคู่มือ Python →</a>
+          <div class="ref-scroll-area" id="dashRefArea">
+            <!-- Rendered by JS below -->
+          </div>
         </div>
       </div>
     </div>
@@ -471,6 +546,57 @@
     toggle.addEventListener('click',()=>{
       const showing=table.classList.toggle('show');
       toggle.textContent=showing?'ซ่อนตาราง':'ดูแบบตาราง';
+    });
+  })();
+
+  /* ---- Embedded Interactive Python Reference ---- */
+  (function(){
+    const refData = [
+      { term: 'print()', desc: 'แสดงผลข้อความหรือค่าตัวแปรออกทางหน้าจอ', code: '<span class="fn">print</span>(<span class="str">"Hello, World!"</span>)' },
+      { term: 'input()', desc: 'รับข้อมูลจากผู้ใช้งานผ่านคีย์บอร์ด (คืนค่าเป็น String)', code: 'name = <span class="fn">input</span>(<span class="str">"กรอกชื่อ: "</span>)' },
+      { term: 'int() / float()', desc: 'แปลงชนิดข้อมูลเป็นจำนวนเต็ม หรือ ทศนิยม', code: 'age = <span class="fn">int</span>(<span class="str">"25"</span>)\nprice = <span class="fn">float</span>(<span class="str">"99.5"</span>)' },
+      { term: 'str()', desc: 'แปลงข้อมูลชนิดอื่นให้เป็นข้อความ (String)', code: 'msg = <span class="str">"คะแนน: "</span> + <span class="fn">str</span>(95)' },
+      { term: 'if / elif / else', desc: 'ตรวจสอบเงื่อนไขเพื่อเลือกทิศทางการทำงาน', code: '<span class="kw">if</span> score >= 80:\n    <span class="fn">print</span>(<span class="str">"Pass"</span>)' },
+      { term: 'for loop', desc: 'วนซ้ำตามจำนวนรอบที่กำหนด หรือผ่านสมาชิกในลิสต์', code: '<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(5):\n    <span class="fn">print</span>(i)' },
+      { term: 'while loop', desc: 'วนซ้ำตราบใดที่เงื่อนไขยังคงเป็นจริง', code: '<span class="kw">while</span> n > 0:\n    n = n - 1' },
+      { term: 'range()', desc: 'สร้างลำดับตัวเลข ใช้ร่วมกับ for loop', code: '<span class="kw">for</span> x <span class="kw">in</span> <span class="fn">range</span>(1, 10):\n    <span class="fn">print</span>(x)' },
+      { term: 'List [...]', desc: 'เก็บชุดข้อมูลหลายค่า เรียงลำดับ และแก้ไขได้', code: 'fruits = [<span class="str">"apple"</span>, <span class="str">"banana"</span>]\nfruits.append(<span class="str">"mango"</span>)' },
+      { term: 'len()', desc: 'นับจำนวนสมาชิกในลิสต์ หรือความยาวข้อความ', code: 'n = <span class="fn">len</span>([10, 20, 30]) <span class="cmt"># 3</span>' },
+      { term: 'Dictionary {...}', desc: 'เก็บข้อมูลแบบจับคู่ Key-Value', code: 'user = {<span class="str">"name"</span>: <span class="str">"John"</span>, <span class="str">"age"</span>: 20}' },
+      { term: 'def', desc: 'สร้างฟังก์ชันของตัวเองเพื่อนำกลับมาใช้ซ้ำ', code: '<span class="kw">def</span> <span class="fn">greet</span>(name):\n    <span class="fn">print</span>(<span class="str">f"Hello {name}"</span>)' }
+    ];
+
+    const area = document.getElementById('dashRefArea');
+    const searchInput = document.getElementById('dashSearchInput');
+
+    if(!area || !searchInput) return;
+
+    function renderRef(items) {
+      if(items.length === 0) {
+        area.innerHTML = '<div style="font-size:13px;color:var(--faint);padding:20px;text-align:center;">ไม่พบคำสั่งที่ค้นหา</div>';
+        return;
+      }
+      area.innerHTML = items.map(function(item) {
+        return '<div class="ref-item-card">' +
+          '<span class="ref-item-term">' + item.term + '</span>' +
+          '<div class="ref-item-desc">' + item.desc + '</div>' +
+          '<div class="ref-item-code">' + item.code + '</div>' +
+        '</div>';
+      }).join('');
+    }
+
+    renderRef(refData);
+
+    searchInput.addEventListener('input', function(e) {
+      const q = e.target.value.toLowerCase().trim();
+      if(!q) {
+        renderRef(refData);
+        return;
+      }
+      const filtered = refData.filter(function(item) { 
+        return item.term.toLowerCase().indexOf(q) > -1 || item.desc.toLowerCase().indexOf(q) > -1;
+      });
+      renderRef(filtered);
     });
   })();
 </script>

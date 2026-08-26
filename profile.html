@@ -449,9 +449,8 @@
           <tr>
             <th class="rt-num">หน่วย</th>
             <th>ชื่อหน่วยการเรียนรู้</th>
-            <th class="rt-pre" width="130">ก่อนเรียน</th>
-            <th width="130">หลังเรียน</th>
-            <th class="rt-delta" width="120">พัฒนาการ</th>
+            <th class="rt-pre" width="140">ก่อนเรียน</th>
+            <th width="140">หลังเรียน</th>
             <th width="140">สถานะ</th>
           </tr>
         </thead>
@@ -522,19 +521,6 @@
     let preHtml = pre ? '<span class="rt-score">' + pre.score + '/' + pre.total + ' <small style="color:var(--faint);">(' + pre.pct + '%)</small></span>' : '<span class="rt-null">—</span>';
     let postHtml = post ? '<span class="rt-score">' + post.score + '/' + post.total + ' <small style="color:var(--faint);">(' + post.pct + '%)</small></span>' : '<span class="rt-null">—</span>';
     
-    // Calculate Delta (Post % - Pre %)
-    let deltaHtml = '<span class="rt-null">—</span>';
-    if(pre && post) {
-      const diff = post.pct - pre.pct;
-      if(diff > 0) {
-        deltaHtml = '<span class="delta-badge delta-plus">+' + diff + '%</span>';
-      } else if(diff < 0) {
-        deltaHtml = '<span class="delta-badge delta-minus">' + diff + '%</span>';
-      } else {
-        deltaHtml = '<span class="delta-badge delta-flat">0%</span>';
-      }
-    }
-
     let statusHtml = '<span class="badge b-lock">ยังไม่เริ่ม</span>';
     if(post && post.pct >= 70) {
       statusHtml = '<span class="badge b-pass">✓ ผ่านเกณฑ์</span>';
@@ -554,7 +540,6 @@
       '<td class="rt-name">' + u.title + '</td>' +
       '<td class="rt-pre">' + preHtml + '</td>' +
       '<td>' + postHtml + '</td>' +
-      '<td class="rt-delta">' + deltaHtml + '</td>' +
       '<td>' + statusHtml + '</td>' +
     '</tr>';
   }).join('');

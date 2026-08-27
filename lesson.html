@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
 <script src="https://skulpt.org/js/skulpt.min.js"></script>
 <script src="https://skulpt.org/js/skulpt-stdlib.js"></script>
 <style>
@@ -184,6 +185,16 @@ code{font-family:'IBM Plex Mono',monospace;}
   white-space:pre-wrap;word-break:break-word;color:var(--edtx);background:oklch(0.1 0.012 260);border-radius:8px;min-height:20px;}
 .ic-out-body.err{color:oklch(0.78 0.14 30);}
 
+/* ── INTERACTIVE TERMINAL INPUT (Replaces ugly browser prompt) ── */
+.term-line{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:4px 0;}
+.term-prompt{color:var(--fn);font-weight:600;}
+.term-input-wrap{display:inline-flex;align-items:center;gap:6px;flex:1;min-width:180px;}
+.term-input{background:rgba(255,255,255,0.09);border:1px solid var(--accent);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:13px;padding:4px 9px;border-radius:6px;outline:none;flex:1;min-width:100px;transition:box-shadow .15s,border-color .15s;}
+.term-input:focus{border-color:var(--accent-2);box-shadow:0 0 0 3px var(--accent-s);}
+.term-send-btn{background:var(--ok);color:#fff;border:none;border-radius:6px;padding:4px 10px;font-size:12px;font-family:'IBM Plex Mono',monospace;font-weight:600;cursor:pointer;white-space:nowrap;transition:background .15s,transform .15s;}
+.term-send-btn:hover{background:var(--ok-d);transform:translateY(-1px);}
+.term-val-entered{color:var(--str);font-weight:600;}
+
 /* ── TIP / WARNING CALLOUTS ── */
 .tip{display:flex;gap:12px;margin:18px 0 24px;padding:14px 16px;border-radius:12px;border:1px solid;}
 .tip .tip-ic{flex-shrink:0;font-size:16px;line-height:1;}
@@ -346,32 +357,174 @@ function renderConceptGrid(g){
   return '<div class="concept-grid">'+g.items.map(c=>'<div class="cc"><h4>'+esc(c.icon||'')+' '+esc(c.title)+'</h4><p>'+esc(c.desc)+'</p></div>').join('')+'</div>';
 }
 
-/* ---------- run Python code with Skulpt ---------- */
-function runCode(idx){
+/* ---------- run Python code with Pyodide (Full CPython 3.12) & Skulpt fallback ---------- */
+let pyodideInstance = null;
+let pyodideLoading = false;
+
+async function getPyodide(){
+  if(pyodideInstance) return pyodideInstance;
+  if(typeof loadPyodide === 'function' && !pyodideLoading){
+    pyodideLoading = true;
+    try {
+      pyodideInstance = await loadPyodide({
+        indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.26.2/full/'
+      });
+      console.log('⚡ Pyodide CPython 3.12 engine ready');
+    } catch(err) {
+      console.warn('Pyodide load failed, using Skulpt fallback', err);
+    } finally {
+      pyodideLoading = false;
+    }
+  }
+  return pyodideInstance;
+}
+
+// Start preloading Pyodide in background
+if(typeof loadPyodide === 'function'){
+  getPyodide();
+}
+
+function createTerminalInput(out, promptText){
+  return new Promise((resolve)=>{
+    const line = document.createElement('div');
+    line.className = 'term-line';
+    
+    if(promptText){
+      const pSpan = document.createElement('span');
+      pSpan.className = 'term-prompt';
+      pSpan.textContent = promptText;
+      line.appendChild(pSpan);
+    }
+    
+    const wrap = document.createElement('span');
+    wrap.className = 'term-input-wrap';
+    
+    const input = document.createElement('input');
+    input.className = 'term-input';
+    input.type = 'text';
+    input.placeholder = 'พิมพ์คำตอบแล้วกด Enter หรือกดส่ง...';
+    
+    const btn = document.createElement('button');
+    btn.className = 'term-send-btn';
+    btn.type = 'button';
+    btn.textContent = 'ส่ง ⏎';
+    
+    wrap.appendChild(input);
+    wrap.appendChild(btn);
+    line.appendChild(wrap);
+    out.appendChild(line);
+    
+    setTimeout(()=>input.focus(), 30);
+    
+    function submit(){
+      const val = input.value;
+      wrap.remove();
+      const valSpan = document.createElement('span');
+      valSpan.className = 'term-val-entered';
+      valSpan.textContent = val;
+      line.appendChild(valSpan);
+      resolve(val);
+    }
+    
+    btn.addEventListener('click', (e)=>{ e.preventDefault(); submit(); });
+    input.addEventListener('keydown', (e)=>{
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        submit();
+      }
+    });
+  });
+}
+
+async function runCode(idx){
   const runBtn=document.querySelector('[data-run][data-idx="'+idx+'"]');
   const editor=document.getElementById('codeEditor-'+idx);
   const out=document.getElementById('codeOutput-'+idx);
   out.classList.remove('err');
-  out.textContent='';
+  out.innerHTML='';
   runBtn.disabled=true;
-  Sk.configure({
-    output:(text)=>{ out.textContent+=text; },
-    read:(file)=>{
-      if(!Sk.builtinFiles || !Sk.builtinFiles.files[file]) throw 'File not found: '+file;
-      return Sk.builtinFiles.files[file];
-    },
-    inputfun:(promptText)=>window.prompt(promptText||''),
-    inputfunTakesPrompt:true
-  });
-  Sk.misceval.asyncToPromise(()=>Sk.importMainWithBody('<stdin>',false,editor.value,true))
-    .then(()=>{
-      if(!out.textContent) out.textContent='(ไม่มี output)';
-    })
-    .catch((e)=>{
+  const originalBtnText = runBtn.innerHTML;
+  runBtn.innerHTML = 'กำลังรัน...';
+
+  const code = editor.value;
+  let hasOutput = false;
+
+  const py = await getPyodide();
+  if(py){
+    try {
+      py.setStdout({
+        batched: (text) => {
+          hasOutput = true;
+          const span = document.createElement('div');
+          span.textContent = text;
+          out.appendChild(span);
+        }
+      });
+      py.setStderr({
+        batched: (text) => {
+          hasOutput = true;
+          const span = document.createElement('div');
+          span.className = 'err';
+          span.textContent = text;
+          out.appendChild(span);
+        }
+      });
+      
+      py.globals.set('__js_input_handler__', async (promptStr) => {
+        hasOutput = true;
+        return await createTerminalInput(out, promptStr);
+      });
+
+      await py.runPythonAsync(`
+import builtins
+async def _custom_input(prompt=''):
+    return await __js_input_handler__(str(prompt))
+builtins.input = _custom_input
+      `);
+
+      await py.runPythonAsync(code);
+      if(!hasOutput && !out.textContent.trim()){
+        out.textContent = '(ไม่มี output — โค้ดทำงานเสร็จสิ้น)';
+      }
+    } catch(e) {
       out.classList.add('err');
-      out.textContent='❌ '+e.toString();
-    })
-    .finally(()=>{ runBtn.disabled=false; });
+      const errDiv = document.createElement('div');
+      errDiv.textContent = '❌ ' + (e.message || e.toString());
+      out.appendChild(errDiv);
+    } finally {
+      runBtn.disabled = false;
+      runBtn.innerHTML = originalBtnText;
+    }
+  } else {
+    // Skulpt Fallback
+    Sk.configure({
+      output:(text)=>{
+        hasOutput = true;
+        out.appendChild(document.createTextNode(text));
+      },
+      read:(file)=>{
+        if(!Sk.builtinFiles || !Sk.builtinFiles.files[file]) throw 'File not found: '+file;
+        return Sk.builtinFiles.files[file];
+      },
+      inputfun:(promptText)=>{
+        hasOutput = true;
+        return createTerminalInput(out, promptText);
+      },
+      inputfunTakesPrompt:true
+    });
+    Sk.misceval.asyncToPromise(()=>Sk.importMainWithBody('<stdin>',false,editor.value,true))
+      .then(()=>{
+        if(!hasOutput && !out.textContent.trim()) out.textContent='(ไม่มี output — โค้ดทำงานเสร็จสิ้น)';
+      })
+      .catch((e)=>{
+        out.classList.add('err');
+        out.textContent='❌ '+e.toString();
+      })
+      .finally(()=>{
+        runBtn.disabled=false;
+        runBtn.innerHTML = originalBtnText;
+      });
+  }
 }
 
 /* ---------- resolve current lesson ---------- */

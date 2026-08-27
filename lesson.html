@@ -475,14 +475,55 @@ async function runCode(idx){
         return await createTerminalInput(out, promptStr);
       });
 
+      // Prepare AST rewriter in Python
       await py.runPythonAsync(`
-import builtins
-async def _custom_input(prompt=''):
-    return await __js_input_handler__(str(prompt))
-builtins.input = _custom_input
+import ast, builtins, sys
+
+async def __pystart_async_input__(prompt=''):
+    res = await __js_input_handler__(str(prompt))
+    return str(res) if res is not None else ''
+
+class _PystartInputRewriter(ast.NodeTransformer):
+    def visit_Call(self, node):
+        self.generic_visit(node)
+        if isinstance(node.func, ast.Name) and node.func.id == 'input':
+            new_func = ast.Name(id='__pystart_async_input__', ctx=ast.Load())
+            new_call = ast.Call(func=new_func, args=node.args, keywords=node.keywords)
+            return ast.Await(value=new_call)
+        return node
+
+async def __pystart_run_user_code__(user_code_str):
+    parsed = ast.parse(user_code_str, mode='exec')
+    has_input = False
+    for n in ast.walk(parsed):
+        if isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id == 'input':
+            has_input = True
+            break
+            
+    if has_input:
+        rewriter = _PystartInputRewriter()
+        parsed = rewriter.visit(parsed)
+        body = parsed.body
+        fn_def = ast.AsyncFunctionDef(
+            name='__pystart_exec_wrapper__',
+            args=ast.arguments(posonlyargs=[], args=[], kwonlyargs=[], kw_defaults=[], defaults=[]),
+            body=body,
+            decorator_list=[]
+        )
+        module = ast.Module(body=[fn_def], type_ignores=[])
+        ast.fix_missing_locations(module)
+        code_obj = compile(module, '<user_code>', 'exec')
+        ns = {}
+        exec(code_obj, globals(), ns)
+        await ns['__pystart_exec_wrapper__']()
+    else:
+        code_obj = compile(parsed, '<user_code>', 'exec')
+        exec(code_obj, globals())
       `);
 
-      await py.runPythonAsync(code);
+      py.globals.set('__current_user_code__', code);
+      await py.runPythonAsync(`await __pystart_run_user_code__(__current_user_code__)`);
+
       if(!hasOutput && !out.textContent.trim()){
         out.textContent = '(ไม่มี output — โค้ดทำงานเสร็จสิ้น)';
       }

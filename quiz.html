@@ -30,12 +30,17 @@
     color: var(--muted); background: var(--card); border: 1px solid var(--line); padding: 6px 11px; border-radius: 9px; flex-shrink: 0; }
 
   /* ── main stage ── */
-  .stage { flex: 1; display: flex; align-items: center; justify-content: center; padding: 28px 16px 140px; box-sizing: border-box; }
+  .stage { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px 16px 95px; box-sizing: border-box; min-height: 0; }
 
-  /* ── compact question card (proportional & natural height) ── */
+  /* ── compact question card (expands naturally, strictly bounded by bottom bar) ── */
   .qcard { position: relative; width: 100%; max-width: 680px; margin: 0 auto;
+    max-height: calc(100vh - 60px - 95px - 20px); overflow-y: auto;
     background: linear-gradient(180deg, #fff, var(--soft)); border: 1px solid var(--line); border-radius: 22px;
-    padding: 28px 32px 30px; box-shadow: var(--shadow-lg); box-sizing: border-box; animation: pop .4s cubic-bezier(.2,.7,.2,1); }
+    padding: 26px 30px 28px; box-shadow: var(--shadow-lg); box-sizing: border-box; animation: pop .4s cubic-bezier(.2,.7,.2,1);
+    scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+  .qcard::-webkit-scrollbar { width: 5px; }
+  .qcard::-webkit-scrollbar-track { background: transparent; }
+  .qcard::-webkit-scrollbar-thumb { background: var(--line); border-radius: 10px; }
   .qcard::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px;
     background: linear-gradient(90deg, var(--accent-2), var(--accent-deep)); border-radius: 22px 22px 0 0; }
   @keyframes pop { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }

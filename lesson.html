@@ -503,7 +503,22 @@ async def __pystart_run_user_code__(user_code_str):
     if has_input:
         rewriter = _PystartInputRewriter()
         parsed = rewriter.visit(parsed)
-        body = parsed.body
+        
+        assigned_names = set()
+        for stmt in parsed.body:
+            if isinstance(stmt, ast.Assign):
+                for target in stmt.targets:
+                    if isinstance(target, ast.Name):
+                        assigned_names.add(target.id)
+            elif isinstance(stmt, (ast.AugAssign, ast.AnnAssign)):
+                if isinstance(stmt.target, ast.Name):
+                    assigned_names.add(stmt.target.id)
+
+        body = []
+        if assigned_names:
+            body.append(ast.Global(names=list(assigned_names)))
+        body.extend(parsed.body)
+
         fn_def = ast.AsyncFunctionDef(
             name='__pystart_exec_wrapper__',
             args=ast.arguments(posonlyargs=[], args=[], kwonlyargs=[], kw_defaults=[], defaults=[]),
@@ -513,9 +528,8 @@ async def __pystart_run_user_code__(user_code_str):
         module = ast.Module(body=[fn_def], type_ignores=[])
         ast.fix_missing_locations(module)
         code_obj = compile(module, '<user_code>', 'exec')
-        ns = {}
-        exec(code_obj, globals(), ns)
-        await ns['__pystart_exec_wrapper__']()
+        exec(code_obj, globals())
+        await globals()['__pystart_exec_wrapper__']()
     else:
         code_obj = compile(parsed, '<user_code>', 'exec')
         exec(code_obj, globals())

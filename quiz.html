@@ -58,13 +58,13 @@
   .qmeta { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
   .qmeta .qn { font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; color: #fff;
     background: linear-gradient(140deg, var(--accent-2), var(--accent-deep)); padding: 5px 12px; border-radius: 8px; }
-  .qmeta .qtag { font-size: 14px; color: var(--muted); }
+  .qmeta .qtag { font-size: 14px; font-weight: 500; color: var(--muted); }
   .qmeta .qdiff { margin-left: auto; font-size: 13px; font-weight: 600; color: var(--ok-deep);
     background: var(--ok-soft); border: 1px solid var(--ok-line); padding: 4px 11px; border-radius: 100px; }
 
-  /* ── question text ── */
-  .qtext { font-size: 21px; font-weight: 700; letter-spacing: -.01em; line-height: 1.45; color: var(--ink); }
-  @media (max-width: 600px) { .qtext { font-size: 18px; } }
+  /* ── question text (clear & legible Thai typography) ── */
+  .qtext { font-size: 21px; font-weight: 700; letter-spacing: 0; line-height: 1.55; color: var(--ink); }
+  @media (max-width: 600px) { .qtext { font-size: 18px; line-height: 1.5; } }
 
   /* ── code block ── */
   .qcode { margin-top: 14px; border-radius: 14px; overflow: hidden; background: oklch(0.19 0.02 260); box-shadow: var(--shadow-md); }
@@ -75,7 +75,7 @@
   .qcode .k { color: oklch(0.78 0.13 320); } .qcode .f { color: oklch(0.8 0.12 215); }
   .qcode .s { color: oklch(0.82 0.13 140); } .qcode .n { color: oklch(0.82 0.12 55); } .qcode .c { color: oklch(0.6 0.03 260); }
 
-  /* ── options ── */
+  /* ── options (comfortable line-height for Thai glyphs) ── */
   .opts { display: flex; flex-direction: column; gap: 9px; margin-top: 20px; }
   .opt { display: flex; align-items: center; gap: 12px; background: var(--card); border: 1.5px solid var(--line); border-radius: 13px;
     padding: 13px 16px; cursor: pointer; transition: transform .14s, box-shadow .14s, border-color .14s, background .14s;
@@ -84,7 +84,7 @@
   .opt .key { width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0; display: grid; place-items: center;
     font-family: 'IBM Plex Mono', monospace; font-weight: 700; font-size: 14px;
     background: var(--soft); border: 1px solid var(--line); color: var(--muted); transition: .15s; }
-  .opt .otx { flex: 1; font-size: 15.5px; font-weight: 500; line-height: 1.45; word-break: break-word; overflow-wrap: anywhere; min-width: 0; color: var(--ink); }
+  .opt .otx { flex: 1; font-size: 16px; font-weight: 500; line-height: 1.55; letter-spacing: 0; word-break: break-word; overflow-wrap: anywhere; min-width: 0; color: var(--ink); }
   .opt .otx code { background: var(--soft); border: 1px solid var(--line); padding: 1px 7px; border-radius: 6px;
     font-size: 14px; color: var(--accent-deep); font-family: 'IBM Plex Mono', monospace; display: inline-block; }
   .opt .mark { width: 24px; height: 24px; flex-shrink: 0; border-radius: 50%; display: grid; place-items: center;
@@ -125,22 +125,22 @@
 
   /* chibi speech bubble */
   .chibi-bubble { position: relative; background: var(--card); border: 1.5px solid var(--line); border-radius: 14px;
-    padding: 8px 14px; flex: 1; min-width: 0; box-shadow: var(--shadow-sm); animation: pop .25s ease; }
+    padding: 9px 15px; flex: 1; min-width: 0; box-shadow: var(--shadow-sm); animation: pop .25s ease; }
   .chibi-bubble::before { content: ""; position: absolute; left: -9px; top: 50%; transform: translateY(-50%);
     border-top: 7px solid transparent; border-bottom: 7px solid transparent; border-right: 9px solid var(--line); }
   .chibi-bubble::after { content: ""; position: absolute; left: -7px; top: 50%; transform: translateY(-50%);
     border-top: 6px solid transparent; border-bottom: 6px solid transparent; border-right: 8px solid var(--card); }
 
-  .chibi-bubble .cb-title { font-size: 13.5px; font-weight: 700; color: var(--ink); display: flex; align-items: center; gap: 6px; }
-  .chibi-bubble .cb-ans { display: none; margin-top: 3px; font-size: 13px; font-weight: 600; color: var(--ok-deep);
-    background: var(--ok-soft); border: 1px solid var(--ok-line); padding: 2px 8px; border-radius: 6px; width: fit-content; }
-  .chibi-bubble .cb-exp { font-size: 12.5px; color: var(--muted); margin-top: 2px; line-height: 1.4; word-break: break-word; }
+  .chibi-bubble .cb-title { font-size: 14px; font-weight: 700; color: var(--ink); display: flex; align-items: center; gap: 6px; line-height: 1.45; letter-spacing: 0; }
+  .chibi-bubble .cb-ans { display: none; margin-top: 4px; font-size: 13.5px; font-weight: 600; color: var(--ok-deep);
+    background: var(--ok-soft); border: 1px solid var(--ok-line); padding: 2px 8px; border-radius: 6px; width: fit-content; line-height: 1.45; }
+  .chibi-bubble .cb-exp { font-size: 13px; color: var(--ink); opacity: 0.9; margin-top: 3px; line-height: 1.5; letter-spacing: 0; word-break: break-word; }
 
   /* bubble variant states */
   .chibi-bubble.is-correct { border-color: var(--ok-line); background: var(--ok-soft); }
   .chibi-bubble.is-correct::after { border-right-color: var(--ok-soft); }
   .chibi-bubble.is-correct .cb-title { color: var(--ok-deep); }
-  .chibi-bubble.is-correct .cb-exp { color: color-mix(in oklch, var(--ok-deep) 80%, var(--ink)); }
+  .chibi-bubble.is-correct .cb-exp { color: color-mix(in oklch, var(--ok-deep) 85%, var(--ink)); }
 
   .chibi-bubble.is-wrong { border-color: oklch(0.85 0.08 25); background: oklch(0.97 0.03 25); }
   .chibi-bubble.is-wrong::after { border-right-color: oklch(0.97 0.03 25); }
@@ -160,10 +160,10 @@
     background: conic-gradient(var(--ok) calc(var(--p,80)*1%), var(--ok-soft) 0); }
   .rscore i { width: 130px; height: 130px; border-radius: 50%; background: var(--card);
     display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: var(--shadow-sm); }
-  .rscore .big { font-size: 44px; font-weight: 700; letter-spacing: -.03em; line-height: 1;
+  .rscore .big { font-size: 44px; font-weight: 700; letter-spacing: 0; line-height: 1;
     background: linear-gradient(120deg, var(--ok), var(--ok-deep)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
   .rscore .sm { font-size: 13px; color: var(--muted); margin-top: 4px; }
-  .result h2 { font-size: 26px; font-weight: 700; letter-spacing: -.02em; margin-top: 14px; }
+  .result h2 { font-size: 26px; font-weight: 700; letter-spacing: 0; margin-top: 14px; line-height: 1.4; }
   .result p.rs { color: var(--muted); font-size: 15.5px; margin-top: 8px; line-height: 1.6; }
   .rstats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 24px 0; }
   .rstats .rstat { background: var(--card); border: 1px solid var(--line); border-radius: 15px; padding: 16px; box-shadow: var(--shadow-sm); }

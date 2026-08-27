@@ -30,15 +30,30 @@
     color: var(--muted); background: var(--card); border: 1px solid var(--line); padding: 6px 11px; border-radius: 9px; flex-shrink: 0; }
 
   /* ── main stage ── */
-  .stage { flex: 1; display: flex; align-items: flex-start; justify-content: center; padding: 28px 16px 48px; overflow-y: auto; }
+  .stage { flex: 1; display: flex; align-items: stretch; justify-content: center; padding: 20px 16px; overflow: hidden; min-height: 0; }
 
-  /* ── question card — FIXED to not overflow ── */
-  .qcard { position: relative; width: 100%; max-width: 740px; animation: pop .4s cubic-bezier(.2,.7,.2,1);
+  /* ── question card — fits viewport, inner scroll ── */
+  .qcard { position: relative; width: 100%; max-width: 740px; display: flex; flex-direction: column;
     background: linear-gradient(180deg, #fff, var(--soft)); border: 1px solid var(--line); border-radius: 22px;
-    padding: 28px 30px 26px; box-shadow: var(--shadow-lg); box-sizing: border-box; }
-  .qcard::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+    padding: 0; box-shadow: var(--shadow-lg); box-sizing: border-box; overflow: hidden; animation: pop .4s cubic-bezier(.2,.7,.2,1); }
+  .qcard::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 5px; z-index: 1;
     background: linear-gradient(90deg, var(--accent-2), var(--accent-deep)); border-radius: 22px 22px 0 0; }
+  /* scrollable body area */
+  .qcard-body { flex: 1; overflow-y: auto; padding: 24px 28px 0; min-height: 0;
+    /* hide scrollbar visually but keep functional */
+    scrollbar-width: thin; scrollbar-color: var(--line) transparent; }
+  .qcard-body::-webkit-scrollbar { width: 5px; }
+  .qcard-body::-webkit-scrollbar-track { background: transparent; }
+  .qcard-body::-webkit-scrollbar-thumb { background: var(--line); border-radius: 10px; }
+  /* sticky footer row */
+  .qcard-foot { flex-shrink: 0; padding: 16px 28px; border-top: 1px solid var(--line); background: var(--card); }
   @keyframes pop { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  @media (max-width: 600px) {
+    .stage { padding: 12px 8px; }
+    .qcard-body { padding: 18px 16px 0; }
+    .qcard-foot { padding: 12px 16px; }
+  }
 
   /* ── option stagger entrance ── */
   body:not(.answered) .opt { animation: optIn .45s cubic-bezier(.2,.7,.2,1) both; }
@@ -50,7 +65,7 @@
   @media (prefers-reduced-motion: reduce) { .opt { animation: none !important } }
 
   /* ── question meta ── */
-  .qmeta { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
+  .qmeta { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; padding-top: 8px; }
   .qmeta .qn { font-family: 'IBM Plex Mono', monospace; font-size: 13px; font-weight: 600; color: #fff;
     background: linear-gradient(140deg, var(--accent-2), var(--accent-deep));
     padding: 5px 12px; border-radius: 8px; }
@@ -120,7 +135,7 @@
   .explain .et span { font-size: 15px; color: var(--muted); line-height: 1.65; display: block; }
 
   /* ── footer ── */
-  .qfoot { display: flex; align-items: center; gap: 12px; margin-top: 22px; flex-wrap: wrap; }
+  .qfoot { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
   .qfoot .hint { font-size: 14px; color: var(--muted); }
   .qfoot .spacer { flex: 1; }
 
@@ -163,21 +178,27 @@
 <main class="stage">
   <!-- QUESTION CARD -->
   <div class="qcard" id="qcard">
-    <div class="qmeta"><span class="qn" id="qn">ข้อ 1</span><span class="qtag" id="qtag">เลือกคำตอบที่ถูกต้องที่สุด</span><span class="qdiff">ระดับง่าย</span></div>
-    <h2 class="qtext" id="qtext">โค้ดนี้จะพิมพ์อะไรออกมา?</h2>
-    <div class="qcode" id="qcode">
-      <div class="bar"><i style="background:oklch(0.72 0.16 25)"></i><i style="background:oklch(0.84 0.13 90)"></i><i style="background:oklch(0.76 0.14 150)"></i></div>
-      <pre><span class="k">for</span> i <span class="k">in</span> <span class="f">range</span>(<span class="n">1</span>, <span class="n">4</span>):
+    <!-- scrollable body -->
+    <div class="qcard-body">
+      <div class="qmeta"><span class="qn" id="qn">ข้อ 1</span><span class="qtag" id="qtag">เลือกคำตอบที่ถูกต้องที่สุด</span><span class="qdiff">ระดับง่าย</span></div>
+      <h2 class="qtext" id="qtext">โค้ดนี้จะพิมพ์อะไรออกมา?</h2>
+      <div class="qcode" id="qcode">
+        <div class="bar"><i style="background:oklch(0.72 0.16 25)"></i><i style="background:oklch(0.84 0.13 90)"></i><i style="background:oklch(0.76 0.14 150)"></i></div>
+        <pre><span class="k">for</span> i <span class="k">in</span> <span class="f">range</span>(<span class="n">1</span>, <span class="n">4</span>):
     <span class="f">print</span>(i)</pre>
+      </div>
+      <div class="opts" id="opts"></div>
+      <!-- correct answer banner — shows only when answered wrong -->
+      <div class="correct-banner" id="correctBanner">
+        <span class="cb-label">✅ คำตอบที่ถูก:</span>
+        <span class="cb-val" id="correctBannerVal"></span>
+      </div>
+      <div class="explain" id="explain"><div class="ei" id="ei">✓</div><div class="et"><b id="eb">ถูกต้อง!</b><span id="es"></span></div></div>
+      <!-- bottom padding inside scroll area -->
+      <div style="height:16px"></div>
     </div>
-    <div class="opts" id="opts"></div>
-    <!-- correct answer banner — shows only when answered wrong -->
-    <div class="correct-banner" id="correctBanner">
-      <span class="cb-label">✅ คำตอบที่ถูก:</span>
-      <span class="cb-val" id="correctBannerVal"></span>
-    </div>
-    <div class="explain" id="explain"><div class="ei" id="ei">✓</div><div class="et"><b id="eb">ถูกต้อง!</b><span id="es"></span></div></div>
-    <div class="qfoot">
+    <!-- sticky footer — always visible -->
+    <div class="qcard-foot qfoot">
       <span class="hint" id="hint">เลือกคำตอบเพื่อดำเนินการต่อ</span>
       <span class="spacer"></span>
       <button class="btn btn-primary" id="nextBtn" disabled>ข้อถัดไป

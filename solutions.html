@@ -89,7 +89,7 @@
           ?'<b>คำตอบที่คุณเลือก:</b> '+question.options[chosen]+' '+(chosen===question.ans?'✓ ถูกต้อง':'✕ ยังไม่ถูก')
           :'<b>คำตอบที่คุณเลือก:</b> ไม่มีข้อมูลคำตอบสำหรับการทำครั้งนี้ — ทำแบบทดสอบใหม่เพื่อบันทึกคำตอบ';
         const explain=document.createElement('div'); explain.className='explain'; explain.textContent=question.explanation;
-        item.append(heading,answer,yourAnswer,explain); questions.appendChild(item);
+        item.append(heading,yourAnswer,answer,explain); questions.appendChild(item);
       });
       details.appendChild(questions); list.appendChild(details);
     });

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>โปสเตอร์โครงงาน - เว็บไซต์สื่อการเรียนรู้ภาษา Python</title>
+  <!-- Google Fonts: Prompt & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Prompt:wght@300;400;500;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+    body {
+      font-family: 'Prompt', 'Inter', sans-serif;
+      background-color: #0b0f19;
+      color: #e2e8f0;
+      margin: 0;
+      padding: 0;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .a4-container {
+      width: 210mm;
+      height: 297mm;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      box-sizing: border-box;
+      background: radial-gradient(circle at 10% 10%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+                  radial-gradient(circle at 90% 90%, rgba(234, 179, 8, 0.08) 0%, transparent 40%),
+                  #0a0f1d;
+    }
+    .grid-bg {
+      background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                        linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .glass-card {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+    .glow-cyan {
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.25);
+    }
+    .glow-yellow {
+      box-shadow: 0 0 15px rgba(250, 204, 21, 0.25);
+    }
+    .gradient-text-python {
+      background: linear-gradient(135deg, #38bdf8 0%, #3b82f6 40%, #eab308 70%, #facc15 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    @media print {
+      body {
+        background: transparent;
+      }
+      .a4-container {
+        width: 100%;
+        height: 100%;
+        box-shadow: none;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-center p-4 min-h-screen">
+
+  <!-- Print Button Bar (Hidden when printing) -->
+  <div class="no-print mb-4 flex gap-4">
+    <button onclick="window.print()" class="px-5 py-2.5 bg-gradient-to-r from-blue-500 to-amber-500 text-white font-semibold rounded-lg shadow-lg hover:opacity-90 transition flex items-center gap-2">
+      <i class="fa-solid fa-print"></i> พิมพ์โปสเตอร์ A4 / บันทึกเป็น PDF
+    </button>
+  </div>
+
+  <!-- A4 Page Container -->
+  <div class="a4-container grid-bg flex flex-col justify-between p-6 shadow-2xl relative text-xs">
+    
+    <!-- Top Header Banner -->
+    <div class="relative z-10">
+      <div class="flex items-center justify-between border-b border-slate-700/60 pb-3">
+        <!-- Logo & Brand -->
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-sky-500 to-yellow-400 p-0.5 glow-cyan">
+            <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+              <i class="fa-brands fa-python text-2xl text-amber-400"></i>
+            </div>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider rounded bg-sky-500/20 text-sky-400 border border-sky-500/30">Academic Project</span>
+              <span class="px-2 py-0.5 text-[10px] uppercase font-bold tracking-wider rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">Web Application</span>
+            </div>
+            <h1 class="text-xl font-extrabold tracking-tight text-white mt-0.5">
+              เว็บไซต์สื่อการเรียนรู้ภาษา <span class="gradient-text-python">Python</span>
+            </h1>
+            <p class="text-[11px] text-slate-400 font-medium">Python Language Learning Resource Website</p>
+          </div>
+        </div>
+
+        <!-- Tech Stack Pill Group -->
+        <div class="flex items-center gap-2">
+          <div class="text-right">
+            <div class="text-[10px] text-slate-400 font-mono">สาขาวิชาเทคโนโลยีธุรกิจดิจิทัล</div>
+            <div class="text-[11px] font-bold text-sky-300">ระดับชั้น ปวส.2/2</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-12 gap-3.5 my-2 z-10 flex-1">
+      
+      <!-- Left Column: Objectives & Features (7 Cols) -->
+      <div class="col-span-7 flex flex-col gap-3">
+        
+        <!-- วัตถุประสงค์ของโครงงาน -->
+        <div class="glass-card rounded-xl p-3.5 border-l-4 border-l-sky-400">
+          <div class="flex items-center gap-2 mb-2 text-sky-400 font-bold text-sm">
+            <i class="fa-solid fa-bullseye"></i>
+            <span>วัตถุประสงค์ของโครงงาน (Objectives)</span>
+          </div>
+          <div class="space-y-1.5 text-[11px] text-slate-300">
+            <div class="flex items-start gap-2 bg-slate-800/50 p-1.5 rounded-lg border border-slate-700/40">
+              <span class="w-5 h-5 rounded-full bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-[10px] shrink-0">1</span>
+              <span>เพื่อพัฒนาแพลตฟอร์มเว็บสื่อการเรียนรู้ที่ครอบคลุมพื้นฐานภาษา Python</span>
+            </div>
+            <div class="flex items-start gap-2 bg-slate-800/50 p-1.5 rounded-lg border border-slate-700/40">
+              <span class="w-5 h-5 rounded-full bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-[10px] shrink-0">2</span>
+              <span>เพื่อหาความพึงพอใจของผู้ใช้งานที่มีต่อระบบสื่อการเรียนรู้</span>
+            </div>
+            <div class="flex items-start gap-2 bg-slate-800/50 p-1.5 rounded-lg border border-slate-700/40">
+              <span class="w-5 h-5 rounded-full bg-sky-500/20 text-sky-400 flex items-center justify-center font-bold text-[10px] shrink-0">3</span>
+              <span>เพื่อหาคุณภาพของสื่อการเรียนรู้ภาษา Python</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- คุณลักษณะเฉพาะของระบบ -->
+        <div class="glass-card rounded-xl p-3.5 border-l-4 border-l-amber-400 flex-1 flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2 mb-2 text-amber-400 font-bold text-sm">
+              <i class="fa-solid fa-layer-group"></i>
+              <span>คุณลักษณะเฉพาะและฟังก์ชันระบบ (Key Features)</span>
+            </div>
+            <p class="text-[10.5px] leading-relaxed text-slate-300 mb-2.5 text-justify">
+              แพลตฟอร์มการเรียนรู้ออนไลน์สำหรับผู้เริ่มต้น จัดลำดับเนื้อหาตั้งแต่พื้นฐานคอมพิวเตอร์และอุปกรณ์, ตัวแปร, ชนิดข้อมูล, เงื่อนไข, การวนซ้ำ, ฟังก์ชัน, โครงสร้างข้อมูล จนถึง <b>Object-Oriented Programming (OOP)</b>
+            </p>
+            
+            <div class="grid grid-cols-2 gap-2 text-[10px]">
+              <div class="bg-slate-900/60 p-2 rounded-lg border border-slate-700/50 flex items-center gap-2">
+                <i class="fa-solid fa-lock-open text-sky-400 text-sm"></i>
+                <div>
+                  <div class="font-semibold text-white">แบบทดสอบปลดล็อก</div>
+                  <div class="text-slate-400 text-[9px]">ประเมินเพื่อผ่านสู่บทเรียนถัดไป</div>
+                </div>
+              </div>
+              <div class="bg-slate-900/60 p-2 rounded-lg border border-slate-700/50 flex items-center gap-2">
+                <i class="fa-solid fa-user-shield text-amber-400 text-sm"></i>
+                <div>
+                  <div class="font-semibold text-white">ระบบสมาชิก</div>
+                  <div class="text-slate-400 text-[9px]">Login / Register / Logout</div>
+                </div>
+              </div>
+              <div class="bg-slate-900/60 p-2 rounded-lg border border-slate-700/50 flex items-center gap-2">
+                <i class="fa-solid fa-fire-flame-curved text-orange-400 text-sm"></i>
+                <div>
+                  <div class="font-semibold text-white">Streak System</div>
+                  <div class="text-slate-400 text-[9px]">ระบบนับวันเรียนรู้อย่างต่อเนื่อง</div>
+                </div>
+              </div>
+              <div class="bg-slate-900/60 p-2 rounded-lg border border-slate-700/50 flex items-center gap-2">
+                <i class="fa-solid fa-chart-pie text-emerald-400 text-sm"></i>
+                <div>
+                  <div class="font-semibold text-white">Learner Dashboard</div>
+                  <div class="text-slate-400 text-[9px]">สรุปสถิติและความก้าวหน้า</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tech Stack Badges -->
+          <div class="mt-2.5 pt-2 border-t border-slate-800 flex items-center justify-between">
+            <span class="text-[10px] text-slate-400 font-semibold">เทคโนโลยีที่ใช้พัฒนา:</span>
+            <div class="flex gap-1.5 flex-wrap">
+              <span class="bg-orange-500/20 text-orange-400 border border-orange-500/30 px-1.5 py-0.5 rounded text-[9px] font-mono font-bold">HTML5</span>
+              <span class="bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 px-1.5 py-0.5 rounded text-[9px] font-mono font-bold">Tailwind CSS</span>
+              <span class="bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 px-1.5 py-0.5 rounded text-[9px] font-mono font-bold">JavaScript</span>
+              <span class="bg-amber-600/20 text-amber-400 border border-amber-600/30 px-1.5 py-0.5 rounded text-[9px] font-mono font-bold">Firebase</span>
+              <span class="bg-blue-600/20 text-blue-400 border border-blue-600/30 px-1.5 py-0.5 rounded text-[9px] font-mono font-bold">Vercel</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Benefits & Architecture (5 Cols) -->
+      <div class="col-span-5 flex flex-col gap-3">
+        
+        <!-- ประโยชน์ที่คาดว่าจะได้รับ -->
+        <div class="glass-card rounded-xl p-3.5 border-l-4 border-l-emerald-400 flex-1 flex flex-col justify-between">
+          <div class="flex items-center gap-2 mb-2 text-emerald-400 font-bold text-sm">
+            <i class="fa-solid fa-award"></i>
+            <span>ประโยชน์ที่คาดว่าจะได้รับ</span>
+          </div>
+
+          <div class="space-y-2 text-[10px] text-slate-300">
+            <div class="bg-slate-900/60 p-2 rounded-lg border border-slate-700/40">
+              <span class="font-bold text-emerald-300 flex items-center gap-1.5 mb-0.5">
+                <i class="fa-solid fa-check-circle text-xs"></i> 1. แพลตฟอร์มคุณภาพสูง
+              </span>
+              <p class="text-slate-400 text-[9.5px]">UI สไตล์ Modern Startup ตอบสนองรวดเร็ว ใช้งานได้จริง</p>
+            </div>
+
+            <div class="bg-slate-900/60 p-2 rounded-lg border border-slate-700/40">
+              <span class="font-bold text-emerald-300 flex items-center gap-1.5 mb-0.5">
+                <i class="fa-solid fa-check-circle text-xs"></i> 2. เสริมการเรียนรู้อิสระ
+              </span>
+              <p class="text-slate-400 text-[9.5px]">ผู้เรียนฝึกเขียนโค้ดได้ด้วยตนเอง ทุกที่ทุกเวลา ไม่จำกัด</p>
+            </div>
+
+            <div class="bg-slate-900/60 p-2 rounded-lg border border-slate-700/40">
+              <span class="font-bold text-emerald-300 flex items-center gap-1.5 mb-0.5">
+                <i class="fa-solid fa-check-circle text-xs"></i> 3. ทักษะระดับสากล
+              </span>
+              <p class="text-slate-400 text-[9.5px]">ผู้พัฒนาได้ฝึก Web Dev & Cloud Tech ตามมาตรฐานอุตสาหกรรม</p>
+            </div>
+
+            <div class="bg-slate-900/60 p-2 rounded-lg border border-slate-700/40">
+              <span class="font-bold text-emerald-300 flex items-center gap-1.5 mb-0.5">
+                <i class="fa-solid fa-check-circle text-xs"></i> 4. ต่อยอดนวัตกรรม
+              </span>
+              <p class="text-slate-400 text-[9.5px]">สถานศึกษาได้รับสื่อดิจิทัลต้นแบบสำหรับพัฒนาต่อยอดในอนาคต</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Architecture & Cloud Stack Box -->
+        <div class="glass-card rounded-xl p-3 border border-slate-700/60 bg-gradient-to-br from-slate-900 to-slate-950">
+          <div class="flex items-center justify-between text-[11px] font-bold text-slate-300 mb-2">
+            <span class="flex items-center gap-1.5 text-sky-300"><i class="fa-solid fa-cloud"></i> Cloud & CI/CD Deployment</span>
+            <span class="text-[9px] font-mono text-slate-500">Responsive UI</span>
+          </div>
+          <div class="grid grid-cols-3 gap-1.5 text-center text-[9.5px]">
+            <div class="bg-slate-800/80 py-1.5 px-1 rounded border border-slate-700">
+              <i class="fa-brands fa-github text-white text-base block mb-0.5"></i>
+              <span class="font-mono text-slate-300">GitHub</span>
+            </div>
+            <div class="bg-slate-800/80 py-1.5 px-1 rounded border border-slate-700">
+              <i class="fa-solid fa-fire text-amber-500 text-base block mb-0.5"></i>
+              <span class="font-mono text-slate-300">Firestore</span>
+            </div>
+            <div class="bg-slate-800/80 py-1.5 px-1 rounded border border-slate-700">
+              <i class="fa-solid fa-bolt text-cyan-400 text-base block mb-0.5"></i>
+              <span class="font-mono text-slate-300">Vercel App</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bottom Section: Team Members & Advisors Footer -->
+    <div class="relative z-10 pt-3 border-t border-slate-700/80">
+      <div class="grid grid-cols-12 gap-3">
+        
+        <!-- ผู้จัดทำ (7 Cols) -->
+        <div class="col-span-7 glass-card rounded-xl p-2.5 border border-slate-700/70">
+          <div class="flex items-center gap-1.5 text-sky-400 font-bold text-[11px] mb-2">
+            <i class="fa-solid fa-users"></i>
+            <span>คณะผู้จัดทำ (Project Team)</span>
+            <span class="ml-auto text-[10px] text-slate-400 font-normal">ระดับชั้น ปวส.2/2</span>
+          </div>
+          <div class="grid grid-cols-3 gap-1.5 text-[10px]">
+            <div class="bg-slate-800/70 p-1.5 rounded-lg border border-slate-700/50 flex flex-col items-center text-center">
+              <div class="w-6 h-6 rounded-full bg-sky-500/20 text-sky-300 flex items-center justify-center mb-1">
+                <i class="fa-solid fa-user text-[10px]"></i>
+              </div>
+              <span class="font-semibold text-slate-200">นายชาญวิทย์ เทพาชมภู</span>
+              <span class="text-[8.5px] text-slate-400">ผู้จัดทำโครงงาน</span>
+            </div>
+            <div class="bg-slate-800/70 p-1.5 rounded-lg border border-slate-700/50 flex flex-col items-center text-center">
+              <div class="w-6 h-6 rounded-full bg-sky-500/20 text-sky-300 flex items-center justify-center mb-1">
+                <i class="fa-solid fa-user text-[10px]"></i>
+              </div>
+              <span class="font-semibold text-slate-200">นายวงเดือน ลุงซอ</span>
+              <span class="text-[8.5px] text-slate-400">ผู้จัดทำโครงงาน</span>
+            </div>
+            <div class="bg-slate-800/70 p-1.5 rounded-lg border border-slate-700/50 flex flex-col items-center text-center">
+              <div class="w-6 h-6 rounded-full bg-sky-500/20 text-sky-300 flex items-center justify-center mb-1">
+                <i class="fa-solid fa-user text-[10px]"></i>
+              </div>
+              <span class="font-semibold text-slate-200">นายศรัณย์ โชติกันตะ</span>
+              <span class="text-[8.5px] text-slate-400">ผู้จัดทำโครงงาน</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ครูที่ปรึกษา (5 Cols) -->
+        <div class="col-span-5 glass-card rounded-xl p-2.5 border border-slate-700/70">
+          <div class="flex items-center gap-1.5 text-amber-400 font-bold text-[11px] mb-2">
+            <i class="fa-solid fa-chalkboard-user"></i>
+            <span>ครูที่ปรึกษา (Project Advisors)</span>
+          </div>
+          <div class="grid grid-cols-2 gap-1.5 text-[10px]">
+            <div class="bg-slate-800/70 p-1.5 rounded-lg border border-slate-700/50 flex flex-col items-center text-center">
+              <div class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-300 flex items-center justify-center mb-1">
+                <i class="fa-solid fa-award text-[10px]"></i>
+              </div>
+              <span class="font-semibold text-slate-200">ครู วันเพ็ญ จินดารัตน์</span>
+              <span class="text-[8.5px] text-slate-400">ครูที่ปรึกษา</span>
+            </div>
+            <div class="bg-slate-800/70 p-1.5 rounded-lg border border-slate-700/50 flex flex-col items-center text-center">
+              <div class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-300 flex items-center justify-center mb-1">
+                <i class="fa-solid fa-award text-[10px]"></i>
+              </div>
+              <span class="font-semibold text-slate-200">ครู นางฝางหลิน โนนทอง</span>
+              <span class="text-[8.5px] text-slate-400">ครูที่ปรึกษา</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

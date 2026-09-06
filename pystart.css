@@ -28,7 +28,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
-body{font-family:'IBM Plex Sans Thai','IBM Plex Sans',-apple-system,BlinkMacSystemFont,sans-serif;color:var(--ink);
+body{font-family:'Prompt',-apple-system,BlinkMacSystemFont,sans-serif;color:var(--ink);
   -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;line-height:1.6;letter-spacing:0;
   background:
     radial-gradient(900px 520px at 102% -8%,oklch(0.6 0.14 277/.05),transparent 60%),
